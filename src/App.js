@@ -1,17 +1,30 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft, faArrowRight, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import { renderChart, drawCanvasBars } from './logic/chart.js';
 import './App.css';
 
 class App extends React.Component {
-  componentDidMount() {
-    //finished loading
-    const loading = document.getElementById('loading');
-    const content = document.getElementById('content-container');
-    const container = document.getElementById('test-container');
-
-    loading.style.display = 'none';
-    content.style.display = 'block';
-    container.style.display = 'flex';
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDarkTheme: true,
+    };
   }
+  componentDidMount() {
+    renderChart();
+  }
+
+  toggleDarkTheme = () => {
+    this.setState((prevState) => ({
+      isDarkTheme: !prevState.isDarkTheme,
+    }), () => {
+      const body = document.getElementsByTagName('body')[0];
+      body.className = (this.state.isDarkTheme) ? '' : 'light-theme';
+      drawCanvasBars();
+    });
+  }
+
   render() {
     return (
       <div>
@@ -23,7 +36,14 @@ class App extends React.Component {
           <div id="content-container">
             <div id="side-info">
               <div id="theme-switcher-container">
-                <i id="theme-switcher" className="fas fa-sun fa-lg"></i>
+                <div id="theme-switcher" onClick={this.toggleDarkTheme}>
+                  {
+                    (this.state.isDarkTheme) ? 
+                    (<FontAwesomeIcon icon={faSun}/>)
+                    :
+                    (<FontAwesomeIcon icon={faMoon}/>)
+                  }
+                </div>
               </div>
               <div id="filters">
                 <div id="search-filter">
@@ -102,8 +122,12 @@ class App extends React.Component {
                   Jeffrey's Music Listening Times &nbsp;
                 </span>
                 <div id="date-navigation">
-                  <button id="left" className="arrow"><i className="fas fa-arrow-left fa-lg"></i></button>
-                  <button id="right" className="arrow"><i className="fas fa-arrow-right fa-lg"></i></button>
+                  <button id="left" className="arrow">
+                    <FontAwesomeIcon icon={faArrowLeft}/>
+                  </button>
+                  <button id="right" className="arrow">
+                    <FontAwesomeIcon icon={faArrowRight}/>
+                  </button>
                   <select id="date-range">
                   </select>
                 </div>
@@ -113,6 +137,9 @@ class App extends React.Component {
             </div>
           </div>
         </div>
+        <datalist id="artist-datalist"></datalist>
+        <datalist id="song-datalist"></datalist>
+        <datalist id="album-datalist"></datalist>
       </div>
     );
   }
