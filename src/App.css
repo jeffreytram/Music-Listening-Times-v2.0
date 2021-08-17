@@ -230,16 +230,6 @@ input[type=checkbox] {
 
 /* Song info */
 
-#temp-instructions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  min-height: 175px;
-  background-color: var(--light);
-  border-radius: calc(var(--border-radius) + 5px);
-}
-
 #song-info {
   display: none;
   text-align: center;
@@ -300,7 +290,7 @@ input[type=checkbox] {
   }
 }
 
-.checkbox, body, #reset, #temp-instructions, input, button, select {
+.checkbox, body, #reset, input, button, select {
   -webkit-transition: background-color .5s ease-out;
   -moz-transition: background-color .5s ease-out;
   -o-transition: background-color .5s ease-out;

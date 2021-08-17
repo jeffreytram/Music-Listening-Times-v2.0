@@ -259,7 +259,6 @@ export const renderChart = () => {
       .attr('r', 3)
       .style('opacity', .3)
       .on("click", function (d) {
-        hideInstructions();
         clearDayFilters();
         displaySongInfo(d);
         displayTags(d);
@@ -314,7 +313,6 @@ export const renderChart = () => {
       .attr('r', displaySize)
       .style('opacity', viewOpacity)
       .on("click", function (d) {
-        hideInstructions();
         clearDayFilters();
         displaySongInfo(d);
         displayTags(d);
@@ -325,15 +323,6 @@ export const renderChart = () => {
     //remove filtered out circles
     point.exit().remove();
   }
-
-  /**
-   * Hides the initial instructions
-   */
-  function hideInstructions() {
-    const instructions = document.getElementById('temp-instructions');
-    instructions.style.display = 'none';
-  }
-
 
   /**
    * Updates the yScale to the current yState

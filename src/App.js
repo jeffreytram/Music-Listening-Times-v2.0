@@ -52,9 +52,6 @@ const DayFilter = (props) => {
 const SongInfo = (props) => {
   return (
     <div id="song-info-container">
-      <div id="temp-instructions">
-        <span className="title">Click a point for more details!</span>
-      </div>
       <div id="song-info" className="hide">
         <div>
           <span className="info artist"></span> - <span className="info song"></span>
@@ -66,9 +63,6 @@ const SongInfo = (props) => {
         <div className="info album"></div>
         <div className="info date"></div>
         <div id="tagList"></div>
-      </div>
-      <div>
-        <svg id="monthly-stats"></svg>
       </div>
     </div>
   )
