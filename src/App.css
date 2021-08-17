@@ -38,7 +38,6 @@ body.light-theme {
 
 html, body {
   color: var(--main-text);
-  height: 100%;
   margin: 0;
 }
 
@@ -47,7 +46,7 @@ html, body {
 }
 
 .site-container {
-  margin: 0 15vw;
+  margin: 30px 15vw;
 }
 
 /* Loading Screen */
@@ -84,7 +83,7 @@ html, body {
   }
 }
 
-/* Main Content */ 
+/* Main Content */
 
 /* D3 Style */
 
@@ -106,22 +105,18 @@ html, body {
 
 /* Title bar style */
 
-#title-bar {
-  position: relative;
-  padding: 2px;
-}
-
 .title {
   font-weight: bold;
   font-size: large;
 }
 
 .arrow {
-  padding: 2px 4px;
+  padding: 2px 7px;
   color: var(--main-text);
   border: none;
-  border-radius: 15px;
+  border-radius: 100px;
   background-color: var(--main-bg);
+  font-size: x-large;
 }
 
 #date-range {
@@ -130,7 +125,8 @@ html, body {
   border: none;
   background-color: var(--light);
   color: - var(--main-text);
-  font-weight: 600;
+  font-weight: 400;
+  font-size: x-large;
 }
 
 /* Sidebar */
@@ -152,7 +148,7 @@ html, body {
 
 #filter-input {
   display: inline-block;
-  width: 70%;
+  width: 300px;
   padding: 4px 8px;
   margin-top: 5px;
   border: none;
@@ -298,9 +294,15 @@ input[type=checkbox] {
 }
 
 #filters {
-  width: 100%;
+  width: 50%;
   height: 100%;
   margin-bottom: 20px;
+  float: left;
+}
+
+#date-navigation {
+  width: 50%;
+  float: right;
 }
 
 #search-filter {
@@ -332,14 +334,5 @@ input[type=checkbox] {
   }
   #day-filters {
     width: 100%;
-  }
-  #entries {
-    position: absolute;
-    left: 5%;
-  }
-  #date-navigation {
-    display: inline;
-    position: absolute;
-    right: 4%;
   }
 }

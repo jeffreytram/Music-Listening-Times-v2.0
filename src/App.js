@@ -8,7 +8,7 @@ const SearchFilter = (props) => {
   return (
     <div id="search-filter">
       <label htmlFor="general-filter">
-        <span>Search by</span>
+        <span>Search by </span>
         <select id="filter-select">
           <option value="artist" selected>Artist</option>
           <option value="song">Song</option>
@@ -16,7 +16,7 @@ const SearchFilter = (props) => {
         </select>
       </label>
       <br />
-      <input type="text" id="filter-input" list="artist-datalist" placeholder="Search htmlFor..." />
+      <input type="text" id="filter-input" list="artist-datalist" placeholder="Search for..." />
       <button type="button" id="submit-button" className="button">Search</button>
     </div>
   )
@@ -45,6 +45,32 @@ const DayFilter = (props) => {
         <DayButton abbrevation="sat" fullName="Saturday" displayName="Sat" />
         <DayButton abbrevation="sun" fullName="Sunday" displayName="Sun" />
       </div>
+    </div>
+  )
+}
+
+const Filters = (props) => {
+  return (
+    <div id="filters">
+      <SearchFilter />
+      <DayFilter />
+      <button id="reset" className="button">Reset</button>
+      <div id="entries"><span id="entry-count"></span> entries</div>
+    </div>
+  )
+}
+
+const DateNavigation = (props) => {
+  return (
+    <div id="date-navigation">
+      <button id="left" className="arrow">
+        <FontAwesomeIcon icon={faArrowLeft} />
+      </button>
+      <button id="right" className="arrow">
+        <FontAwesomeIcon icon={faArrowRight} />
+      </button>
+      <select id="date-range">
+      </select>
     </div>
   )
 }
@@ -104,29 +130,12 @@ class App extends React.Component {
                 (<FontAwesomeIcon icon={faMoon} />)
             }
           </div>
-          <div id="filters">
-            <SearchFilter />
-            <DayFilter />
-            <button id="reset" className="button">Reset</button>
-          </div>
+          <h1>Music Listening Times</h1>
+          <Filters />
+          <DateNavigation />
           <SongInfo />
+
           <div id="main">
-            <div id="title-bar">
-              <div id="entries"><span id="entry-count"></span> entries</div>
-              <span className="title">
-                Jeffrey's Music Listening Times &nbsp;
-              </span>
-              <div id="date-navigation">
-                <button id="left" className="arrow">
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </button>
-                <button id="right" className="arrow">
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-                <select id="date-range">
-                </select>
-              </div>
-            </div>
             <canvas id="canvas"></canvas>
             <svg id="main-graph"></svg>
           </div>
