@@ -102,24 +102,20 @@ class App extends React.Component {
           <h2>Loading...</h2>
         </div>
         <div id="content-container">
-          <div id="side-info">
-            <div id="theme-switcher-container">
-              <div id="theme-switcher" onClick={this.toggleDarkTheme}>
-                {
-                  (this.state.isDarkTheme) ?
-                    (<FontAwesomeIcon icon={faSun} />)
-                    :
-                    (<FontAwesomeIcon icon={faMoon} />)
-                }
-              </div>
-            </div>
-            <div id="filters">
-              <SearchFilter />
-              <DayFilter />
-              <button id="reset" className="button">Reset</button>
-            </div>
-            <SongInfo/>
+          <div id="theme-switcher" onClick={this.toggleDarkTheme}>
+            {
+              (this.state.isDarkTheme) ?
+                (<FontAwesomeIcon icon={faSun} />)
+                :
+                (<FontAwesomeIcon icon={faMoon} />)
+            }
           </div>
+          <div id="filters">
+            <SearchFilter />
+            <DayFilter />
+            <button id="reset" className="button">Reset</button>
+          </div>
+          <SongInfo />
           <div id="main">
             <div id="title-bar">
               <div id="entries"><span id="entry-count"></span> entries</div>

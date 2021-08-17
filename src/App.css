@@ -47,7 +47,7 @@ html, body {
 }
 
 .site-container {
-  margin: 0 5vw;
+  margin: 0 15vw;
 }
 
 /* Loading Screen */
@@ -135,9 +135,9 @@ html, body {
 
 /* Sidebar */
 
-#theme-switcher-container {
+#theme-switcher {
   position: absolute;
-  right: 5px;
+  right: 0;
 }
 
 /* Filters */
@@ -218,7 +218,7 @@ input[type=checkbox] {
   color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
-#theme-switcher-container, .checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
+#theme-switcher, .checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
   cursor: pointer;
 }
 
@@ -287,6 +287,7 @@ input[type=checkbox] {
 
 #content-container {
   display: none;
+  position: relative;
   animation: .5s ease-in-out content-fade-in;
 }
 
@@ -331,25 +332,13 @@ input[type=checkbox] {
   height: 100%;
 }
 
-#side-info {
-  position: relative;
-}
-
 #canvas {
   width: 100%;
 }
 
 @media (min-width:800px) {
-  #main {
-    width: 70%;
-    float: left;
-  }
   #album-art {
     width: 50%;
-  }
-  #side-info {
-    width: 30%;
-    float: right;
   }
   #day-filters {
     width: 100%;
