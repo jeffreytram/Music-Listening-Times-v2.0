@@ -646,10 +646,8 @@ export const renderChart = () => {
     //finished loading
     const loading = document.getElementById('loading');
     const content = document.getElementById('content-container');
-    const container = document.getElementById('test-container');
 
     loading.style.display = 'none';
     content.style.display = 'block';
-    container.style.display = 'flex';
   });
 }

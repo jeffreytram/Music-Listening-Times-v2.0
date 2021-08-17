@@ -46,6 +46,10 @@ html, body {
   height: 100%;
 }
 
+.site-container {
+  margin: 0 5vw;
+}
+
 /* Loading Screen */
 
 #loading {
@@ -80,7 +84,7 @@ html, body {
   }
 }
 
-/* Main Content */
+/* Main Content */ 
 
 /* D3 Style */
 
@@ -283,15 +287,6 @@ input[type=checkbox] {
 
 #content-container {
   display: none;
-  width: 97%;
-  margin: auto;
-  background-color: var(--main-bg);
-  -webkit-box-shadow: 0px 0px 5px 0px var(--shadow);
-  -moz-box-shadow: 0px 0px 5px 0px var(--shadow);
-  box-shadow: 0px 0px 5px 0px var(--shadow);
-  padding: 10px;
-  box-sizing: border-box;
-  border-radius: calc(var(--border-radius) + 5px);
   animation: .5s ease-in-out content-fade-in;
 }
 
@@ -304,7 +299,7 @@ input[type=checkbox] {
   }
 }
 
-#content-container, .checkbox, body {
+.checkbox, body, #reset, #temp-instructions, input, button, select {
   -webkit-transition: background-color .5s ease-out;
   -moz-transition: background-color .5s ease-out;
   -o-transition: background-color .5s ease-out;
@@ -345,12 +340,6 @@ input[type=checkbox] {
 }
 
 @media (min-width:800px) {
-  #test-container {
-    height: 100%;
-    display: none;
-    justify-content: center;
-    align-content: center;
-  }
   #main {
     width: 70%;
     float: left;
