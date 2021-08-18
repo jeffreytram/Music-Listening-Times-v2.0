@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import { updateContrastingColors } from './colors.js';
-import { getNextMonthDate, getPrevMonthDate } from './date.js'
 import { displayTags, displaySongInfo } from './song-info.js';
 
 const width = 950;
@@ -314,6 +313,51 @@ export function changeDateRange(date) {
   drawCanvasBars();
   clearDayFilters();
   setDataList();
+  updateOptionVisibility(date);
+}
+
+/**
+ * Ables/disables the month options based on whether the option is a valid month
+ * @param {Object} date Date object
+ */
+function updateOptionVisibility(date) {
+  // update month option visibility
+  const options = Array.from(document.getElementById('month-select').getElementsByTagName('option'));
+  const validMonthsArr = getValidMonthArr(date);
+  options.forEach((month, i) => {
+    if (validMonthsArr[i]) {
+      month.disabled = false;
+    } else {
+      month.disabled = true;
+    }
+  })
+}
+
+/**
+ * Gets the valid months array for the year
+ * @param {Object} date 
+ * @returns valid month boolean array
+ */
+function getValidMonthArr(date) {
+  let validMonthsArr = [];
+  const year = date.getFullYear();
+  for (let i = 1; i <= 12; i++) {
+    if (buckets[i + ' ' + year]) {
+      validMonthsArr.push(true);
+    } else {
+      validMonthsArr.push(false);
+    }
+  }
+  return validMonthsArr;
+}
+
+/**
+ * Switches the current datalist to the new one
+ * @param {string} value The datalist to switch too
+ */
+function changeDataList(value) {
+  const filterInput = document.getElementById('filter-input');
+  filterInput.setAttribute('list', value + '-datalist');
 }
 
 /**
@@ -366,17 +410,6 @@ function addFilter(type, element, sourceValue) {
     }
   });
 }
-
-/**
- * Switches the current datalist to the new one
- * @param {string} value The datalist to switch too
- */
-function changeDataList(value) {
-  const filterInput = document.getElementById('filter-input');
-  filterInput.setAttribute('list', value + '-datalist');
-}
-
-
 
 /**
  * Draws the single axis vertical bar visualization
@@ -552,6 +585,9 @@ export const renderChart = () => {
     renderCircles();
     drawCanvasBars();
 
+    // ables/disables valid month options
+    updateOptionVisibility(yState[1]);
+
     //song, artist, and album filter
     const submitFilter = document.getElementById('submit-button');
     addFilter(null, submitFilter, 'input');
@@ -596,26 +632,6 @@ export const renderChart = () => {
         submitFilter.dispatchEvent(new Event('click'));
       }
     });
-
-    //theme switcher listener
-    // const themeSwitcher = document.getElementById('theme-switcher');
-    // themeSwitcher.addEventListener('click', function () {
-    //   const body = document.getElementsByTagName('body');
-    //   if (themeSwitcher.classList.contains('moon')) {
-    //     themeSwitcher.innerHTML = (<FontAwesomeIcon icon={faSun}/>);
-    //     body.className = 'light-theme';
-    //     themeSwitcher.className = 'sun';
-    //   } else {
-    //     themeSwitcher.innerHTML = (<FontAwesomeIcon icon={faMoon}/>);
-    //     body.className = '';
-    //     themeSwitcher.className = 'moon';
-    //   }
-
-    //   style = getComputedStyle(document.body);
-    //   rgb = style.getPropertyValue('--default-rgb');
-    //   drawCanvasBars();
-    //   updateContrastingColors();
-    // })
 
     //finished loading
     const loading = document.getElementById('loading');
