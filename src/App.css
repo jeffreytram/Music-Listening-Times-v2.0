@@ -294,15 +294,16 @@ input[type=checkbox] {
 }
 
 #filters {
-  width: 50%;
   height: 100%;
+  position: relative;
   margin-bottom: 20px;
-  float: left;
 }
 
-#date-navigation {
-  width: 50%;
-  float: right;
+.side-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-align: right;
 }
 
 #search-filter {

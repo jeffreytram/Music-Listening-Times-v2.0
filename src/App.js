@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight, faSun, faMoon } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faArrowRight, faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { renderChart, drawCanvasBars } from './logic/chart.js';
 import './App.css';
 
@@ -8,7 +8,7 @@ const SearchFilter = (props) => {
   return (
     <div id="search-filter">
       <label htmlFor="general-filter">
-        <span>Search by </span>
+        <span><FontAwesomeIcon icon={faSearch} /> Search by </span>
         <select id="filter-select">
           <option value="artist" selected>Artist</option>
           <option value="song">Song</option>
@@ -35,7 +35,7 @@ const DayButton = (props) => {
 const DayFilter = (props) => {
   return (
     <div id="day-filters">
-      <label>Filter by day of the week:</label>
+      <label><FontAwesomeIcon icon={faFilter} /> Filter by day of the week:</label>
       <div id="day-container">
         <DayButton abbrevation="mon" fullName="Monday" displayName="Mon" />
         <DayButton abbrevation="tues" fullName="Tuesday" displayName="Tue" />
@@ -55,7 +55,10 @@ const Filters = (props) => {
       <SearchFilter />
       <DayFilter />
       <button id="reset" className="button">Reset</button>
-      <div id="entries"><span id="entry-count"></span> entries</div>
+      <div className="side-container">
+        <div id="entries"><span id="entry-count"></span> entries</div>
+        <DateNavigation />
+      </div>
     </div>
   )
 }
@@ -132,9 +135,7 @@ class App extends React.Component {
           </div>
           <h1>Music Listening Times</h1>
           <Filters />
-          <DateNavigation />
           <SongInfo />
-
           <div id="main">
             <canvas id="canvas"></canvas>
             <svg id="main-graph"></svg>
