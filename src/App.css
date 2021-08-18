@@ -110,16 +110,8 @@ html, body {
   font-size: large;
 }
 
-.arrow {
-  padding: 2px 7px;
-  color: var(--main-text);
-  border: none;
-  border-radius: 100px;
-  background-color: var(--main-bg);
-  font-size: x-large;
-}
-
-#date-range {
+#month-select, #year-select {
+  margin-left: 10px;
   padding: 2px 2px;
   border-radius: var(--border-radius);
   border: none;

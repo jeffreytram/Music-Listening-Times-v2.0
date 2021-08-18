@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight, faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
-import { renderChart, drawCanvasBars } from './logic/chart.js';
+import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { renderChart, drawCanvasBars, changeDateRange } from './logic/chart.js';
 import './App.css';
 
 const SearchFilter = (props) => {
@@ -63,17 +63,31 @@ const Filters = (props) => {
   )
 }
 
+const handleDateChange = () => {
+  const month = document.getElementById('month-select').value;
+  const year = document.getElementById('year-select').value;
+  const date = new Date(month + ' ' + year);
+  changeDateRange(date);
+}
+
 const DateNavigation = (props) => {
   return (
     <div id="date-navigation">
-      <button id="left" className="arrow">
-        <FontAwesomeIcon icon={faArrowLeft} />
-      </button>
-      <button id="right" className="arrow">
-        <FontAwesomeIcon icon={faArrowRight} />
-      </button>
-      <select id="date-range">
+      <select id="month-select" onChange={handleDateChange}>
+        <option value="jan">January</option>
+        <option value="feb">February</option>
+        <option value="mar">March</option>
+        <option value="apr">April</option>
+        <option value="may">May</option>
+        <option value="jun">June</option>
+        <option value="jul">July</option>
+        <option value="aug">August</option>
+        <option value="sep">September</option>
+        <option value="oct">October</option>
+        <option value="nov">November</option>
+        <option value="dec">December</option>
       </select>
+      <select id="year-select" onChange={handleDateChange}></select>
     </div>
   )
 }

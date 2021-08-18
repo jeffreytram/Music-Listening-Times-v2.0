@@ -7,6 +7,10 @@ const width = 950;
 const height = 540;
 const padding = { left: 90, right: 40, top: 10, down: 60 };
 
+let svg = {};
+let xAxisG = {};
+let yAxisG = {};
+
 let filteredDatasetMonth = [];
 
 let datasetMonth = [];
@@ -17,6 +21,361 @@ let yScale = [];
 
 //creating canvas, DOM element
 let canvas = [];
+
+/**
+ * Sets yState from the first day to the last day of the month for the given date
+ * @param {*} date 
+ */
+function setYState(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  yState = [lastDay, firstDay];
+}
+
+/**
+   * Switches the current month's data to the newly selected month's data
+   * @param {array} range Array containing the upper date range, and lower date range
+   */
+function filterRange(range) {
+  const lowerRange = range[1];
+  let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
+  datasetMonth = buckets[key];
+  filteredDatasetMonth = datasetMonth;
+}
+
+/**
+ * Displays the length of the current month's data
+ */
+function displayNumEntries() {
+  //display length of fitlered list
+  document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
+}
+
+/**
+ * Sets the datalists to the current months data
+ */
+function setDataList() {
+  const artistDataList = document.getElementById('artist-datalist');
+  const songDataList = document.getElementById('song-datalist');
+  const albumDataList = document.getElementById('album-datalist');
+
+  artistDataList.innerHTML = '';
+  songDataList.innerHTML = '';
+  albumDataList.innerHTML = '';
+
+  let artistSet = new Set();
+  let songSet = new Set();
+  let albumSet = new Set();
+  datasetMonth.forEach(d => {
+    artistSet.add(d.Artist);
+    songSet.add(d.SongTitle);
+    albumSet.add(d.Album);
+  });
+  const artistList = Array.from(artistSet).sort();
+  const songList = Array.from(songSet).sort();
+  const albumList = Array.from(albumSet).sort();
+
+  const maxLength = Math.max(artistList.length, songList.length, albumList.length);
+  let i = 0;
+  while (i < maxLength) {
+    if (i < artistList.length) {
+      const option1 = document.createElement('option');
+      option1.value = artistList[i];
+      artistDataList.appendChild(option1);
+    }
+    if (i < songList.length) {
+      const option2 = document.createElement('option');
+      option2.value = songList[i];
+      songDataList.appendChild(option2);
+    }
+    if (i < albumList.length) {
+      const option3 = document.createElement('option');
+      option3.value = albumList[i];
+      albumDataList.appendChild(option3);
+    }
+    i++;
+  }
+}
+
+/**
+ * Handles filter functionality
+ * @param {string} type the type of filter
+ * @param {string} value the value to filter by
+ */
+function filterController(type, value) {
+  clearHighlight()
+  if (type === "song") {
+    filterSong(value);
+    updateCircles(5, .5);
+  } else if (type === "artist") {
+    filterArtist(value);
+    updateCircles(5, .5);
+  } else if (type === "album") {
+    filterAlbum(value);
+    updateCircles(5, .5);
+  } else if (type === "day") {
+    filterDay(value);
+    updateCircles(3, .3);
+  }
+  drawCanvasBars();
+  displayNumEntries();
+}
+
+/**
+ * Filters the current month's data by the given song's name
+ * @param {string} song The song name to filter by
+ */
+function filterSong(song) {
+  filteredDatasetMonth = datasetMonth.filter(d => d.SongTitle === song);
+}
+
+/**
+ * Filters the current month's data by the given arist's name
+ * @param {string} artist The artist's name to filter by
+ */
+function filterArtist(artist) {
+  filteredDatasetMonth = datasetMonth.filter(d => d.Artist === artist);
+}
+
+/**
+ * Filters the current month's data by the given list of days
+ * @param {array} days The list of days to filter by
+ */
+function filterDay(days) {
+  let newDataset = [];
+  days.forEach(function (day) {
+    newDataset = newDataset.concat(datasetMonth.filter(d => d.Day === day));
+  });
+  //if no days selected, display all
+  if (days.length > 0) {
+    filteredDatasetMonth = newDataset;
+  } else {
+    filteredDatasetMonth = datasetMonth;
+  }
+}
+
+/**
+ * Filters the current month's data by the given album's name
+ * @param {string} category The album's name to filter by
+ */
+function filterAlbum(album) {
+  filteredDatasetMonth = datasetMonth.filter(d => d.Album === album);
+}
+
+/**
+ * Reset controller.
+ * Clears all filters and selections, and updates the visualizaiton accordingly
+ */
+function resetGraph() {
+  displayNumEntries();
+  updateCircles();
+  drawCanvasBars();
+  clearHighlight();
+  clearDayFilters();
+  clearInput();
+}
+
+/**
+ * Resets the checkbox filters (day filters)
+ */
+function clearDayFilters() {
+  const input = document.getElementsByTagName('input');
+  const checkbox = Array.from(input).filter(input => input.type === "checkbox");
+  Array.from(checkbox).forEach(function (cb) {
+    cb.checked = false;
+    let change = new Event('change');
+    cb.dispatchEvent(change);
+  });
+}
+
+/**
+ * Resets the values in the text inputs
+ */
+function clearInput() {
+  const filterInput = document.getElementById('filter-input');
+  filterInput.value = '';
+}
+
+/**
+ * Initial render of the current month's data
+ */
+function renderCircles() {
+  //filtered selection
+  var point = svg.selectAll('.point')
+    .data(filteredDatasetMonth, d => d.ConvertedDateTime)
+
+  var pointEnter = point.enter()
+    .append('g')
+    .attr('class', 'point')
+
+  pointEnter.merge(point)
+    .attr('transform', d => {
+      var tx = xScale(d.Time);
+      var ty = yScale(d.Date);
+      return 'translate(' + [tx, ty] + ')';
+    });
+
+  //add circle to group
+  pointEnter.append('circle')
+    .attr('r', 3)
+    .style('opacity', .3)
+    .on("click", function (d) {
+      clearDayFilters();
+      displaySongInfo(d);
+      displayTags(d);
+      clearHighlight();
+      singleHighlight(d3.select(this));
+    });
+}
+
+/**
+ * Updates the filtered data points accordingly
+ * Points filtered out are more transparent. The other points are more opaque
+ * @param {number} displaySize The radius size to set the filtered data points to
+ * @param {number} viewOpacity The opaciity to set the filtered data points to
+ */
+function updateCircles(displaySize = 3, viewOpacity = .3) {
+  //filtered selection
+  var point = svg.selectAll('.point')
+    .data(filteredDatasetMonth, d => d.ConvertedDateTime)
+
+  point.select("circle")
+    .attr('r', displaySize)
+    .style('opacity', viewOpacity);
+
+  //remove filtered out circles
+  point.exit()
+    .select("circle")
+    .attr('r', 3)
+    .style('opacity', .07);
+}
+
+/**
+ * Renders the new month's data
+ */
+function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
+  //filtered selection
+  var point = svg.selectAll('.point')
+    .data(datasetMonth, d => d.ConvertedDateTime)
+
+  var pointEnter = point.enter()
+    .append('g')
+    .attr('class', 'point')
+
+  pointEnter.merge(point)
+    .attr('transform', d => {
+      var tx = xScale(d.Time);
+      var ty = yScale(d.Date);
+      return 'translate(' + [tx, ty] + ')';
+    });
+
+  //add circle to group
+  pointEnter.append('circle')
+    .attr('r', displaySize)
+    .style('opacity', viewOpacity)
+    .on("click", function (d) {
+      clearDayFilters();
+      displaySongInfo(d);
+      displayTags(d);
+      clearHighlight();
+      singleHighlight(d3.select(this));
+    });
+
+  //remove filtered out circles
+  point.exit().remove();
+}
+
+/**
+ * Updates the yScale to the current yState
+ */
+function updateYAxis() {
+  yScale.domain(yState);
+  yAxisG.transition()
+    .ease(d3.easePoly)
+    .duration(750)
+    .call(d3.axisLeft(yScale));
+}
+
+/**
+ * Handles the changing of months
+ * Updates all the data as needed and resets the filters
+ * @param {Object} date The date to update to
+ */
+export function changeDateRange(date) {
+  setYState(date);
+
+  // Update chart
+  updateYAxis();
+  filterRange(yState);
+  displayNumEntries();
+  updateCirclesRange();
+  drawCanvasBars();
+  clearDayFilters();
+  setDataList();
+}
+
+/**
+ * highlights the given point
+ * @param {Pt} dot The point to highlight
+ */
+function singleHighlight(dot) {
+  filterController('artist', dot._groups[0][0].__data__.Artist);
+  dot.transition()
+    .ease(d3.easePoly)
+    .duration(750)
+    .attr('r', 10)
+    .style('opacity', .5)
+    .attr('class', 'point')
+    .attr('id', 'selected');
+}
+
+/**
+ * Clears the highlight of the highlighted circle
+ */
+function clearHighlight() {
+  svg.select('#selected')
+    .attr('r', 3)
+    .attr('class', 'point')
+    .attr('id', '');
+}
+
+/**
+ * creates an event listener filter
+ * @param {string} type The type of filter
+ * @param {HTML element} element The element too add the event listener to
+ * @param {string} sourceValue Where the value to filter by comes from
+ */
+function addFilter(type, element, sourceValue) {
+  element.addEventListener("click", function () {
+    let filterValue;
+    const select = document.getElementById('filter-select');
+    const input = document.getElementById('filter-input');
+    if (sourceValue === "input") {
+      //filter value is the user input in text field
+      filterValue = input.value;
+      filterController(select.value, filterValue);
+    } else if (sourceValue === "info") {
+      //filter value is the text displayed in the info
+      filterValue = element.innerHTML;
+      select.value = type;
+      input.value = filterValue;
+      filterController(type, filterValue);
+      changeDataList(type);
+    }
+  });
+}
+
+/**
+ * Switches the current datalist to the new one
+ * @param {string} value The datalist to switch too
+ */
+function changeDataList(value) {
+  const filterInput = document.getElementById('filter-input');
+  filterInput.setAttribute('list', value + '-datalist');
+}
+
 
 
 /**
@@ -48,7 +407,7 @@ export const renderChart = () => {
   //Initialization
 
   //Where to add the graph to
-  const svg = d3.select('#main-graph')
+  svg = d3.select('#main-graph')
     .attr('width', width)
     .attr('height', height)
     .attr('viewBox', [0, 0, width, height])
@@ -59,367 +418,13 @@ export const renderChart = () => {
     .attr('width', width)
     .attr('height', 45);
 
-  /**
-   * Sets yState from the first day to the last day of the month for the given date
-   * @param {*} date 
-   */
-  function setYState(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    yState = [lastDay, firstDay];
-  }
-
-  /**
-   * Switches the current month's data to the newly selected month's data
-   * @param {array} range Array containing the upper date range, and lower date range
-   */
-  function filterRange(range) {
-    const lowerRange = range[1];
-    let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
-    datasetMonth = buckets[key];
-    filteredDatasetMonth = datasetMonth;
-  }
-
-  /**
-   * Displays the length of the current month's data
-   */
-  function displayNumEntries() {
-    //display length of fitlered list
-    document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
-  }
-
-  /**
-   * Sets the datalists to the current months data
-   */
-  function setDataList() {
-    const artistDataList = document.getElementById('artist-datalist');
-    const songDataList = document.getElementById('song-datalist');
-    const albumDataList = document.getElementById('album-datalist');
-
-    artistDataList.innerHTML = '';
-    songDataList.innerHTML = '';
-    albumDataList.innerHTML = '';
-
-    let artistSet = new Set();
-    let songSet = new Set();
-    let albumSet = new Set();
-    datasetMonth.forEach(d => {
-      artistSet.add(d.Artist);
-      songSet.add(d.SongTitle);
-      albumSet.add(d.Album);
-    });
-    const artistList = Array.from(artistSet).sort();
-    const songList = Array.from(songSet).sort();
-    const albumList = Array.from(albumSet).sort();
-
-    const maxLength = Math.max(artistList.length, songList.length, albumList.length);
-    let i = 0;
-    while (i < maxLength) {
-      if (i < artistList.length) {
-        const option1 = document.createElement('option');
-        option1.value = artistList[i];
-        artistDataList.appendChild(option1);
-      }
-      if (i < songList.length) {
-        const option2 = document.createElement('option');
-        option2.value = songList[i];
-        songDataList.appendChild(option2);
-      }
-      if (i < albumList.length) {
-        const option3 = document.createElement('option');
-        option3.value = albumList[i];
-        albumDataList.appendChild(option3);
-      }
-      i++;
-    }
-  }
-
-  /**
-   * Handles filter functionality
-   * @param {string} type the type of filter
-   * @param {string} value the value to filter by
-   */
-  function filterController(type, value) {
-    clearHighlight()
-    if (type === "song") {
-      filterSong(value);
-      updateCircles(5, .5);
-    } else if (type === "artist") {
-      filterArtist(value);
-      updateCircles(5, .5);
-    } else if (type === "album") {
-      filterAlbum(value);
-      updateCircles(5, .5);
-    } else if (type === "day") {
-      filterDay(value);
-      updateCircles(3, .3);
-    }
-    drawCanvasBars();
-    displayNumEntries();
-  }
-
-  /**
-   * Filters the current month's data by the given song's name
-   * @param {string} song The song name to filter by
-   */
-  function filterSong(song) {
-    filteredDatasetMonth = datasetMonth.filter(d => d.SongTitle === song);
-  }
-
-  /**
-   * Filters the current month's data by the given arist's name
-   * @param {string} artist The artist's name to filter by
-   */
-  function filterArtist(artist) {
-    filteredDatasetMonth = datasetMonth.filter(d => d.Artist === artist);
-  }
-
-  /**
-   * Filters the current month's data by the given list of days
-   * @param {array} days The list of days to filter by
-   */
-  function filterDay(days) {
-    let newDataset = [];
-    days.forEach(function (day) {
-      newDataset = newDataset.concat(datasetMonth.filter(d => d.Day === day));
-    });
-    //if no days selected, display all
-    if (days.length > 0) {
-      filteredDatasetMonth = newDataset;
-    } else {
-      filteredDatasetMonth = datasetMonth;
-    }
-  }
-
-  /**
-   * Filters the current month's data by the given album's name
-   * @param {string} category The album's name to filter by
-   */
-  function filterAlbum(album) {
-    filteredDatasetMonth = datasetMonth.filter(d => d.Album === album);
-  }
-
-  /**
-   * Reset controller.
-   * Clears all filters and selections, and updates the visualizaiton accordingly
-   */
-  function resetGraph() {
-    displayNumEntries();
-    updateCircles();
-    drawCanvasBars();
-    clearHighlight();
-    clearDayFilters();
-    clearInput();
-  }
-
-  /**
-   * Resets the checkbox filters (day filters)
-   */
-  function clearDayFilters() {
-    const input = document.getElementsByTagName('input');
-    const checkbox = Array.from(input).filter(input => input.type === "checkbox");
-    Array.from(checkbox).forEach(function (cb) {
-      cb.checked = false;
-      let change = new Event('change');
-      cb.dispatchEvent(change);
-    });
-  }
-
-  /**
-   * Resets the values in the text inputs
-   */
-  function clearInput() {
-    const filterInput = document.getElementById('filter-input');
-    filterInput.value = '';
-  }
-
-  /**
-   * Initial render of the current month's data
-   */
-  function renderCircles() {
-    //filtered selection
-    var point = svg.selectAll('.point')
-      .data(filteredDatasetMonth, d => d.ConvertedDateTime)
-
-    var pointEnter = point.enter()
-      .append('g')
-      .attr('class', 'point')
-
-    pointEnter.merge(point)
-      .attr('transform', d => {
-        var tx = xScale(d.Time);
-        var ty = yScale(d.Date);
-        return 'translate(' + [tx, ty] + ')';
-      });
-
-    //add circle to group
-    pointEnter.append('circle')
-      .attr('r', 3)
-      .style('opacity', .3)
-      .on("click", function (d) {
-        clearDayFilters();
-        displaySongInfo(d);
-        displayTags(d);
-        clearHighlight();
-        singleHighlight(d3.select(this));
-      });
-  }
-
-  /**
-   * Updates the filtered data points accordingly
-   * Points filtered out are more transparent. The other points are more opaque
-   * @param {number} displaySize The radius size to set the filtered data points to
-   * @param {number} viewOpacity The opaciity to set the filtered data points to
-   */
-  function updateCircles(displaySize = 3, viewOpacity = .3) {
-    //filtered selection
-    var point = svg.selectAll('.point')
-      .data(filteredDatasetMonth, d => d.ConvertedDateTime)
-
-    point.select("circle")
-      .attr('r', displaySize)
-      .style('opacity', viewOpacity);
-
-    //remove filtered out circles
-    point.exit()
-      .select("circle")
-      .attr('r', 3)
-      .style('opacity', .07);
-  }
-
-  /**
-   * Renders the new month's data
-   */
-  function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
-    //filtered selection
-    var point = svg.selectAll('.point')
-      .data(datasetMonth, d => d.ConvertedDateTime)
-
-    var pointEnter = point.enter()
-      .append('g')
-      .attr('class', 'point')
-
-    pointEnter.merge(point)
-      .attr('transform', d => {
-        var tx = xScale(d.Time);
-        var ty = yScale(d.Date);
-        return 'translate(' + [tx, ty] + ')';
-      });
-
-    //add circle to group
-    pointEnter.append('circle')
-      .attr('r', displaySize)
-      .style('opacity', viewOpacity)
-      .on("click", function (d) {
-        clearDayFilters();
-        displaySongInfo(d);
-        displayTags(d);
-        clearHighlight();
-        singleHighlight(d3.select(this));
-      });
-
-    //remove filtered out circles
-    point.exit().remove();
-  }
-
-  /**
-   * Updates the yScale to the current yState
-   */
-  function updateYAxis() {
-    yScale.domain(yState);
-    yAxisG.transition()
-      .ease(d3.easePoly)
-      .duration(750)
-      .call(d3.axisLeft(yScale));
-  }
-
-  /**
-   * Handles the changing of months
-   * Updates all the data as needed and resets the filters
-   * @param {Object} date The date to update to
-   */
-  function changeDateRange(date) {
-    setYState(date);
-
-    // Update chart
-    updateYAxis();
-    filterRange(yState);
-    displayNumEntries();
-    updateCirclesRange();
-    drawCanvasBars();
-    clearDayFilters();
-    setDataList();
-  }
-
-  /**
-   * highlights the given point
-   * @param {Pt} dot The point to highlight
-   */
-  function singleHighlight(dot) {
-    filterController('artist', dot._groups[0][0].__data__.Artist);
-    dot.transition()
-      .ease(d3.easePoly)
-      .duration(750)
-      .attr('r', 10)
-      .style('opacity', .5)
-      .attr('class', 'point')
-      .attr('id', 'selected');
-  }
-
-  /**
-   * Clears the highlight of the highlighted circle
-   */
-  function clearHighlight() {
-    svg.select('#selected')
-      .attr('r', 3)
-      .attr('class', 'point')
-      .attr('id', '');
-  }
-
-  /**
-   * creates an event listener filter
-   * @param {string} type The type of filter
-   * @param {HTML element} element The element too add the event listener to
-   * @param {string} sourceValue Where the value to filter by comes from
-   */
-  function addFilter(type, element, sourceValue) {
-    element.addEventListener("click", function () {
-      let filterValue;
-      const select = document.getElementById('filter-select');
-      const input = document.getElementById('filter-input');
-      if (sourceValue === "input") {
-        //filter value is the user input in text field
-        filterValue = input.value;
-        filterController(select.value, filterValue);
-      } else if (sourceValue === "info") {
-        //filter value is the text displayed in the info
-        filterValue = element.innerHTML;
-        select.value = type;
-        input.value = filterValue;
-        filterController(type, filterValue);
-        changeDataList(type);
-      }
-    });
-  }
-
-  /**
-   * Switches the current datalist to the new one
-   * @param {string} value The datalist to switch too
-   */
-  function changeDataList(value) {
-    const filterInput = document.getElementById('filter-input');
-    filterInput.setAttribute('list', value + '-datalist');
-  }
-
   //append x-axis
-  var xAxisG = svg.append('g')
+  xAxisG = svg.append('g')
     .attr('class', 'x axis')
     .attr('transform', `translate(0, ${height - padding.down})`)
 
   //append y-axis
-  var yAxisG = svg.append('g')
+  yAxisG = svg.append('g')
     .attr('class', 'y axis')
     .attr('transform', `translate(${padding.left}, 0)`)
 
@@ -451,7 +456,8 @@ export const renderChart = () => {
     //initialize date range
     const latestDate = dataset[0].Date;
     const earliestDate = dataset[dataset.length - 1].Date;
-    const select = document.getElementById('date-range');
+    const selectYear = document.getElementById('year-select');
+    const uniqueYears = new Set();
 
     latestDate.setDate(1);
     latestDate.setHours(0, 0, 0, 0);
@@ -461,11 +467,11 @@ export const renderChart = () => {
     let currDate = new Date(latestDate);
 
     while (currDate >= earliestDate) {
-      const formattedDate = `${currDate.toLocaleDateString()}`;
-      const abbrevDate = `${currDate.toDateString().substring(4, 7)} ${currDate.getFullYear()}`;
-      const option = new Option(abbrevDate, formattedDate);
-
-      select.appendChild(option);
+      const year = currDate.getFullYear();
+      if (!uniqueYears.has(year)) {
+        uniqueYears.add(year);
+        selectYear.append(new Option(year, year));
+      }
 
       currDate.setMonth(currDate.getMonth() - 1);
     }
@@ -571,36 +577,15 @@ export const renderChart = () => {
       });
     });
 
-    //change date range
-    let selectList = document.getElementById("date-range");
-    selectList.addEventListener("change", function () {
-      let selectedValue = selectList.options[selectList.selectedIndex].value;
-      let date = new Date(selectedValue);
-      changeDateRange(date);
-    });
-
     //reset button
     let resetButton = document.getElementById("reset");
     resetButton.addEventListener("click", function () {
       resetGraph();
     });
 
-    //left/right buttons
-    let nextButton = document.getElementById('right');
-    nextButton.addEventListener("click", function () {
-      const nextMonth = getNextMonthDate();
-      if (nextMonth !== -1) changeDateRange(nextMonth);
-    });
-    let prevButton = document.getElementById('left');
-    prevButton.addEventListener("click", function () {
-      const prevMonth = getPrevMonthDate();
-      if (prevMonth !== -1) changeDateRange(prevMonth);
-    });
-
     //change datalist
     const filterSelect = document.getElementById('filter-select');
     filterSelect.addEventListener('change', function () {
-      console.log(`datalist changed to: ${filterSelect.value}`);
       changeDataList(filterSelect.value);
     });
 
