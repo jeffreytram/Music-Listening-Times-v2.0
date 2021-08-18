@@ -167,7 +167,7 @@ function filterAlbum(album) {
  * Reset controller.
  * Clears all filters and selections, and updates the visualizaiton accordingly
  */
-function resetGraph() {
+export function resetGraph() {
   displayNumEntries();
   updateCircles();
   drawCanvasBars();
@@ -355,7 +355,7 @@ function getValidMonthArr(date) {
  * Switches the current datalist to the new one
  * @param {string} value The datalist to switch too
  */
-function changeDataList(value) {
+export function changeDataList(value) {
   const filterInput = document.getElementById('filter-input');
   filterInput.setAttribute('list', value + '-datalist');
 }
@@ -611,18 +611,6 @@ export const renderChart = () => {
         }
         filterController("day", checkedDays);
       });
-    });
-
-    //reset button
-    let resetButton = document.getElementById("reset");
-    resetButton.addEventListener("click", function () {
-      resetGraph();
-    });
-
-    //change datalist
-    const filterSelect = document.getElementById('filter-select');
-    filterSelect.addEventListener('change', function () {
-      changeDataList(filterSelect.value);
     });
 
     //filter-input listener

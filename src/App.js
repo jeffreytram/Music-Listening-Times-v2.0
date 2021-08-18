@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
-import { renderChart, drawCanvasBars, changeDateRange } from './logic/chart.js';
+import { renderChart, drawCanvasBars, changeDateRange, changeDataList, resetGraph } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
   constructor(props) {
@@ -24,13 +24,19 @@ class App extends React.Component {
     });
   }
 
+  handleSearchByChange = () => {
+    //change datalist
+    const filterSelect = document.getElementById('filter-select');
+    changeDataList(filterSelect.value);
+  }
+
   render() {
     const SearchFilter = (props) => {
       return (
         <div id="search-filter">
           <label htmlFor="general-filter">
             <span><FontAwesomeIcon icon={faSearch} /> Search by </span>
-            <select id="filter-select">
+            <select id="filter-select" onChange={this.handleSearchByChange}>
               <option value="artist" selected>Artist</option>
               <option value="song">Song</option>
               <option value="album">Album</option>
@@ -75,7 +81,7 @@ class App extends React.Component {
         <div id="filters">
           <SearchFilter />
           <DayFilter />
-          <button id="reset" className="button">Reset</button>
+          <button id="reset" className="button" onClick={resetGraph}>Reset</button>
           <div className="side-container">
             <div id="entries"><span id="entry-count"></span> entries</div>
             <DateNavigation />
