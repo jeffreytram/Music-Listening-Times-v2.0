@@ -12,6 +12,7 @@ let yAxisG = {};
 
 let filteredDatasetMonth = [];
 
+let datasetLoaded = [];
 let datasetMonth = [];
 let buckets = {};
 let yState = [];
@@ -436,9 +437,10 @@ export const drawCanvasBars = () => {
   }
 }
 
-export const renderChart = () => {
-  //Initialization
-
+/**
+ * Initializes the svg, canvas, and x/y axis
+ */
+const generateChartElements = () => {
   //Where to add the graph to
   svg = d3.select('#main-graph')
     .attr('width', width)
@@ -454,22 +456,66 @@ export const renderChart = () => {
   //append x-axis
   xAxisG = svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', `translate(0, ${height - padding.down})`)
+    .attr('transform', `translate(0, ${height - padding.down})`);
 
   //append y-axis
   yAxisG = svg.append('g')
     .attr('class', 'y axis')
-    .attr('transform', `translate(${padding.left}, 0)`)
+    .attr('transform', `translate(${padding.left}, 0)`);
 
-  //Initial load of the data. Default view, no filter
+  //cursor position vertical line
+  let line = svg.append('path')
+    .style('stroke', 'var(--secondary-color')
+    .style('stroke-width', '3px')
+    .style('stroke-dasharray', '4');
 
-  d3.csv('/lastfm-data-utf.csv').then(dataset => {
-    //convert date string to data object
-    let newDate = new Date();
-    newDate.setHours(0, 0, 0, 0);
-    let newDateMilis = newDate.getTime();
+  svg
+    .on('mousemove', function (event) {
+      let mouse = d3.pointer(event);
+      line.attr('d', function () {
+        //d = 'M100,0 L100,460
+        //move to 100,460 then line to 100,0
+        let d = 'M' + mouse[0] + ',0 ';
+        d += 'L' + mouse[0] + `,${height - padding.down}`;
+        return d;
+      });
+    })
+    .on('mouseover', function () {
+      line.style('opacity', .4)
+    })
+    .on('mouseout', function () {
+      line.style('opacity', 0);
+    });
 
-    //sorts all the data into buckets by the month and year
+  //append x-axis label
+  svg.append('text')
+    .attr('class', 'x label')
+    .attr('text-anchor', 'middle')
+    .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${height - padding.down / 4})`)
+    .text('Time of Day (hrs:mins)');
+
+  //append y-axis label
+  svg.append('text')
+    .attr('class', 'x label')
+    .attr('text-anchor', 'middle')
+    .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
+    .text('Date');
+}
+
+const loadData = () => {
+  datasetLoaded = d3.csv('/lastfm-data-utf.csv').then((data) => {
+    return data;
+  });
+}
+
+const preprocessData = () => {
+  //convert date string to data object
+  let newDate = new Date();
+  newDate.setHours(0, 0, 0, 0);
+  let newDateMilis = newDate.getTime();
+
+  //sorts all the data into buckets by the month and year
+  datasetLoaded.then(dataset => {
     dataset.forEach(d => {
       d.Date = new Date(d.Date);
       //add to bucket
@@ -486,11 +532,17 @@ export const renderChart = () => {
       d.Time.setTime(newDateMilis + timePeriodMillis);
     });
 
-    //initialize date range
+    // date range initialization
+  });
+}
+
+const dateRangeInitialization = () => {
+  //Initial load of the data. Default view, no filter
+
+  //initialize date range
+  datasetLoaded.then(dataset => {
     const latestDate = dataset[0].Date;
     const earliestDate = dataset[dataset.length - 1].Date;
-    const selectYear = document.getElementById('year-select');
-    const uniqueYears = new Set();
 
     latestDate.setDate(1);
     latestDate.setHours(0, 0, 0, 0);
@@ -499,42 +551,29 @@ export const renderChart = () => {
 
     let currDate = new Date(latestDate);
 
+    const uniqueYears = new Set();
+    const yearSelect= document.getElementById('year-select');
     while (currDate >= earliestDate) {
       const year = currDate.getFullYear();
       if (!uniqueYears.has(year)) {
         uniqueYears.add(year);
-        selectYear.append(new Option(year, year));
-      }
 
+        // create option
+        const newYearOption = new Option(year, year);
+        // add select option
+        yearSelect.appendChild(newYearOption);
+      }
       currDate.setMonth(currDate.getMonth() - 1);
     }
+  });
+}
+
+const otherInitialization = () => {
+  datasetLoaded.then(dataset => {
+    const latestDate = dataset[0].Date;
 
     // Initialzation of global object to store state of the y-axis range
     setYState(latestDate);
-
-    //cursor position vertical line
-    let line = svg.append('path')
-      .style('stroke', 'var(--secondary-color')
-      .style('stroke-width', '3px')
-      .style('stroke-dasharray', '4');
-
-    svg
-      .on('mousemove', function (event) {
-        let mouse = d3.pointer(event);
-        line.attr('d', function () {
-          //d = 'M100,0 L100,460
-          //move to 100,460 then line to 100,0
-          let d = 'M' + mouse[0] + ',0 ';
-          d += 'L' + mouse[0] + `,${height - padding.down}`;
-          return d;
-        });
-      })
-      .on('mouseover', function () {
-        line.style('opacity', .4)
-      })
-      .on('mouseout', function () {
-        line.style('opacity', 0);
-      })
 
     //x-axis scale
     xScale = d3.scaleTime()
@@ -546,6 +585,11 @@ export const renderChart = () => {
       .domain(yState)
       .range([padding.top, height - padding.down]);
 
+    // intialization of global object to store the month's data we want to display
+    datasetMonth = buckets[`${latestDate.getMonth() + 1} ${latestDate.getFullYear()}`];
+    // intialization of global object to store the month's data we want to display
+    filteredDatasetMonth = datasetMonth;
+
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
       .ticks(d3.timeHour.every(2))
@@ -555,28 +599,7 @@ export const renderChart = () => {
     var yAxis = d3.axisLeft(yScale)
 
     xAxisG.call(xAxis);
-
-    //append x-axis label
-    svg.append('text')
-      .attr('class', 'x label')
-      .attr('text-anchor', 'middle')
-      .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${height - padding.down / 4})`)
-      .text('Time of Day (hrs:mins)');
-
-
     yAxisG.call(yAxis);
-
-    //append y-axis label
-    svg.append('text')
-      .attr('class', 'x label')
-      .attr('text-anchor', 'middle')
-      .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
-      .text('Date');
-
-    // intialization of global object to store the month's data we want to display
-    datasetMonth = buckets[`${latestDate.getMonth() + 1} ${latestDate.getFullYear()}`];
-    // intialization of global object to store the month's data we want to display
-    filteredDatasetMonth = datasetMonth;
 
     setDataList();
     filterRange(yState);
@@ -587,7 +610,11 @@ export const renderChart = () => {
 
     // ables/disables valid month options
     updateOptionVisibility(yState[1]);
+  });
+}
 
+const setFilters = () => {
+  datasetLoaded.then(dataset => {
     //song, artist, and album filter
     const submitFilter = document.getElementById('submit-button');
     addFilter(null, submitFilter, 'input');
@@ -620,12 +647,24 @@ export const renderChart = () => {
         submitFilter.dispatchEvent(new Event('click'));
       }
     });
-
-    //finished loading
-    const loading = document.getElementById('loading');
-    const content = document.getElementById('content-container');
-
-    loading.style.display = 'none';
-    content.style.display = 'block';
   });
+}
+
+const finishedLoading = () => {
+  //finished loading
+  const loading = document.getElementById('loading');
+  const content = document.getElementById('content-container');
+
+  loading.style.display = 'none';
+  content.style.display = 'block';
+}
+
+export const setup = () => {
+  generateChartElements();
+  loadData();
+  preprocessData();
+  dateRangeInitialization();
+  otherInitialization();
+  setFilters();
+  finishedLoading();
 }

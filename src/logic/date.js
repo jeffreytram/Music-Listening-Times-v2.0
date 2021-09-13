@@ -1,7 +1,8 @@
 /**
  * Switches from the current month to the next month
+ * NOTE: no longer needed with recent date change
  */
-export function getNextMonthDate() {
+function getNextMonthDate() {
   const currDate = new Date(getSelectedValue());
   const year = currDate.getFullYear();
   const month = currDate.getMonth();
@@ -13,8 +14,9 @@ export function getNextMonthDate() {
 
 /**
  * Switches from the current month to the previous month
+ * NOTE: no longer needed with recent date change
  */
-export function getPrevMonthDate() {
+function getPrevMonthDate() {
   const currDate = new Date(getSelectedValue());
   const year = currDate.getFullYear();
   const month = currDate.getMonth();
@@ -26,6 +28,7 @@ export function getPrevMonthDate() {
 
 /**
  * Retrieves the value of the option selected from the month dropdown selector
+ * NOTE: no longer needed with recent date change
  */
 function getSelectedValue() {
   let selectList = document.getElementById("date-range");
@@ -36,7 +39,7 @@ function getSelectedValue() {
 /**
  * Checks if the given month/year is in the data
  */
-function validMonth(month) {
+export function validMonth(bucket) {
   let selector = document.getElementById('date-range');
   for (let i = 0; i < selector.options.length; i++) {
     if (selector.options[i].text === month) {

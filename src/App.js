@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
-import { renderChart, drawCanvasBars, changeDateRange, changeDataList, resetGraph } from './logic/chart.js';
+import { setup, drawCanvasBars, changeDateRange, changeDataList, resetGraph } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    renderChart();
+    setup();
   }
 
   toggleDarkTheme = () => {
