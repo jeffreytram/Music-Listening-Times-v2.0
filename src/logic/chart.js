@@ -26,12 +26,13 @@ let canvas = [];
  * Sets yState from the first day to the last day of the month for the given date
  * @param {*} date 
  */
-function setYState(date) {
+export function setYState(date) {
   const year = date.getFullYear();
   const month = date.getMonth();
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
   yState = [lastDay, firstDay];
+  return yState;
 }
 
 /**
@@ -438,77 +439,20 @@ export const drawCanvasBars = () => {
 }
 
 /**
- * Initializes the svg, canvas, and x/y axis
+ * Loads the music data from the csv
  */
-const generateChartElements = () => {
-  //Where to add the graph to
-  svg = d3.select('#main-graph')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('viewBox', [0, 0, width, height])
-    .attr('preserveAspectRatio', 'xMidYMid meet')
-    .classed('svg-content', true);
-
-  canvas = d3.select('#canvas')
-    .attr('width', width)
-    .attr('height', 45);
-
-  //append x-axis
-  xAxisG = svg.append('g')
-    .attr('class', 'x axis')
-    .attr('transform', `translate(0, ${height - padding.down})`);
-
-  //append y-axis
-  yAxisG = svg.append('g')
-    .attr('class', 'y axis')
-    .attr('transform', `translate(${padding.left}, 0)`);
-
-  //cursor position vertical line
-  let line = svg.append('path')
-    .style('stroke', 'var(--secondary-color')
-    .style('stroke-width', '3px')
-    .style('stroke-dasharray', '4');
-
-  svg
-    .on('mousemove', function (event) {
-      let mouse = d3.pointer(event);
-      line.attr('d', function () {
-        //d = 'M100,0 L100,460
-        //move to 100,460 then line to 100,0
-        let d = 'M' + mouse[0] + ',0 ';
-        d += 'L' + mouse[0] + `,${height - padding.down}`;
-        return d;
-      });
-    })
-    .on('mouseover', function () {
-      line.style('opacity', .4)
-    })
-    .on('mouseout', function () {
-      line.style('opacity', 0);
-    });
-
-  //append x-axis label
-  svg.append('text')
-    .attr('class', 'x label')
-    .attr('text-anchor', 'middle')
-    .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${height - padding.down / 4})`)
-    .text('Time of Day (hrs:mins)');
-
-  //append y-axis label
-  svg.append('text')
-    .attr('class', 'x label')
-    .attr('text-anchor', 'middle')
-    .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
-    .text('Date');
-}
-
 const loadData = () => {
   datasetLoaded = d3.csv('/lastfm-data-utf.csv').then((data) => {
     return data;
   });
 }
 
-const preprocessData = () => {
+/**
+ * Processes the data into buckets
+ * @param {Function} setDatasetBuckets 
+ * @param {Function} setDatasetMonth 
+ */
+const preprocessData = (setDatasetBuckets, setDatasetMonth) => {
   //convert date string to data object
   let newDate = new Date();
   newDate.setHours(0, 0, 0, 0);
@@ -532,11 +476,22 @@ const preprocessData = () => {
       d.Time.setTime(newDateMilis + timePeriodMillis);
     });
 
-    // date range initialization
+    setDatasetBuckets(buckets);
+
+    const latestDate = dataset[0].Date;
+
+    // intialization of global object to store the month's data we want to display
+    datasetMonth = buckets[`${latestDate.getMonth() + 1} ${latestDate.getFullYear()}`];
+    // intialization of global object to store the month's data we want to display
+
+    filteredDatasetMonth = datasetMonth;
+    // TODO: once React refactored, we no longer need the global filteredDatasetMonth variable
+
+    setDatasetMonth(latestDate.getMonth() + 1, latestDate.getFullYear());
   });
 }
 
-const dateRangeInitialization = () => {
+const dateRangeInitialization = (setYearList) => {
   //Initial load of the data. Default view, no filter
 
   //initialize date range
@@ -552,64 +507,14 @@ const dateRangeInitialization = () => {
     let currDate = new Date(latestDate);
 
     const uniqueYears = new Set();
-    const yearSelect= document.getElementById('year-select');
     while (currDate >= earliestDate) {
       const year = currDate.getFullYear();
       if (!uniqueYears.has(year)) {
         uniqueYears.add(year);
-
-        // create option
-        const newYearOption = new Option(year, year);
-        // add select option
-        yearSelect.appendChild(newYearOption);
       }
       currDate.setMonth(currDate.getMonth() - 1);
     }
-  });
-}
-
-const otherInitialization = () => {
-  datasetLoaded.then(dataset => {
-    const latestDate = dataset[0].Date;
-
-    // Initialzation of global object to store state of the y-axis range
-    setYState(latestDate);
-
-    //x-axis scale
-    xScale = d3.scaleTime()
-      .domain(d3.extent(dataset, d => d.Time))
-      .range([padding.left, width - padding.right]);
-
-    //y-axis scale
-    yScale = d3.scaleTime()
-      .domain(yState)
-      .range([padding.top, height - padding.down]);
-
-    // intialization of global object to store the month's data we want to display
-    datasetMonth = buckets[`${latestDate.getMonth() + 1} ${latestDate.getFullYear()}`];
-    // intialization of global object to store the month's data we want to display
-    filteredDatasetMonth = datasetMonth;
-
-    //x-axis line
-    var xAxis = d3.axisBottom(xScale)
-      .ticks(d3.timeHour.every(2))
-      .tickFormat(d3.timeFormat('%H:%M'));
-
-    //y-axis line
-    var yAxis = d3.axisLeft(yScale)
-
-    xAxisG.call(xAxis);
-    yAxisG.call(yAxis);
-
-    setDataList();
-    filterRange(yState);
-    displayNumEntries();
-    //render all data points
-    renderCircles();
-    drawCanvasBars();
-
-    // ables/disables valid month options
-    updateOptionVisibility(yState[1]);
+    setYearList(Array.from(uniqueYears));
   });
 }
 
@@ -659,12 +564,11 @@ const finishedLoading = () => {
   content.style.display = 'block';
 }
 
-export const setup = () => {
-  generateChartElements();
+export const setup = ( setDatasetBuckets, setDatasetMonth, setYearList) => {
   loadData();
-  preprocessData();
-  dateRangeInitialization();
-  otherInitialization();
+  preprocessData(setDatasetBuckets, setDatasetMonth);
+  dateRangeInitialization(setYearList);
+
   setFilters();
   finishedLoading();
 }

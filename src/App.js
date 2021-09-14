@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
+import Graph from './components/Graph';
 import { setup, drawCanvasBars, changeDateRange, changeDataList, resetGraph } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
@@ -8,10 +9,36 @@ class App extends React.Component {
     super(props);
     this.state = {
       isDarkTheme: true,
+      datasetBuckets: {},
+      datasetMonth: [],
+      yearList: [],
+      month: 0,
+      year: 0,
     };
   }
+
   componentDidMount() {
-    setup();
+    setup(this.setDatasetBuckets, this.setDatasetMonth, this.setYearList);
+  }
+
+  setDatasetBuckets = (bucket) => {
+    this.setState(() => ({
+      datasetBuckets: bucket,
+    }));
+  }
+
+  setDatasetMonth = (month, year) => {
+    this.setState((prevState) => ({
+      datasetMonth: prevState.datasetBuckets[`${month} ${year}`],
+      month: month,
+      year: year
+    }));
+  }
+
+  setYearList = (years) => {
+    this.setState(() => ({
+      yearList: years,
+    }))
   }
 
   toggleDarkTheme = () => {
@@ -83,33 +110,48 @@ class App extends React.Component {
           <DayFilter />
           <button id="reset" className="button" onClick={resetGraph}>Reset</button>
           <div className="side-container">
-            <div id="entries"><span id="entry-count"></span> entries</div>
+            <div id="entries">{this.state.datasetMonth.length} entries</div>
             <DateNavigation />
           </div>
         </div>
       )
     }
 
-    const handleDateChange = () => {
-      const month = document.getElementById('month-select').value;
-      const year = document.getElementById('year-select').value;
-      const date = new Date(month + ' ' + year);
-      changeDateRange(date);
+    const handleMonthChange = (event) => {
+      const month = event.target.value
+      this.setState((prevState) => ({
+        datasetMonth: prevState.datasetBuckets[`${month} ${prevState.year}`],
+        month: month,
+      }));
+    };
+
+    const handleYearChange = (event) => {
+      const year = event.target.value
+      this.setState((prevState) => ({
+        datasetMonth: prevState.datasetBuckets[`${prevState.month} ${year}`],
+        year: year,
+      }));
     }
 
     const DateNavigation = (props) => {
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      const abbrev = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
       return (
         <div id="date-navigation">
-          <select id="month-select" onChange={handleDateChange}>
+          <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
             {months.map((month, i) => {
               return (
                 <option value={abbrev[i]}>{month}</option>
               )
             })}
           </select>
-          <select id="year-select" onChange={handleDateChange}></select>
+          <select id="year-select" onChange={handleYearChange} value={this.state.year}>
+            {this.state.yearList.map((year) => {
+              return (
+                <option value={year}>{year}</option>
+              )
+            })}
+          </select>
         </div>
       )
     }
@@ -151,8 +193,7 @@ class App extends React.Component {
           <Filters />
           <SongInfo />
           <div id="main">
-            <canvas id="canvas"></canvas>
-            <svg id="main-graph"></svg>
+            <Graph data={this.state.datasetMonth}/>
           </div>
         </div>
         <datalist id="artist-datalist"></datalist>
