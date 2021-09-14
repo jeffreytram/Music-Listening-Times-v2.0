@@ -12,6 +12,8 @@ let canvas = {};
 let xAxisG = {};
 let yAxisG = {};
 
+let xScale = {};
+
 export default class Graph extends React.Component {
   constructor(props) {
     super(props);
@@ -99,7 +101,7 @@ export default class Graph extends React.Component {
       const yState = setYState(latestDate);
 
       // x-axis scaled
-      const xScale = d3.scaleTime()
+      xScale = d3.scaleTime()
         .domain(d3.extent(data, d => d.Time))
         .range([padding.left, width - padding.right]);
 
@@ -153,31 +155,31 @@ export default class Graph extends React.Component {
       //remove filtered out circles
       point.exit().remove();
 
+      this.drawCanvasBars();
+    }
+  }
 
+  drawCanvasBars = () => {
+    const data = this.props.data;
 
+    const cWidth = canvas.node().width;
+    const cHeight = canvas.node().height;
 
+    //object with prop and methods used to render graphics in canvas element
+    let context = canvas.node().getContext('2d');
 
+    // clear canvas
+    context.clearRect(0, 0, cWidth, cHeight);
 
-      // DRAW CANVAS BARS
-      const cWidth = canvas.node().width;
-      const cHeight = canvas.node().height;
+    const style = getComputedStyle(document.body);
+    const rgb = style.getPropertyValue('--default-rgb');
 
-      //object with prop and methods used to render graphics in canvas element
-      let context = canvas.node().getContext('2d');
+    for (let i = 0; i < data.length; i++) {
+      let d = data[i];
 
-      // clear canvas
-      context.clearRect(0, 0, cWidth, cHeight);
-
-      const style = getComputedStyle(document.body);
-      const rgb = style.getPropertyValue('--default-rgb');
-
-      for (let i = 0; i < data.length; i++) {
-        let d = data[i];
-
-        //draw rect
-        context.fillStyle = `rgba(${rgb}, .1)`;
-        context.fillRect(xScale(d.Time), 0, 3, cHeight);
-      }
+      //draw rect
+      context.fillStyle = `rgba(${rgb}, .1)`;
+      context.fillRect(xScale(d.Time), 0, 3, cHeight);
     }
   }
 

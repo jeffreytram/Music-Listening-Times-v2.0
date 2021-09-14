@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
-import { setup, drawCanvasBars, changeDateRange, changeDataList, resetGraph } from './logic/chart.js';
+import { setup, changeDataList, resetGraph } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
   constructor(props) {
@@ -42,12 +42,12 @@ class App extends React.Component {
   }
 
   toggleDarkTheme = () => {
+    const body = document.getElementsByTagName('body')[0];
+    body.className = (this.state.isDarkTheme) ? 'light-theme' : '';
     this.setState((prevState) => ({
       isDarkTheme: !prevState.isDarkTheme,
     }), () => {
-      const body = document.getElementsByTagName('body')[0];
-      body.className = (this.state.isDarkTheme) ? '' : 'light-theme';
-      drawCanvasBars();
+
     });
   }
 
@@ -184,16 +184,16 @@ class App extends React.Component {
           <div id="theme-switcher" onClick={this.toggleDarkTheme}>
             {
               (this.state.isDarkTheme) ?
-                (<FontAwesomeIcon icon={faSun} />)
-                :
                 (<FontAwesomeIcon icon={faMoon} />)
+                :
+                (<FontAwesomeIcon icon={faSun} />)
             }
           </div>
           <h1>Music Listening Times</h1>
           <Filters />
           <SongInfo />
           <div id="main">
-            <Graph data={this.state.datasetMonth}/>
+            <Graph data={this.state.datasetMonth} />
           </div>
         </div>
         <datalist id="artist-datalist"></datalist>

@@ -416,7 +416,7 @@ function addFilter(type, element, sourceValue) {
 /**
  * Draws the single axis vertical bar visualization
  */
-export const drawCanvasBars = () => {
+const drawCanvasBars = () => {
   const width = canvas.node().width;
   const height = canvas.node().height;
 
@@ -564,7 +564,7 @@ const finishedLoading = () => {
   content.style.display = 'block';
 }
 
-export const setup = ( setDatasetBuckets, setDatasetMonth, setYearList) => {
+export const setup = (setDatasetBuckets, setDatasetMonth, setYearList) => {
   loadData();
   preprocessData(setDatasetBuckets, setDatasetMonth);
   dateRangeInitialization(setYearList);
