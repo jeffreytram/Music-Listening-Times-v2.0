@@ -14,6 +14,8 @@ class App extends React.Component {
       yearList: [],
       month: 0,
       year: 0,
+      datalist: { artist: [], song: [], album: [] },
+      datalistSetting: 'artist',
     };
   }
 
@@ -32,13 +34,38 @@ class App extends React.Component {
       datasetMonth: prevState.datasetBuckets[`${month} ${year}`],
       month: month,
       year: year
-    }));
+    }), () => {
+      this.setDatalist();
+    });
   }
 
   setYearList = (years) => {
     this.setState(() => ({
       yearList: years,
     }))
+  }
+
+  setDatalist = () => {
+    const artistSet = new Set();
+    const songSet = new Set();
+    const albumSet = new Set();
+
+    this.state.datasetMonth.forEach(d => {
+      artistSet.add(d.Artist);
+      songSet.add(d.SongTitle);
+      albumSet.add(d.Album);
+    });
+
+    const ignoreCaseSort = (a, b) => {
+      return a.toLowerCase().localeCompare(b.toLowerCase());
+    };
+    const artistList = Array.from(artistSet).sort(ignoreCaseSort);
+    const songList = Array.from(songSet).sort(ignoreCaseSort);
+    const albumList = Array.from(albumSet).sort(ignoreCaseSort);
+
+    this.setState(() => ({
+      datalist: { artist: artistList, song: songList, album: albumList },
+    }));
   }
 
   toggleDarkTheme = () => {
@@ -51,10 +78,11 @@ class App extends React.Component {
     });
   }
 
-  handleSearchByChange = () => {
+  handleSearchByChange = (event) => {
     //change datalist
-    const filterSelect = document.getElementById('filter-select');
-    changeDataList(filterSelect.value);
+    this.setState(() => ({
+      datalistSetting: event.target.value,
+    }));
   }
 
   render() {
@@ -63,14 +91,14 @@ class App extends React.Component {
         <div id="search-filter">
           <label htmlFor="general-filter">
             <span><FontAwesomeIcon icon={faSearch} /> Search by </span>
-            <select id="filter-select" onChange={this.handleSearchByChange}>
-              <option value="artist" selected>Artist</option>
+            <select id="filter-select" onChange={this.handleSearchByChange} value={this.state.datalistSetting}>
+              <option value="artist">Artist</option>
               <option value="song">Song</option>
               <option value="album">Album</option>
             </select>
           </label>
           <br />
-          <input type="text" id="filter-input" list="artist-datalist" placeholder="Search for..." />
+          <input type="text" id="filter-input" list={`${this.state.datalistSetting}-datalist`} placeholder="Search for..." />
           <button type="button" id="submit-button" className="button">Search</button>
         </div>
       )
@@ -122,7 +150,9 @@ class App extends React.Component {
       this.setState((prevState) => ({
         datasetMonth: prevState.datasetBuckets[`${month} ${prevState.year}`],
         month: month,
-      }));
+      }), () => {
+        this.setDatalist();
+      });
     };
 
     const handleYearChange = (event) => {
@@ -130,7 +160,9 @@ class App extends React.Component {
       this.setState((prevState) => ({
         datasetMonth: prevState.datasetBuckets[`${prevState.month} ${year}`],
         year: year,
-      }));
+      }), () => {
+        this.setDatalist();
+      });
     }
 
     const DateNavigation = (props) => {
@@ -196,9 +228,21 @@ class App extends React.Component {
             <Graph data={this.state.datasetMonth} />
           </div>
         </div>
-        <datalist id="artist-datalist"></datalist>
-        <datalist id="song-datalist"></datalist>
-        <datalist id="album-datalist"></datalist>
+        <datalist id="artist-datalist">
+          {this.state.datalist.artist.map(option => {
+            return <option>{option}</option>
+          })}
+        </datalist>
+        <datalist id="song-datalist">
+          {this.state.datalist.song.map(option => {
+            return <option>{option}</option>
+          })}
+        </datalist>
+        <datalist id="album-datalist">
+          {this.state.datalist.album.map(option => {
+            return <option>{option}</option>
+          })}
+        </datalist>
       </div>
     );
   }
