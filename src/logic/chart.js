@@ -524,26 +524,26 @@ const setFilters = () => {
     const submitFilter = document.getElementById('submit-button');
     addFilter(null, submitFilter, 'input');
 
-    let clickableFilters = ["album", "artist", "song"];
-    clickableFilters.forEach(type => {
-      let clickable = document.getElementsByClassName(type);
-      addFilter(type, clickable[0], "info");
-    });
+    // let clickableFilters = ["album", "artist", "song"];
+    // clickableFilters.forEach(type => {
+    //   let clickable = document.getElementsByClassName(type);
+    //   addFilter(type, clickable[0], "info");
+    // });
 
     //multiple day filter event listener
-    let checkbox = document.getElementsByTagName('input');
-    checkbox = Array.from(checkbox).filter(input => input.type === "checkbox");
-    let checkedDays = [];
-    Array.from(checkbox).forEach(function (cb) {
-      cb.addEventListener('change', function () {
-        if (this.checked) {
-          checkedDays.push(this.value);
-        } else {
-          checkedDays = checkedDays.filter(day => day !== this.value);
-        }
-        filterController("day", checkedDays);
-      });
-    });
+    // let checkbox = document.getElementsByTagName('input');
+    // checkbox = Array.from(checkbox).filter(input => input.type === "checkbox");
+    // let checkedDays = [];
+    // Array.from(checkbox).forEach(function (cb) {
+    //   cb.addEventListener('change', function () {
+    //     if (this.checked) {
+    //       checkedDays.push(this.value);
+    //     } else {
+    //       checkedDays = checkedDays.filter(day => day !== this.value);
+    //     }
+    //     filterController("day", checkedDays);
+    //   });
+    // });
 
     //filter-input listener
     const filterInput = document.getElementById('filter-input');

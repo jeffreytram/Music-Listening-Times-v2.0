@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
-import { setup, changeDataList, resetGraph } from './logic/chart.js';
+import { setup, resetGraph } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class App extends React.Component {
       year: 0,
       datalist: { artist: [], song: [], album: [] },
       datalistSetting: 'artist',
+      dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
     };
   }
 
@@ -85,6 +86,18 @@ class App extends React.Component {
     }));
   }
 
+  toggleDayCheckbox = (event) => {
+    const toggledDay = event.target.name;
+    this.setState((prevState) => {
+      return {
+        dayFilter: {
+          ...prevState.dayFilter,
+          [toggledDay]: !prevState.dayFilter[toggledDay],
+        }
+      };
+    });
+  }
+
   render() {
     const SearchFilter = (props) => {
       return (
@@ -108,7 +121,14 @@ class App extends React.Component {
       const { abbrevation, fullName, displayName } = props;
       return (
         <label htmlFor={abbrevation}>
-          <input type="checkbox" name={abbrevation} id={abbrevation} value={fullName} />
+          <input
+            type="checkbox"
+            name={abbrevation}
+            id={abbrevation}
+            value={fullName}
+            checked={this.state.dayFilter[abbrevation]}
+            onChange={this.toggleDayCheckbox}
+          />
           <span className="checkbox">{displayName}</span>
         </label>
       )
@@ -120,9 +140,9 @@ class App extends React.Component {
           <label><FontAwesomeIcon icon={faFilter} /> Filter by day of the week:</label>
           <div id="day-container">
             <DayButton abbrevation="mon" fullName="Monday" displayName="Mon" />
-            <DayButton abbrevation="tues" fullName="Tuesday" displayName="Tue" />
+            <DayButton abbrevation="tue" fullName="Tuesday" displayName="Tue" />
             <DayButton abbrevation="wed" fullName="Wednesday" displayName="Wed" />
-            <DayButton abbrevation="thurs" fullName="Thursday" displayName="Thu" />
+            <DayButton abbrevation="thu" fullName="Thursday" displayName="Thu" />
             <DayButton abbrevation="fri" fullName="Friday" displayName="Fri" />
             <DayButton abbrevation="sat" fullName="Saturday" displayName="Sat" />
             <DayButton abbrevation="sun" fullName="Sunday" displayName="Sun" />
