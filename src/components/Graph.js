@@ -18,12 +18,22 @@ export default class Graph extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      yScale: [],
     };
   }
 
   componentDidMount() {
     this.initializeGraph();
+  }
+
+  componentDidUpdate() {
+    const { newLoad } = this.props;
+    if (newLoad) {
+      // brand new month data load
+      this.drawGraph();
+    } else {
+      // updating the current month data with a filter/reset
+      this.updateGraph();
+    }
   }
 
   initializeGraph = () => {
@@ -49,6 +59,16 @@ export default class Graph extends React.Component {
     yAxisG = svg.append('g')
       .attr('class', 'y axis')
       .attr('transform', `translate(${padding.left}, 0)`);
+
+    const startDay = new Date();
+    startDay.setHours(0, 0, 0, 0);
+    const endDay = new Date();
+    endDay.setHours(23, 59, 59, 59);
+
+    // x-axis scaled - time from 00:00 - 23:59:59
+    xScale = d3.scaleTime()
+      .domain([startDay, endDay])
+      .range([padding.left, width - padding.right]);
 
     //cursor position vertical line
     let line = svg.append('path')
@@ -100,11 +120,6 @@ export default class Graph extends React.Component {
       const latestDate = data[0].Date;
       const yState = setYState(latestDate);
 
-      // x-axis scaled
-      xScale = d3.scaleTime()
-        .domain(d3.extent(data, d => d.Time))
-        .range([padding.left, width - padding.right]);
-
       //y-axis scale
       const yScale = d3.scaleTime()
         .domain(yState)
@@ -127,11 +142,11 @@ export default class Graph extends React.Component {
       // RENDER CIRCLES
       //filtered selection
       var point = svg.selectAll('.point')
-        .data(data, d => d.ConvertedDateTime)
+        .data(data, d => d.ConvertedDateTime);
 
       var pointEnter = point.enter()
         .append('g')
-        .attr('class', 'point')
+        .attr('class', 'point');
 
       pointEnter.merge(point)
         .attr('transform', d => {
@@ -159,6 +174,24 @@ export default class Graph extends React.Component {
     }
   }
 
+  updateGraph = () => {
+    const { filteredData } = this.props;
+
+    //filtered selection
+    var point = svg.selectAll('.point')
+      .data(filteredData, d => d.ConvertedDateTime)
+
+    point.select("circle")
+      .attr('r', 3)
+      .style('opacity', .3);
+
+    //remove filtered out circles
+    point.exit()
+      .select("circle")
+      .attr('r', 3)
+      .style('opacity', .07);
+  }
+
   drawCanvasBars = () => {
     const data = this.props.data;
 
@@ -184,7 +217,6 @@ export default class Graph extends React.Component {
   }
 
   render() {
-    this.drawGraph();
     return <div>
       <canvas id="canvas"></canvas>
       <svg id="main-graph"></svg>

@@ -142,18 +142,27 @@ function filterArtist(artist) {
 
 /**
  * Filters the current month's data by the given list of days
- * @param {array} days The list of days to filter by
+ * @param {Object} dayFilter
+ * @param {Array} dataset
  */
-function filterDay(days) {
+export const filterDay = (dayFilter, dataset) => {
   let newDataset = [];
-  days.forEach(function (day) {
-    newDataset = newDataset.concat(datasetMonth.filter(d => d.Day === day));
+  // get the applied day filters from the object
+  const weekList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const abbrevList = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+  let daySelectedCount = 0;
+
+  abbrevList.forEach((day, i) => {
+    if (dayFilter[day]) {
+      newDataset = newDataset.concat(dataset.filter(d => d.Day === weekList[i]));
+      daySelectedCount++;
+    }
   });
   //if no days selected, display all
-  if (days.length > 0) {
-    filteredDatasetMonth = newDataset;
+  if (daySelectedCount > 0) {
+    return newDataset;
   } else {
-    filteredDatasetMonth = datasetMonth;
+    return dataset;
   }
 }
 

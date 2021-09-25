@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
-import { setup, resetGraph } from './logic/chart.js';
+import { setup, resetGraph, filterDay } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
   constructor(props) {
@@ -11,12 +11,14 @@ class App extends React.Component {
       isDarkTheme: true,
       datasetBuckets: {},
       datasetMonth: [],
+      filteredDatasetMonth: [],
       yearList: [],
       month: 0,
       year: 0,
       datalist: { artist: [], song: [], album: [] },
       datalistSetting: 'artist',
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
+      newLoad: false,
     };
   }
 
@@ -33,8 +35,10 @@ class App extends React.Component {
   setDatasetMonth = (month, year) => {
     this.setState((prevState) => ({
       datasetMonth: prevState.datasetBuckets[`${month} ${year}`],
+      filteredDatasetMonth: prevState.datasetBuckets[`${month} ${year}`],
       month: month,
-      year: year
+      year: year,
+      newLoad: true,
     }), () => {
       this.setDatalist();
     });
@@ -66,6 +70,7 @@ class App extends React.Component {
 
     this.setState(() => ({
       datalist: { artist: artistList, song: songList, album: albumList },
+      newLoad: false,
     }));
   }
 
@@ -95,6 +100,13 @@ class App extends React.Component {
           [toggledDay]: !prevState.dayFilter[toggledDay],
         }
       };
+    }, () => {
+      // TODO: filter datasetmonth by date
+      const filteredDataset = filterDay(this.state.dayFilter, this.state.datasetBuckets[`${this.state.month} ${this.state.year}`]);
+      this.setState(() => ({
+        filteredDatasetMonth: filteredDataset,
+      }));
+      // 
     });
   }
 
@@ -158,7 +170,7 @@ class App extends React.Component {
           <DayFilter />
           <button id="reset" className="button" onClick={resetGraph}>Reset</button>
           <div className="side-container">
-            <div id="entries">{this.state.datasetMonth.length} entries</div>
+            <div id="entries">{this.state.filteredDatasetMonth.length} entries</div>
             <DateNavigation />
           </div>
         </div>
@@ -166,23 +178,13 @@ class App extends React.Component {
     }
 
     const handleMonthChange = (event) => {
-      const month = event.target.value
-      this.setState((prevState) => ({
-        datasetMonth: prevState.datasetBuckets[`${month} ${prevState.year}`],
-        month: month,
-      }), () => {
-        this.setDatalist();
-      });
+      const month = event.target.value;
+      this.setDatasetMonth(month, this.state.year);
     };
 
     const handleYearChange = (event) => {
-      const year = event.target.value
-      this.setState((prevState) => ({
-        datasetMonth: prevState.datasetBuckets[`${prevState.month} ${year}`],
-        year: year,
-      }), () => {
-        this.setDatalist();
-      });
+      const year = event.target.value;
+      this.setDatasetMonth(this.state.month, year);
     }
 
     const DateNavigation = (props) => {
@@ -226,6 +228,7 @@ class App extends React.Component {
         </div>
       )
     }
+    // ------------------------------------------------------
     return (
       <div class="site-container">
         <div id="loading">
@@ -245,7 +248,7 @@ class App extends React.Component {
           <Filters />
           <SongInfo />
           <div id="main">
-            <Graph data={this.state.datasetMonth} />
+            <Graph data={this.state.datasetMonth} filteredData={this.state.filteredDatasetMonth} newLoad={this.state.newLoad} />
           </div>
         </div>
         <datalist id="artist-datalist">
