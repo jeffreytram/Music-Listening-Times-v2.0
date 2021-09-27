@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
+import SearchForm from './components/SearchForm';
 import { setup, resetGraph, filterDay } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
@@ -91,6 +92,13 @@ class App extends React.Component {
     }));
   }
 
+  handleSearchFormSubmit = (filteredDataset) => {
+    this.setState(() => ({
+      filteredDatasetMonth: filteredDataset,
+    }));
+    // 
+  }
+
   toggleDayCheckbox = (event) => {
     const toggledDay = event.target.name;
     this.setState((prevState) => {
@@ -123,8 +131,12 @@ class App extends React.Component {
             </select>
           </label>
           <br />
-          <input type="text" id="filter-input" list={`${this.state.datalistSetting}-datalist`} placeholder="Search for..." />
-          <button type="button" id="submit-button" className="button">Search</button>
+          <SearchForm
+            setting={this.state.datalistSetting}
+            handleSearchFormSubmit={this.handleSearchFormSubmit}
+            data={this.state.datasetMonth}
+            datalist={`${this.state.datalistSetting}-datalist`}
+          />
         </div>
       )
     }

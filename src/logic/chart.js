@@ -104,24 +104,16 @@ function setDataList() {
  * Handles filter functionality
  * @param {string} type the type of filter
  * @param {string} value the value to filter by
+ * @param {array} dataset the data to filter
  */
-function filterController(type, value) {
-  clearHighlight()
-  if (type === "song") {
-    filterSong(value);
-    updateCircles(5, .5);
-  } else if (type === "artist") {
-    filterArtist(value);
-    updateCircles(5, .5);
-  } else if (type === "album") {
-    filterAlbum(value);
-    updateCircles(5, .5);
-  } else if (type === "day") {
-    filterDay(value);
-    updateCircles(3, .3);
+export function searchFilter(type, value, dataset) {
+  const settings = ['song', 'artist', 'album'];
+  const keys = ['SongTitle', 'Artist', 'Album'];
+  for (let i = 0; i < settings.length; i++) {
+    if (type === settings[i]) {
+      return dataset.filter(d => d[keys[i]] === value);
+    }
   }
-  drawCanvasBars();
-  displayNumEntries();
 }
 
 /**
@@ -138,6 +130,14 @@ function filterSong(song) {
  */
 function filterArtist(artist) {
   filteredDatasetMonth = datasetMonth.filter(d => d.Artist === artist);
+}
+
+/**
+ * Filters the current month's data by the given album's name
+ * @param {string} category The album's name to filter by
+ */
+ function filterAlbum(album) {
+  filteredDatasetMonth = datasetMonth.filter(d => d.Album === album);
 }
 
 /**
@@ -164,14 +164,6 @@ export const filterDay = (dayFilter, dataset) => {
   } else {
     return dataset;
   }
-}
-
-/**
- * Filters the current month's data by the given album's name
- * @param {string} category The album's name to filter by
- */
-function filterAlbum(album) {
-  filteredDatasetMonth = datasetMonth.filter(d => d.Album === album);
 }
 
 /**
@@ -376,7 +368,7 @@ export function changeDataList(value) {
  * @param {Pt} dot The point to highlight
  */
 function singleHighlight(dot) {
-  filterController('artist', dot._groups[0][0].__data__.Artist);
+  // filterController('artist', dot._groups[0][0].__data__.Artist);
   dot.transition()
     .ease(d3.easePoly)
     .duration(750)
@@ -410,13 +402,13 @@ function addFilter(type, element, sourceValue) {
     if (sourceValue === "input") {
       //filter value is the user input in text field
       filterValue = input.value;
-      filterController(select.value, filterValue);
+      // filterController(select.value, filterValue);
     } else if (sourceValue === "info") {
       //filter value is the text displayed in the info
       filterValue = element.innerHTML;
       select.value = type;
       input.value = filterValue;
-      filterController(type, filterValue);
+      // filterController(type, filterValue);
       changeDataList(type);
     }
   });
