@@ -13,6 +13,7 @@ class App extends React.Component {
       datasetBuckets: {},
       datasetMonth: [],
       filteredDatasetMonth: [],
+      filterView: 'none',
       yearList: [],
       month: 0,
       year: 0,
@@ -37,6 +38,7 @@ class App extends React.Component {
     this.setState((prevState) => ({
       datasetMonth: prevState.datasetBuckets[`${month} ${year}`],
       filteredDatasetMonth: prevState.datasetBuckets[`${month} ${year}`],
+      filterView: 'none',
       month: month,
       year: year,
       newLoad: true,
@@ -95,6 +97,7 @@ class App extends React.Component {
   handleSearchFormSubmit = (filteredDataset) => {
     this.setState(() => ({
       filteredDatasetMonth: filteredDataset,
+      filterView: 'search',
     }));
     // 
   }
@@ -106,7 +109,8 @@ class App extends React.Component {
         dayFilter: {
           ...prevState.dayFilter,
           [toggledDay]: !prevState.dayFilter[toggledDay],
-        }
+        },
+        filterView: 'day',
       };
     }, () => {
       // TODO: filter datasetmonth by date
@@ -260,7 +264,12 @@ class App extends React.Component {
           <Filters />
           <SongInfo />
           <div id="main">
-            <Graph data={this.state.datasetMonth} filteredData={this.state.filteredDatasetMonth} newLoad={this.state.newLoad} />
+            <Graph
+              data={this.state.datasetMonth}
+              filteredData={this.state.filteredDatasetMonth}
+              filterView={this.state.filterView}
+              newLoad={this.state.newLoad}
+            />
           </div>
         </div>
         <datalist id="artist-datalist">

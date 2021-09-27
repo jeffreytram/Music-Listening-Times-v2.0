@@ -14,6 +14,13 @@ let yAxisG = {};
 
 let xScale = {};
 
+const defaultRadius = 3;
+const slightlyLargerRadius = 5;
+
+const defaultOpacity = .3;
+const slightlyMoreOpacity = .5;
+const hiddenOpacity = .05;
+
 export default class Graph extends React.Component {
   constructor(props) {
     super(props);
@@ -157,8 +164,8 @@ export default class Graph extends React.Component {
 
       //add circle to group
       pointEnter.append('circle')
-        .attr('r', 3)
-        .style('opacity', .3)
+        .attr('r', defaultRadius)
+        .style('opacity', defaultOpacity)
         .on("click", function (d) {
           // clearDayFilters();
           // displaySongInfo(d);
@@ -175,21 +182,24 @@ export default class Graph extends React.Component {
   }
 
   updateGraph = () => {
-    const { filteredData } = this.props;
+    const { filteredData, filterView } = this.props;
 
     //filtered selection
     var point = svg.selectAll('.point')
-      .data(filteredData, d => d.ConvertedDateTime)
+      .data(filteredData, d => d.ConvertedDateTime);
+
+    const opacity = (filterView === 'search') ? slightlyMoreOpacity : defaultOpacity;
+    const radius = (filterView === 'search') ? slightlyLargerRadius : defaultRadius;
 
     point.select("circle")
-      .attr('r', 3)
-      .style('opacity', .3);
+      .attr('r', radius)
+      .style('opacity', opacity);
 
     //remove filtered out circles
     point.exit()
       .select("circle")
-      .attr('r', 3)
-      .style('opacity', .07);
+      .attr('r', defaultRadius)
+      .style('opacity', hiddenOpacity);
 
     this.drawCanvasBars(filteredData);
   }
