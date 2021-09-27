@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
-import { setup, resetGraph, filterDay } from './logic/chart.js';
+import { setup, filterDay } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
   constructor(props) {
@@ -122,6 +122,14 @@ class App extends React.Component {
     });
   }
 
+  resetGraph = () => {
+    this.setState((prevState) => ({
+      filteredDatasetMonth: prevState.datasetMonth,
+      filterView: 'none',
+      dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
+    }));
+  }
+
   render() {
     const SearchFilter = (props) => {
       return (
@@ -184,7 +192,7 @@ class App extends React.Component {
         <div id="filters">
           <SearchFilter />
           <DayFilter />
-          <button id="reset" className="button" onClick={resetGraph}>Reset</button>
+          <button id="reset" className="button" onClick={this.resetGraph}>Reset</button>
           <div className="side-container">
             <div id="entries">{this.state.filteredDatasetMonth.length} entries</div>
             <DateNavigation />
