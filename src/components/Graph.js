@@ -170,7 +170,7 @@ export default class Graph extends React.Component {
       //remove filtered out circles
       point.exit().remove();
 
-      this.drawCanvasBars();
+      this.drawCanvasBars(data);
     }
   }
 
@@ -190,11 +190,11 @@ export default class Graph extends React.Component {
       .select("circle")
       .attr('r', 3)
       .style('opacity', .07);
+
+    this.drawCanvasBars(filteredData);
   }
 
-  drawCanvasBars = () => {
-    const data = this.props.data;
-
+  drawCanvasBars = (data) => {
     const cWidth = canvas.node().width;
     const cHeight = canvas.node().height;
 
