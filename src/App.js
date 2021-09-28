@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
+import SongInfo from './components/SongInfo';
 import { setup, filterDay } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
@@ -21,6 +22,7 @@ class App extends React.Component {
       datalistSetting: 'artist',
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       newLoad: false,
+      clickedPoint: {},
     };
   }
 
@@ -75,6 +77,12 @@ class App extends React.Component {
       datalist: { artist: artistList, song: songList, album: albumList },
       newLoad: false,
     }));
+  }
+
+  setClickedPoint = (point) => {
+    this.setState(() => ({
+      clickedPoint: point,
+    }))
   }
 
   toggleDarkTheme = () => {
@@ -233,26 +241,6 @@ class App extends React.Component {
         </div>
       )
     }
-
-    const SongInfo = (props) => {
-      return (
-        <div id="song-info-container">
-          <div id="song-info" className="hide">
-            <div>
-              <span className="info artist"></span> - <span className="info song"></span>
-            </div>
-            <div className="info art">
-              <img id="album-art"
-                src="https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png" />
-            </div>
-            <div className="info album"></div>
-            <div className="info date"></div>
-            <div id="tagList"></div>
-          </div>
-        </div>
-      )
-    }
-    // ------------------------------------------------------
     return (
       <div class="site-container">
         <div id="loading">
@@ -270,13 +258,14 @@ class App extends React.Component {
           </div>
           <h1>Music Listening Times</h1>
           <Filters />
-          <SongInfo />
+          <SongInfo clickedPoint={this.state.clickedPoint} />
           <div id="main">
             <Graph
               data={this.state.datasetMonth}
               filteredData={this.state.filteredDatasetMonth}
               filterView={this.state.filterView}
               newLoad={this.state.newLoad}
+              setClickedPoint={this.setClickedPoint}
             />
           </div>
         </div>

@@ -218,13 +218,8 @@ input[type=checkbox] {
 
 /* Song info */
 
-#song-info {
-  display: none;
-  text-align: center;
-}
-
 #album-art {
-  width: 30%;
+  width: 100px;
   margin: 5px 0px;
   border-radius: calc(var(--border-radius) + 5px);
   -webkit-box-shadow: 7px 7px 7px 0px var(--shadow);
@@ -322,9 +317,6 @@ input[type=checkbox] {
 }
 
 @media (min-width:800px) {
-  #album-art {
-    width: 50%;
-  }
   #day-filters {
     width: 100%;
   }

@@ -118,7 +118,7 @@ export default class Graph extends React.Component {
 
   drawGraph = () => {
     // OTHER INITIALIZATION
-    const { data } = this.props;
+    const { data, setClickedPoint } = this.props;
 
     // TODO: need to improve this
     // initial state, loading icon
@@ -166,7 +166,8 @@ export default class Graph extends React.Component {
       pointEnter.append('circle')
         .attr('r', defaultRadius)
         .style('opacity', defaultOpacity)
-        .on("click", function (d) {
+        .on("click", function (e, d) {
+          setClickedPoint(d);
           // clearDayFilters();
           // displaySongInfo(d);
           // displayTags(d);
