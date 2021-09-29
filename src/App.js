@@ -82,6 +82,13 @@ class App extends React.Component {
   setClickedPoint = (point) => {
     this.setState(() => ({
       clickedPoint: point,
+      filterView: 'select',
+    }))
+  }
+
+  setFilteredDatasetMonth = (dataset) => {
+    this.setState(() => ({
+      filteredDatasetMonth: dataset,
     }))
   }
 
@@ -266,6 +273,7 @@ class App extends React.Component {
               filterView={this.state.filterView}
               newLoad={this.state.newLoad}
               setClickedPoint={this.setClickedPoint}
+              setFilteredDatasetMonth={this.setFilteredDatasetMonth}
             />
           </div>
         </div>

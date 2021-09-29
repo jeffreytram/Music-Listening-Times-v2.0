@@ -15,11 +15,22 @@ let yAxisG = {};
 let xScale = {};
 
 const defaultRadius = 3;
-const slightlyLargerRadius = 5;
+const mediumRadius = 5;
+const largeRadius = 7;
 
 const defaultOpacity = .3;
-const slightlyMoreOpacity = .5;
+const mediumOpacity = .5;
+const highOpacity = .7;
 const hiddenOpacity = .05;
+
+const dict = [
+  ['none', [defaultOpacity, defaultRadius]],
+  ['day', [defaultOpacity, defaultRadius]],
+  ['search', [mediumOpacity, mediumRadius]],
+  ['select', [highOpacity, largeRadius]],
+]
+
+const circleSettings = new Map(dict);
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -118,7 +129,7 @@ export default class Graph extends React.Component {
 
   drawGraph = () => {
     // OTHER INITIALIZATION
-    const { data, setClickedPoint } = this.props;
+    const { data, setClickedPoint, setFilteredDatasetMonth } = this.props;
 
     // TODO: need to improve this
     // initial state, loading icon
@@ -168,6 +179,11 @@ export default class Graph extends React.Component {
         .style('opacity', defaultOpacity)
         .on("click", function (e, d) {
           setClickedPoint(d);
+          setFilteredDatasetMonth([d]);
+          // TODO: when clicked, need to update graph so only the selected point is viewed
+          // need to pass a filteredDatasetMonth setter to this component so we can set the filtereddataset to
+          // an array with only 1 point, the selected point.
+
           // clearDayFilters();
           // displaySongInfo(d);
           // displayTags(d);
@@ -188,9 +204,9 @@ export default class Graph extends React.Component {
     //filtered selection
     var point = svg.selectAll('.point')
       .data(filteredData, d => d.ConvertedDateTime);
-
-    const opacity = (filterView === 'search') ? slightlyMoreOpacity : defaultOpacity;
-    const radius = (filterView === 'search') ? slightlyLargerRadius : defaultRadius;
+    
+    const opacity = circleSettings.get(filterView)[0];
+    const radius = circleSettings.get(filterView)[1];
 
     point.select("circle")
       .attr('r', radius)
