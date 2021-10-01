@@ -105,6 +105,7 @@ function setDataList() {
  * @param {string} type the type of filter
  * @param {string} value the value to filter by
  * @param {array} dataset the data to filter
+ * @returns the filtered dataset
  */
 export function searchFilter(type, value, dataset) {
   const settings = ['song', 'artist', 'album'];
@@ -114,6 +115,8 @@ export function searchFilter(type, value, dataset) {
       return dataset.filter(d => d[keys[i]] === value);
     }
   }
+  // search type not found;
+  return [];
 }
 
 /**
