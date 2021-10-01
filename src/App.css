@@ -20,8 +20,8 @@ body.light-theme {
   --main-bg: #f6f6f6;
   --light: #e8e8e8;
   --secondary-color: rgba(30, 30, 30, 1);
-  --light-secondary: rgba(30, 30, 30, 0.2);
-  --very-light-secondary: rgba(30, 30, 30, .1);
+  --light-secondary: rgba(240, 240, 240, 1);
+  --very-light-secondary: rgba(250, 250, 250, 1);
   --default-rgb: 30, 30, 30;
   --secondary-r: 30;
   --secondary-g: 30;
@@ -46,7 +46,7 @@ html, body {
 }
 
 .site-container {
-  margin: 30px 15vw;
+  margin: 2em 5vw;
 }
 
 /* Loading Screen */
@@ -140,9 +140,9 @@ html, body {
 
 #filter-input {
   display: inline-block;
-  width: 300px;
+  width: clamp(100px, 50%, 350px);
   padding: 4px 8px;
-  margin-top: 5px;
+  margin: 5px 5px 5px 0px;
   border: none;
   border-radius: var(--border-radius);
   background-color: var(--light);
@@ -156,7 +156,6 @@ html, body {
 
 #day-filters {
   width: 100%;
-  margin: 25px 0px;
 }
 
 input[type=text] {
@@ -194,7 +193,8 @@ input[type=checkbox] {
 }
 
 #reset {
-  display: inline-block;
+  width: 103px;
+  height: 25px;
   padding: 4px 15px;
 }
 
@@ -228,6 +228,10 @@ input[type=checkbox] {
   box-shadow: 7px 7px 7px 0px var(--shadow);
 }
 
+.info {
+  overflow: hidden;
+}
+
 .artist:hover, .song:hover, .album:hover {
   text-decoration: underline;
 }
@@ -243,6 +247,10 @@ input[type=checkbox] {
 .song {
   font-size: large;
   font-weight: bold;
+}
+
+.date {
+  font-size: smaller;
 }
 
 #tagList {
@@ -262,6 +270,12 @@ input[type=checkbox] {
 }
 
 /* Website layout */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: 1em 1em;
+}
 
 #content-container {
   display: none;
@@ -285,22 +299,14 @@ input[type=checkbox] {
   transition: background-color .5s ease-out;
 }
 
-#filters {
-  height: 100%;
-  position: relative;
-  margin-bottom: 20px;
-}
-
 .side-container {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  float: right;
   text-align: right;
+  margin: 10px 0px;
 }
 
 #search-filter {
   width: 100%;
-  margin-bottom: 25px;
 }
 
 #song-info-grid {
@@ -328,5 +334,18 @@ input[type=checkbox] {
 @media (min-width:800px) {
   #day-filters {
     width: 100%;
+  }
+  .info-grid {
+    grid-template-columns: 50% 50%;
+  }
+  #song-info-grid {
+    grid-row: 1 / 4;
+    grid-column: 2 / 3;
+  }
+}
+
+@media (min-width: 1000px) {
+  .site-container {
+    margin: 2em 15vw;
   }
 }

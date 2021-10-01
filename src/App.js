@@ -10,7 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDarkTheme: true,
+      isDarkTheme: false,
       datasetBuckets: {},
       datasetMonth: [],
       filteredDatasetMonth: [],
@@ -93,8 +93,6 @@ class App extends React.Component {
   }
 
   toggleDarkTheme = () => {
-    const body = document.getElementsByTagName('body')[0];
-    body.className = (this.state.isDarkTheme) ? 'light-theme' : '';
     this.setState((prevState) => ({
       isDarkTheme: !prevState.isDarkTheme,
     }), () => {
@@ -144,6 +142,9 @@ class App extends React.Component {
   }
 
   render() {
+    const body = document.getElementsByTagName('body')[0];
+    body.className = (this.state.isDarkTheme) ? '' : 'light-theme';
+
     const SearchFilter = (props) => {
       return (
         <div id="search-filter">
@@ -164,96 +165,76 @@ class App extends React.Component {
           />
         </div >
       )
-  }
+    }
 
-  const DayButton = (props) => {
-    const { abbrevation, fullName, displayName } = props;
-    return (
-      <label htmlFor={abbrevation}>
-        <input
-          type="checkbox"
-          name={abbrevation}
-          id={abbrevation}
-          value={fullName}
-          checked={this.state.dayFilter[abbrevation]}
-          onChange={this.toggleDayCheckbox}
-        />
-        <span className="checkbox">{displayName}</span>
-      </label>
-    )
-  }
+    const DayButton = (props) => {
+      const { abbrevation, fullName, displayName } = props;
+      return (
+        <label htmlFor={abbrevation}>
+          <input
+            type="checkbox"
+            name={abbrevation}
+            id={abbrevation}
+            value={fullName}
+            checked={this.state.dayFilter[abbrevation]}
+            onChange={this.toggleDayCheckbox}
+          />
+          <span className="checkbox">{displayName}</span>
+        </label>
+      )
+    }
 
-  const DayFilter = (props) => {
-    return (
-      <div id="day-filters">
-        <label><FontAwesomeIcon icon={faFilter} /> Filter by day of the week:</label>
-        <div id="day-container">
-          <DayButton abbrevation="mon" fullName="Monday" displayName="Mon" />
-          <DayButton abbrevation="tue" fullName="Tuesday" displayName="Tue" />
-          <DayButton abbrevation="wed" fullName="Wednesday" displayName="Wed" />
-          <DayButton abbrevation="thu" fullName="Thursday" displayName="Thu" />
-          <DayButton abbrevation="fri" fullName="Friday" displayName="Fri" />
-          <DayButton abbrevation="sat" fullName="Saturday" displayName="Sat" />
-          <DayButton abbrevation="sun" fullName="Sunday" displayName="Sun" />
+    const DayFilter = (props) => {
+      return (
+        <div id="day-filters">
+          <label><FontAwesomeIcon icon={faFilter} /> Filter by day of the week:</label>
+          <div id="day-container">
+            <DayButton abbrevation="mon" fullName="Monday" displayName="Mon" />
+            <DayButton abbrevation="tue" fullName="Tuesday" displayName="Tue" />
+            <DayButton abbrevation="wed" fullName="Wednesday" displayName="Wed" />
+            <DayButton abbrevation="thu" fullName="Thursday" displayName="Thu" />
+            <DayButton abbrevation="fri" fullName="Friday" displayName="Fri" />
+            <DayButton abbrevation="sat" fullName="Saturday" displayName="Sat" />
+            <DayButton abbrevation="sun" fullName="Sunday" displayName="Sun" />
+          </div>
         </div>
-      </div>
-    )
-  }
+      )
+    }
 
-  const Filters = (props) => {
-    return (
-      <div id="filters">
-        <SearchFilter />
-        <DayFilter />
-        <button id="reset" className="button" onClick={this.resetGraph}>Reset</button>
-        <SongInfo
-          clickedPoint={this.state.clickedPoint}
-          setFilteredDatasetMonth={this.handleSearchFormSubmit}
-          setSearchType={this.setSearchType}
-          data={this.state.datasetMonth}
-        />
-        <div className="side-container">
-          <div id="entries">{this.state.filteredDatasetMonth.length} entries</div>
-          <DateNavigation />
+    const handleMonthChange = (event) => {
+      const month = event.target.value;
+      this.setDatasetMonth(month, this.state.year);
+    };
+
+    const handleYearChange = (event) => {
+      const year = event.target.value;
+      this.setDatasetMonth(this.state.month, year);
+    }
+
+    const DateNavigation = (props) => {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+      return (
+        <div id="date-navigation">
+          <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
+            {months.map((month, i) => {
+              return (
+                <option value={abbrev[i]}>{month}</option>
+              )
+            })}
+          </select>
+          <select id="year-select" onChange={handleYearChange} value={this.state.year}>
+            {this.state.yearList.map((year) => {
+              return (
+                <option value={year}>{year}</option>
+              )
+            })}
+          </select>
         </div>
-      </div>
-    )
-  }
-
-  const handleMonthChange = (event) => {
-    const month = event.target.value;
-    this.setDatasetMonth(month, this.state.year);
-  };
-
-  const handleYearChange = (event) => {
-    const year = event.target.value;
-    this.setDatasetMonth(this.state.month, year);
-  }
-
-  const DateNavigation = (props) => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+      )
+    }
     return (
-      <div id="date-navigation">
-        <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
-          {months.map((month, i) => {
-            return (
-              <option value={abbrev[i]}>{month}</option>
-            )
-          })}
-        </select>
-        <select id="year-select" onChange={handleYearChange} value={this.state.year}>
-          {this.state.yearList.map((year) => {
-            return (
-              <option value={year}>{year}</option>
-            )
-          })}
-        </select>
-      </div>
-    )
-  }
-  return(
-      <div class = "site-container" >
+      <div class="site-container" >
         <div id="loading">
           <div className="lds-dual-ring"></div>
           <h2>Loading...</h2>
@@ -268,7 +249,21 @@ class App extends React.Component {
             }
           </div>
           <h1>Music Listening Times</h1>
-          <Filters />
+          <div className="info-grid">
+            <SearchFilter />
+            <DayFilter />
+            <button id="reset" className="button" onClick={this.resetGraph}>Reset</button>
+            <SongInfo
+              clickedPoint={this.state.clickedPoint}
+              setFilteredDatasetMonth={this.handleSearchFormSubmit}
+              setSearchType={this.setSearchType}
+              data={this.state.datasetMonth}
+            />
+          </div>
+          <div className="side-container">
+            <div id="entries">{this.state.filteredDatasetMonth.length} entries</div>
+            <DateNavigation />
+          </div>
           <div id="main">
             <Graph
               data={this.state.datasetMonth}
