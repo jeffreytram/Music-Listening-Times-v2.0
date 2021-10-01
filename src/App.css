@@ -219,6 +219,7 @@ input[type=checkbox] {
 /* Song info */
 
 #album-art {
+  grid-row: 1 / 4;
   width: 100px;
   margin: 5px 0px;
   border-radius: calc(var(--border-radius) + 5px);
@@ -233,6 +234,10 @@ input[type=checkbox] {
 
 .artist, .album {
   font-weight: 600;
+}
+
+.album {
+  font-style: italic;
 }
 
 .song {
@@ -298,8 +303,12 @@ input[type=checkbox] {
   margin-bottom: 25px;
 }
 
-#song-info-container {
+#song-info-grid {
   width: 100%;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: 20px 40px 20px;
+  gap: 0px 10px;
 }
 
 #main {

@@ -208,6 +208,7 @@ class App extends React.Component {
           <SearchFilter />
           <DayFilter />
           <button id="reset" className="button" onClick={this.resetGraph}>Reset</button>
+          <SongInfo clickedPoint={this.state.clickedPoint} />
           <div className="side-container">
             <div id="entries">{this.state.filteredDatasetMonth.length} entries</div>
             <DateNavigation />
@@ -265,7 +266,6 @@ class App extends React.Component {
           </div>
           <h1>Music Listening Times</h1>
           <Filters />
-          <SongInfo clickedPoint={this.state.clickedPoint} />
           <div id="main">
             <Graph
               data={this.state.datasetMonth}
