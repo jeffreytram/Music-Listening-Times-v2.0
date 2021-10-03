@@ -103,6 +103,11 @@ html, body {
   fill: red;
 }
 
+.no-data-message {
+  fill: gray;
+  font-style: italic;
+}
+
 /* Title bar style */
 
 .title {

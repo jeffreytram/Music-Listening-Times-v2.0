@@ -157,6 +157,18 @@ export default class Graph extends React.Component {
 
 
     const inputData = (data) ? data : [];
+    // clear 'no data message'
+    svg.select('.no-data-message').remove();
+    if (inputData.length === 0) {
+      // genereate 'no data' text
+      //append x-axis label
+      svg.append('text')
+        .attr('class', 'no-data-message')
+        .attr('text-anchor', 'middle')
+        .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${(height - padding.down - padding.top) / 2})`)
+        .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric'})}`);
+    }
+
     // RENDER CIRCLES
     //filtered selection
     var point = svg.selectAll('.point')
