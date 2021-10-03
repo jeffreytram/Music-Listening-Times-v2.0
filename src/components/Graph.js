@@ -129,73 +129,72 @@ export default class Graph extends React.Component {
 
   drawGraph = () => {
     // OTHER INITIALIZATION
-    const { data, setClickedPoint, setFilteredDatasetMonth } = this.props;
+    const { data, setClickedPoint, setFilteredDatasetMonth, sampleDate } = this.props;
 
     // TODO: need to improve this
     // initial state, loading icon
     // empty state for when no data
-    if (data.length > 0) {
-      const latestDate = data[0].Date;
-      const yState = setYState(latestDate);
+    // if (data) {
+    const dateInMonth = sampleDate;
+    const yState = setYState(dateInMonth);
 
-      //y-axis scale
-      const yScale = d3.scaleTime()
-        .domain(yState)
-        .range([padding.top, height - padding.down]);
+    //y-axis scale
+    const yScale = d3.scaleTime()
+      .domain(yState)
+      .range([padding.top, height - padding.down]);
 
-      //x-axis line
-      var xAxis = d3.axisBottom(xScale)
-        .ticks(d3.timeHour.every(2))
-        .tickFormat(d3.timeFormat('%H:%M'));
+    //x-axis line
+    var xAxis = d3.axisBottom(xScale)
+      .ticks(d3.timeHour.every(2))
+      .tickFormat(d3.timeFormat('%H:%M'));
 
-      //y-axis line
-      var yAxis = d3.axisLeft(yScale)
+    //y-axis line
+    var yAxis = d3.axisLeft(yScale)
 
-      xAxisG.call(xAxis);
-      yAxisG.call(yAxis);
-
-
+    xAxisG.call(xAxis);
+    yAxisG.call(yAxis);
 
 
-      // RENDER CIRCLES
-      //filtered selection
-      var point = svg.selectAll('.point')
-        .data(data, d => d.ConvertedDateTime);
 
-      var pointEnter = point.enter()
-        .append('g')
-        .attr('class', 'point');
+    const inputData = (data) ? data : [];
+    // RENDER CIRCLES
+    //filtered selection
+    var point = svg.selectAll('.point')
+      .data(inputData, d => d.ConvertedDateTime);
 
-      pointEnter.merge(point)
-        .attr('transform', d => {
-          var tx = xScale(d.Time);
-          var ty = yScale(d.Date);
-          return 'translate(' + [tx, ty] + ')';
-        });
+    var pointEnter = point.enter()
+      .append('g')
+      .attr('class', 'point');
 
-      //add circle to group
-      pointEnter.append('circle')
-        .attr('r', defaultRadius)
-        .style('opacity', defaultOpacity)
-        .on("click", function (e, d) {
-          setClickedPoint(d);
-          setFilteredDatasetMonth([d]);
-          // TODO: when clicked, need to update graph so only the selected point is viewed
-          // need to pass a filteredDatasetMonth setter to this component so we can set the filtereddataset to
-          // an array with only 1 point, the selected point.
+    pointEnter.merge(point)
+      .attr('transform', d => {
+        var tx = xScale(d.Time);
+        var ty = yScale(d.Date);
+        return 'translate(' + [tx, ty] + ')';
+      });
 
-          // clearDayFilters();
-          // displaySongInfo(d);
-          // displayTags(d);
-          // clearHighlight();
-          // singleHighlight(d3.select(this));
-        });
+    //add circle to group
+    pointEnter.append('circle')
+      .attr('r', defaultRadius)
+      .style('opacity', defaultOpacity)
+      .on("click", function (e, d) {
+        setClickedPoint(d);
+        setFilteredDatasetMonth([d]);
+        // TODO: when clicked, need to update graph so only the selected point is viewed
+        // need to pass a filteredDatasetMonth setter to this component so we can set the filtereddataset to
+        // an array with only 1 point, the selected point.
 
-      //remove filtered out circles
-      point.exit().remove();
+        // clearDayFilters();
+        // displaySongInfo(d);
+        // displayTags(d);
+        // clearHighlight();
+        // singleHighlight(d3.select(this));
+      });
 
-      this.drawCanvasBars(data);
-    }
+    //remove filtered out circles
+    point.exit().remove();
+
+    this.drawCanvasBars(inputData);
   }
 
   updateGraph = () => {
@@ -204,7 +203,7 @@ export default class Graph extends React.Component {
     //filtered selection
     var point = svg.selectAll('.point')
       .data(filteredData, d => d.ConvertedDateTime);
-    
+
     const opacity = circleSettings.get(filterView)[0];
     const radius = circleSettings.get(filterView)[1];
 

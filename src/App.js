@@ -45,7 +45,9 @@ class App extends React.Component {
       year: year,
       newLoad: true,
     }), () => {
-      this.setDatalist();
+      if (this.state.datasetMonth) {
+        this.setDatalist();
+      }
     });
   }
 
@@ -261,7 +263,7 @@ class App extends React.Component {
             />
           </div>
           <div className="side-container">
-            <div id="entries">{this.state.filteredDatasetMonth.length} entries</div>
+            <div id="entries">{(this.state.filteredDatasetMonth) ? this.state.filteredDatasetMonth.length : 0} entries</div>
             <DateNavigation />
           </div>
           <div id="main">
@@ -272,6 +274,7 @@ class App extends React.Component {
               newLoad={this.state.newLoad}
               setClickedPoint={this.setClickedPoint}
               setFilteredDatasetMonth={this.setFilteredDatasetMonth}
+              sampleDate = {new Date(`${this.state.month} 1 ${this.state.year}`)}
             />
           </div>
         </div>
