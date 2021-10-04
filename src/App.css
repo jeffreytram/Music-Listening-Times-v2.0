@@ -314,6 +314,22 @@ input[type=checkbox] {
   margin: 10px 0px;
 }
 
+.date-navigation {
+  position: relative;
+}
+
+.up-caret {
+  position: absolute;
+  left: -15px;
+  top: 2px;
+}
+
+.down-caret {
+  position: absolute;
+  left: -15px;
+  bottom: 2px;
+}
+
 #search-filter {
   width: 100%;
   grid-row: 1 / 2;

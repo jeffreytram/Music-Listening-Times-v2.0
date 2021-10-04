@@ -217,11 +217,9 @@ class App extends React.Component {
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
       return (
-        <div id="date-navigation">
-          <span>
-            <FontAwesomeIcon icon={faCaretUp} size="lg" />
-            <FontAwesomeIcon icon={faCaretDown} size="lg" />
-          </span>
+        <div className="date-navigation">
+          <FontAwesomeIcon icon={faCaretUp} size="" className="up-caret"/>
+          <FontAwesomeIcon icon={faCaretDown} size="" className="down-caret"/>
           <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
             {months.map((month, i) => {
               return (
