@@ -1,6 +1,6 @@
 import React from 'react';
 import * as d3 from "d3";
-import { setYState } from '../logic/chart';
+import { generateYState } from '../logic/chart';
 
 const width = 950;
 const height = 540;
@@ -136,7 +136,7 @@ export default class Graph extends React.Component {
     // empty state for when no data
     // if (data) {
     const dateInMonth = sampleDate;
-    const yState = setYState(dateInMonth);
+    const yState = generateYState(dateInMonth);
 
     //y-axis scale
     const yScale = d3.scaleTime()
