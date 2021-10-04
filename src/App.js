@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faMoon, faSearch, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faSun, faMoon, faSearch, faFilter, faRedoAlt, faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
 import SongInfo from './components/SongInfo';
@@ -218,6 +218,10 @@ class App extends React.Component {
       const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
       return (
         <div id="date-navigation">
+          <span>
+            <FontAwesomeIcon icon={faCaretUp} size="lg" />
+            <FontAwesomeIcon icon={faCaretDown} size="lg" />
+          </span>
           <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
             {months.map((month, i) => {
               return (
@@ -254,7 +258,7 @@ class App extends React.Component {
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />
-            <button id="reset" className="button" onClick={this.resetGraph}>Reset</button>
+            <button id="reset" className="button" onClick={this.resetGraph}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
             <SongInfo
               clickedPoint={this.state.clickedPoint}
               setFilteredDatasetMonth={this.handleSearchFormSubmit}
@@ -274,7 +278,7 @@ class App extends React.Component {
               newLoad={this.state.newLoad}
               setClickedPoint={this.setClickedPoint}
               setFilteredDatasetMonth={this.setFilteredDatasetMonth}
-              sampleDate = {new Date(`${this.state.month} 1 ${this.state.year}`)}
+              sampleDate={new Date(`${this.state.month} 1 ${this.state.year}`)}
             />
           </div>
         </div>
