@@ -4,7 +4,6 @@ export default class SongInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
     };
   }
 
@@ -21,8 +20,9 @@ export default class SongInfo extends React.Component {
 
   render() {
     const { clickedPoint } = this.props;
+    const visibility = (clickedPoint.Artist === undefined) ? 'hidden' : '';
     return (
-      <div id="song-info-grid">
+      <div className={`song-info-grid ${visibility}`}>
         <img id="album-art"
           src="https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png" />
         <div className="info">

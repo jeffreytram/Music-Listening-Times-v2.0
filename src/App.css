@@ -161,6 +161,8 @@ html, body {
 
 #day-filters {
   width: 100%;
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
 }
 
 input[type=text] {
@@ -201,6 +203,8 @@ input[type=checkbox] {
   width: 103px;
   height: 25px;
   padding: 4px 15px;
+  grid-row: 3 / 4;
+  grid-column: 1 / 2;
 }
 
 /* Hover */
@@ -312,9 +316,11 @@ input[type=checkbox] {
 
 #search-filter {
   width: 100%;
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
 }
 
-#song-info-grid {
+.song-info-grid {
   width: 100%;
   display: grid;
   grid-template-columns: 100px 1fr;
@@ -343,7 +349,7 @@ input[type=checkbox] {
   .info-grid {
     grid-template-columns: 50% 50%;
   }
-  #song-info-grid {
+  .song-info-grid {
     grid-row: 1 / 4;
     grid-column: 2 / 3;
   }
@@ -353,4 +359,8 @@ input[type=checkbox] {
   .site-container {
     margin: 2em 15vw;
   }
+}
+
+.hidden {
+  display: none;
 }
