@@ -382,3 +382,8 @@ button:hover, select:hover, .point:hover, .artist:hover,
 .hidden {
   display: none;
 }
+
+.disabled-arrow {
+  pointer-events: none;
+  color: var(--light);
+}

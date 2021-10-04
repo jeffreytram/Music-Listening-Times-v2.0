@@ -231,10 +231,26 @@ class App extends React.Component {
     const DateNavigation = (props) => {
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+      const nextMonthDate = getNextMonth(this.state.month, this.state.year);
+      const nextMonth = nextMonthDate.getMonth() + 1;
+      const nextYear = nextMonthDate.getFullYear();
+
+      const prevMonthDate = getPrevMonth(this.state.month, this.state.year);
+      const prevMonth = prevMonthDate.getMonth() + 1;
+      const prevYear = prevMonthDate.getFullYear();
+
+      const nextDisabled = (this.state.datasetBuckets[`${nextMonth} ${nextYear}`]) ? '' : 'disabled-arrow';
+      const prevDisabled = (this.state.datasetBuckets[`${prevMonth} ${prevYear}`]) ? '' : 'disabled-arrow';
+
       return (
         <div className="date-navigation">
-          <FontAwesomeIcon icon={faCaretUp} className="up-caret" onClick={handlePrevMonthChange} />
-          <FontAwesomeIcon icon={faCaretDown} className="down-caret" onClick={handleNextMonthChange} />
+          <FontAwesomeIcon icon={faCaretUp} className={`up-caret ${prevDisabled}`} onClick={handlePrevMonthChange}
+            title="Go to the previous month"
+          />
+          <FontAwesomeIcon icon={faCaretDown} className={`down-caret ${nextDisabled}`} onClick={handleNextMonthChange}
+            title="Go to the next month"
+          />
           <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
             {months.map((month, i) => {
               return (
