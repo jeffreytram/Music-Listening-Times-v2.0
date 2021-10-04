@@ -215,7 +215,9 @@ input[type=checkbox] {
   color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
-#theme-switcher, .checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
+#theme-switcher, .checkbox:hover, .checkbox>input:hover, 
+button:hover, select:hover, .point:hover, .artist:hover, 
+.song:hover, .album:hover, .up-caret:hover, .down-caret:hover {
   cursor: pointer;
 }
 

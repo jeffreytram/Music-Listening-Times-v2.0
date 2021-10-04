@@ -5,6 +5,7 @@ import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
 import SongInfo from './components/SongInfo';
 import { setup, filterDay } from './logic/chart.js';
+import { getNextMonth, getPrevMonth } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
   constructor(props) {
@@ -213,13 +214,27 @@ class App extends React.Component {
       this.setDatasetMonth(this.state.month, year);
     }
 
+    const handleNextMonthChange = () => {
+      const nextMonth = getNextMonth(this.state.month, this.state.year);
+      const month = nextMonth.getMonth() + 1;
+      const year = nextMonth.getFullYear();
+      this.setDatasetMonth(month, year);
+    }
+
+    const handlePrevMonthChange = () => {
+      const prevMonth = getPrevMonth(this.state.month, this.state.year);
+      const month = prevMonth.getMonth() + 1;
+      const year = prevMonth.getFullYear();
+      this.setDatasetMonth(month, year);
+    }
+
     const DateNavigation = (props) => {
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
       return (
         <div className="date-navigation">
-          <FontAwesomeIcon icon={faCaretUp} size="" className="up-caret"/>
-          <FontAwesomeIcon icon={faCaretDown} size="" className="down-caret"/>
+          <FontAwesomeIcon icon={faCaretUp} className="up-caret" onClick={handlePrevMonthChange} />
+          <FontAwesomeIcon icon={faCaretDown} className="down-caret" onClick={handleNextMonthChange} />
           <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
             {months.map((month, i) => {
               return (

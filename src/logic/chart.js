@@ -576,3 +576,14 @@ export const setup = (setDatasetBuckets, setDatasetMonth, setYearList) => {
   setFilters();
   finishedLoading();
 }
+
+export const getNextMonth = (month, year) => {
+  // dont need to "add" a month since the date object's month indexes from
+  return new Date(year, month, 1);
+}
+
+export const getPrevMonth = (month, year) => {
+  // we subtract 1 for bc of month index from 0
+  // we subtract another 1 to get the prev month
+  return new Date(year, month - 2, 1);
+}
