@@ -42,9 +42,11 @@ class App extends React.Component {
       datasetMonth: prevState.datasetBuckets[`${month} ${year}`],
       filteredDatasetMonth: prevState.datasetBuckets[`${month} ${year}`],
       filterView: 'none',
+      dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       month: month,
       year: year,
       newLoad: true,
+      clickedPoint: {},
     }), () => {
       if (this.state.datasetMonth) {
         this.setDatalist();
@@ -134,14 +136,6 @@ class App extends React.Component {
       }));
       // 
     });
-  }
-
-  resetGraph = () => {
-    this.setState((prevState) => ({
-      filteredDatasetMonth: prevState.datasetMonth,
-      filterView: 'none',
-      dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-    }));
   }
 
   render() {
@@ -287,7 +281,7 @@ class App extends React.Component {
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />
-            <button id="reset" className="button" onClick={this.resetGraph}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
+            <button id="reset" className="button" onClick={() => this.setDatasetMonth(this.state.month, this.state.year)}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
             <SongInfo
               clickedPoint={this.state.clickedPoint}
               setFilteredDatasetMonth={this.handleSearchFormSubmit}
