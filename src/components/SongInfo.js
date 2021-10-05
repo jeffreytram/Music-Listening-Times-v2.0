@@ -18,7 +18,7 @@ export default class SongInfo extends React.Component {
 
     // filter the dataset
     const filteredDataset = searchFilter(type, value, data);
-    setFilteredDatasetMonth(filteredDataset, type);
+    setFilteredDatasetMonth(filteredDataset, 'search');
   }
 
   handlePointChange = (change) => {
