@@ -112,27 +112,19 @@ const preprocessData = (setDatasetBuckets, setDatasetMonth) => {
  * Initializes the date range (list of years)
  * @param {Function} setYearList Sets the year list to the given list
  */
-const dateRangeInitialization = (setYearList) => {
+const yearListInitialization = (setYearList) => {
   datasetLoaded.then(dataset => {
-    const latestDate = dataset[0].Date;
-    const earliestDate = dataset[dataset.length - 1].Date;
+    const latestYear = dataset[0].Date.getFullYear();
+    const earliestYear = dataset[dataset.length - 1].Date.getFullYear();
 
-    latestDate.setDate(1);
-    latestDate.setHours(0, 0, 0, 0);
-    earliestDate.setDate(1);
-    earliestDate.setHours(0, 0, 0, 0);
+    let currYear = latestYear;
 
-    let currDate = new Date(latestDate);
-
-    const uniqueYears = new Set();
-    while (currDate >= earliestDate) {
-      const year = currDate.getFullYear();
-      if (!uniqueYears.has(year)) {
-        uniqueYears.add(year);
-      }
-      currDate.setMonth(currDate.getMonth() - 1);
+    let uniqueYears = [];
+    while (currYear >= earliestYear) {
+      uniqueYears.push(currYear);
+      currYear -= 1;
     }
-    setYearList(Array.from(uniqueYears));
+    setYearList(uniqueYears);
   });
 }
 
@@ -157,7 +149,7 @@ const finishedLoading = () => {
 export const setup = (setDatasetBuckets, setDatasetMonth, setYearList) => {
   loadData();
   preprocessData(setDatasetBuckets, setDatasetMonth);
-  dateRangeInitialization(setYearList);
+  yearListInitialization(setYearList);
 
   finishedLoading();
 }
