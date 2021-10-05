@@ -108,10 +108,11 @@ const preprocessData = (setDatasetBuckets, setDatasetMonth) => {
   });
 }
 
+/**
+ * Initializes the date range (list of years)
+ * @param {Function} setYearList Sets the year list to the given list
+ */
 const dateRangeInitialization = (setYearList) => {
-  //Initial load of the data. Default view, no filter
-
-  //initialize date range
   datasetLoaded.then(dataset => {
     const latestDate = dataset[0].Date;
     const earliestDate = dataset[dataset.length - 1].Date;
@@ -135,6 +136,9 @@ const dateRangeInitialization = (setYearList) => {
   });
 }
 
+/**
+ * Hides the loading icon and shows the application
+ */
 const finishedLoading = () => {
   //finished loading
   const loading = document.getElementById('loading');
@@ -144,6 +148,12 @@ const finishedLoading = () => {
   content.style.display = 'block';
 }
 
+/**
+ * Setup for the application
+ * @param {Function} setDatasetBuckets 
+ * @param {Function} setDatasetMonth 
+ * @param {Function} setYearList 
+ */
 export const setup = (setDatasetBuckets, setDatasetMonth, setYearList) => {
   loadData();
   preprocessData(setDatasetBuckets, setDatasetMonth);
@@ -152,11 +162,23 @@ export const setup = (setDatasetBuckets, setDatasetMonth, setYearList) => {
   finishedLoading();
 }
 
+/**
+ * Gets the next month
+ * @param {number} month The numerical month you use normally (1 = Janurary, 12 = December)
+ * @param {number} year The numerical full year (ex: 2021)
+ * @returns Next month as a Date object
+ */
 export const getNextMonth = (month, year) => {
   // dont need to "add" a month since the date object's month indexes from
   return new Date(year, month, 1);
 }
 
+/**
+ * Gets the previous month
+ * @param {number} month The numerical month you use normally (1 = Janurary, 12 = December)
+ * @param {number} year The numerical full year (ex: 2021)
+ * @returns Previous month as a Date object
+ */
 export const getPrevMonth = (month, year) => {
   // we subtract 1 for bc of month index from 0
   // we subtract another 1 to get the prev month

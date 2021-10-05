@@ -54,6 +54,9 @@ export default class Graph extends React.Component {
     }
   }
 
+  /**
+   * Initializes the graph for the first time application load
+   */
   initializeGraph = () => {
     // GENERATE ELEMENTS 
     //Where to add the graph to
@@ -127,6 +130,9 @@ export default class Graph extends React.Component {
       .text('Date');
   }
 
+  /**
+   * Draws the graph with new data (month change)
+   */
   drawGraph = () => {
     // OTHER INITIALIZATION
     const { data, setClickedPoint, setFilteredDatasetMonth, sampleDate } = this.props;
@@ -166,7 +172,7 @@ export default class Graph extends React.Component {
         .attr('class', 'no-data-message')
         .attr('text-anchor', 'middle')
         .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${(height - padding.down - padding.top) / 2})`)
-        .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric'})}`);
+        .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric' })}`);
     }
 
     // RENDER CIRCLES
@@ -209,6 +215,9 @@ export default class Graph extends React.Component {
     this.drawCanvasBars(inputData);
   }
 
+  /**
+   * Updates the current data in the graph (same month, no month change. filter update)
+   */
   updateGraph = () => {
     const { filteredData, filterView } = this.props;
 
@@ -232,6 +241,10 @@ export default class Graph extends React.Component {
     this.drawCanvasBars(filteredData);
   }
 
+  /**
+   * Draws the vertical bars on the single axis time graph
+   * @param {Array} data The data to use for the graph
+   */
   drawCanvasBars = (data) => {
     const cWidth = canvas.node().width;
     const cHeight = canvas.node().height;

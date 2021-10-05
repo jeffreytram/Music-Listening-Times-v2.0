@@ -31,12 +31,21 @@ class App extends React.Component {
     setup(this.setDatasetBuckets, this.setDatasetMonth, this.setYearList);
   }
 
+  /**
+   * Initializes the datasetBuckets state
+   * @param {Object} bucket Object with attributes of data by month
+   */
   setDatasetBuckets = (bucket) => {
     this.setState(() => ({
       datasetBuckets: bucket,
     }));
   }
 
+  /**
+   * Sets the state to the given month and year
+   * @param {number} month The numerical month you use normally (1 = Janurary, 12 = December)
+   * @param {number} year The numerical full year (ex: 2021)
+   */
   setDatasetMonth = (month, year) => {
     this.setState((prevState) => ({
       datasetMonth: prevState.datasetBuckets[`${month} ${year}`],
@@ -54,12 +63,19 @@ class App extends React.Component {
     });
   }
 
+  /**
+   * Initializes the yearList state to use as select options
+   * @param {Array} years the list of years
+   */
   setYearList = (years) => {
     this.setState(() => ({
       yearList: years,
     }))
   }
 
+  /**
+   * Sets the artist, song, and album datalist for the current month
+   */
   setDatalist = () => {
     const artistSet = new Set();
     const songSet = new Set();
@@ -84,6 +100,10 @@ class App extends React.Component {
     }));
   }
 
+  /**
+   * Sets the state for clickedPoint to the given point object
+   * @param {Object} point Data point object
+   */
   setClickedPoint = (point) => {
     this.setState(() => ({
       clickedPoint: point,
@@ -91,26 +111,40 @@ class App extends React.Component {
     }))
   }
 
+  /**
+   * 
+   * @param {*} dataset 
+   */
   setFilteredDatasetMonth = (dataset) => {
     this.setState(() => ({
       filteredDatasetMonth: dataset,
     }))
   }
 
+  /**
+   * Sets the application theme to the opposite theme
+   */
   toggleDarkTheme = () => {
     this.setState((prevState) => ({
       isDarkTheme: !prevState.isDarkTheme,
-    }), () => {
-
-    });
+    }));
   }
 
+  /**
+   * Sets the search type to the given parameter
+   * @param {String} type the search type to set to ('artist', 'song', 'album')
+   */
   setSearchType = (type) => {
     this.setState(() => ({
       datalistSetting: type,
     }));
   }
 
+  /**
+   * Handles the search form submission
+   * Sets the filtered dataset to the given dataset and sets the view to search
+   * @param {Array} filteredDataset 
+   */
   handleSearchFormSubmit = (filteredDataset) => {
     this.setState(() => ({
       filteredDatasetMonth: filteredDataset,
@@ -119,6 +153,10 @@ class App extends React.Component {
     // 
   }
 
+  /**
+   * Handles the toggling of the day filter checkboxes
+   * @param {Object} event 
+   */
   toggleDayCheckbox = (event) => {
     const toggledDay = event.target.name;
     this.setState((prevState) => {
