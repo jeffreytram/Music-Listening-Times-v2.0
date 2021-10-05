@@ -23,7 +23,7 @@ class App extends React.Component {
       datalistSetting: 'artist',
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       newLoad: false,
-      clickedPoint: {},
+      clickedPoint: -1,
     };
   }
 
@@ -55,7 +55,7 @@ class App extends React.Component {
       month: month,
       year: year,
       newLoad: true,
-      clickedPoint: {},
+      clickedPoint: -1,
     }), () => {
       if (this.state.datasetMonth) {
         this.setDatalist();
@@ -101,12 +101,12 @@ class App extends React.Component {
   }
 
   /**
-   * Sets the state for clickedPoint to the given point object
-   * @param {Object} point Data point object
+   * Sets the state for clickedPoint to the given point id
+   * @param {number} id month point id
    */
-  setClickedPoint = (point) => {
+  setClickedPoint = (id) => {
     this.setState(() => ({
-      clickedPoint: point,
+      clickedPoint: id,
       filterView: 'select',
     }))
   }
@@ -114,10 +114,12 @@ class App extends React.Component {
   /**
    * 
    * @param {*} dataset 
+   * @param {*} viewType 
    */
-  setFilteredDatasetMonth = (dataset) => {
+  setFilteredDatasetMonth = (dataset, viewType) => {
     this.setState(() => ({
       filteredDatasetMonth: dataset,
+      filterView: viewType,
     }))
   }
 
@@ -138,19 +140,6 @@ class App extends React.Component {
     this.setState(() => ({
       datalistSetting: type,
     }));
-  }
-
-  /**
-   * Handles the search form submission
-   * Sets the filtered dataset to the given dataset and sets the view to search
-   * @param {Array} filteredDataset 
-   */
-  handleSearchFormSubmit = (filteredDataset) => {
-    this.setState(() => ({
-      filteredDatasetMonth: filteredDataset,
-      filterView: 'search',
-    }));
-    // 
   }
 
   /**
@@ -277,10 +266,10 @@ class App extends React.Component {
 
       return (
         <div className="date-navigation">
-          <FontAwesomeIcon icon={faCaretUp} className={`up-caret ${prevDisabled}`} onClick={handlePrevMonthChange}
+          <FontAwesomeIcon icon={faCaretUp} className={`up-caret arrow ${prevDisabled}`} onClick={handlePrevMonthChange}
             title="Go to the previous month"
           />
-          <FontAwesomeIcon icon={faCaretDown} className={`down-caret ${nextDisabled}`} onClick={handleNextMonthChange}
+          <FontAwesomeIcon icon={faCaretDown} className={`down-caret arrow ${nextDisabled}`} onClick={handleNextMonthChange}
             title="Go to the next month"
           />
           <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
@@ -322,8 +311,9 @@ class App extends React.Component {
             <button id="reset" className="button" onClick={() => this.setDatasetMonth(this.state.month, this.state.year)}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
             <SongInfo
               clickedPoint={this.state.clickedPoint}
-              setFilteredDatasetMonth={this.handleSearchFormSubmit}
+              setFilteredDatasetMonth={this.setFilteredDatasetMonth}
               setSearchType={this.setSearchType}
+              setClickedPoint={this.setClickedPoint}
               data={this.state.datasetMonth}
             />
           </div>

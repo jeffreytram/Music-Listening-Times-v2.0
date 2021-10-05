@@ -91,6 +91,7 @@ const preprocessData = (setDatasetBuckets, setDatasetMonth) => {
       if (buckets[key] === undefined) {
         buckets[key] = [];
       }
+      d.monthId = buckets[key].length;
       buckets[key].push(d);
 
       var parts = d.Time.split(/:/);

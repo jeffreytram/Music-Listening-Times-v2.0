@@ -196,8 +196,8 @@ export default class Graph extends React.Component {
       .attr('r', defaultRadius)
       .style('opacity', defaultOpacity)
       .on("click", function (e, d) {
-        setClickedPoint(d);
-        setFilteredDatasetMonth([d]);
+        setClickedPoint(d.monthId);
+        setFilteredDatasetMonth([d], 'select');
         // TODO: when clicked, need to update graph so only the selected point is viewed
         // need to pass a filteredDatasetMonth setter to this component so we can set the filtereddataset to
         // an array with only 1 point, the selected point.
@@ -224,7 +224,7 @@ export default class Graph extends React.Component {
     //filtered selection
     var point = svg.selectAll('.point')
       .data(filteredData, d => d.ConvertedDateTime);
-
+      
     const opacity = circleSettings.get(filterView)[0];
     const radius = circleSettings.get(filterView)[1];
 

@@ -217,7 +217,7 @@ input[type=checkbox] {
 
 #theme-switcher, .checkbox:hover, .checkbox>input:hover, 
 button:hover, select:hover, .point:hover, .artist:hover, 
-.song:hover, .album:hover, .up-caret:hover, .down-caret:hover {
+.song:hover, .album:hover, .arrow:hover {
   cursor: pointer;
 }
 
@@ -230,7 +230,7 @@ button:hover, select:hover, .point:hover, .artist:hover,
 /* Song info */
 
 #album-art {
-  grid-row: 1 / 4;
+  grid-row: 1 / 5;
   width: 100px;
   margin: 5px 0px;
   border-radius: calc(var(--border-radius) + 5px);
@@ -342,7 +342,7 @@ button:hover, select:hover, .point:hover, .artist:hover,
   width: 100%;
   display: grid;
   grid-template-columns: 100px 1fr;
-  grid-template-rows: 20px 40px 20px;
+  grid-template-rows: 20px 40px 20px 25px;
   gap: 0px 10px;
 }
 
