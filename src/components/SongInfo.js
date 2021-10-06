@@ -54,7 +54,7 @@ export default class SongInfo extends React.Component {
         </div>
         <div className="info album" onClick={() => this.handleInfoClick('album', point.Album)}>{point.Album}</div>
         <div className="info date">{point.Day + ' ' + point.ConvertedDateTime}</div>
-        <div className="info">
+        <div className="song-arrows">
           <FontAwesomeIcon icon={faLongArrowAltLeft}
             onClick={() => this.handlePointChange(1)}
             className={`${leftArrowVisibility} arrow`}

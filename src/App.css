@@ -230,7 +230,7 @@ button:hover, select:hover, .point:hover, .artist:hover,
 /* Song info */
 
 #album-art {
-  grid-row: 1 / 5;
+  grid-row: 1 / 6;
   width: 100px;
   margin: 5px 0px;
   border-radius: calc(var(--border-radius) + 5px);
@@ -241,6 +241,8 @@ button:hover, select:hover, .point:hover, .artist:hover,
 
 .info {
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .artist:hover, .song:hover, .album:hover {
@@ -262,6 +264,11 @@ button:hover, select:hover, .point:hover, .artist:hover,
 
 .date {
   font-size: smaller;
+  grid-row: 4 / 5
+}
+
+.song-arrows {
+  grid-row: 5 / 6;
 }
 
 #tagList {
@@ -342,7 +349,7 @@ button:hover, select:hover, .point:hover, .artist:hover,
   width: 100%;
   display: grid;
   grid-template-columns: 100px 1fr;
-  grid-template-rows: 20px 40px 20px 25px;
+  grid-template-rows: 24px 24px 18px 18px 18px;
   gap: 0px 10px;
 }
 
