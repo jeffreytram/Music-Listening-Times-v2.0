@@ -18,9 +18,9 @@ export default class SearchForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const { setting, handleSearchFormSubmit, data } = this.props;
+    const { setting, setFilteredDatasetMonth, data } = this.props;
     const filteredDataset = searchFilter(setting, this.state.value, data);
-    handleSearchFormSubmit(filteredDataset);
+    setFilteredDatasetMonth(filteredDataset, 'search');
   }
 
   render() {

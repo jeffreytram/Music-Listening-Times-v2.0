@@ -204,7 +204,7 @@ class App extends React.Component {
           <br />
           <SearchForm
             setting={this.state.datalistSetting}
-            handleSearchFormSubmit={this.handleSearchFormSubmit}
+            setFilteredDatasetMonth={this.setFilteredDatasetMonth}
             data={this.state.datasetMonth}
             datalist={`${this.state.datalistSetting}-datalist`}
           />
