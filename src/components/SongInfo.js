@@ -37,12 +37,16 @@ export default class SongInfo extends React.Component {
 
   render() {
     const { clickedPoint, data } = this.props;
-    let point = data[clickedPoint];
+
+    let dataset = data;
+    if (data === undefined) dataset = [];
+
+    let point = dataset[clickedPoint];
     if (point === undefined) point = {};
 
     const visibility = (point.Artist === undefined) ? 'hidden' : '';
 
-    const leftArrowVisibility = (clickedPoint === data.length - 1) ? 'disabled-arrow' : '';
+    const leftArrowVisibility = (clickedPoint === dataset.length - 1) ? 'disabled-arrow' : '';
     const rightArrowVisibility = (clickedPoint === 0) ? 'disabled-arrow' : '';
     return (
       <div className={`song-info-grid ${visibility}`}>
