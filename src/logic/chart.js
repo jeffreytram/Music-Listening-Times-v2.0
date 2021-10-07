@@ -76,36 +76,9 @@ const loadData = () => {
  * @param {Function} setDatasetBuckets 
  * @param {Function} setDatasetMonth 
  */
-const preprocessData = (setDatasetBuckets, setDatasetMonth) => {
-  //convert date string to data object
-  let newDate = new Date();
-  newDate.setHours(0, 0, 0, 0);
-  let newDateMilis = newDate.getTime();
-
-  //sorts all the data into buckets by the month and year
+const examplePreprocessData = (setDatasetBuckets, setDatasetMonth) => {
   datasetLoaded.then(dataset => {
-    dataset.forEach(d => {
-      d.Date = new Date(d.Date);
-      //add to bucket
-      let key = (d.Date.getMonth() + 1) + " " + d.Date.getFullYear();
-      if (buckets[key] === undefined) {
-        buckets[key] = [];
-      }
-      d.monthId = buckets[key].length;
-      buckets[key].push(d);
-
-      var parts = d.Time.split(/:/);
-      var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
-        (parseInt(parts[1], 10) * 60 * 1000)
-      d.Time = new Date()
-      d.Time.setTime(newDateMilis + timePeriodMillis);
-    });
-
-    setDatasetBuckets(buckets);
-
-    const latestDate = dataset[0].Date;
-
-    setDatasetMonth(latestDate.getMonth() + 1, latestDate.getFullYear());
+    preprocessData(dataset, setDatasetBuckets, setDatasetMonth);
   });
 }
 
@@ -114,7 +87,7 @@ const preprocessData = (setDatasetBuckets, setDatasetMonth) => {
  * @param {Function} setDatasetBuckets 
  * @param {Function} setDatasetMonth 
  */
-const filePreprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
+const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
   //convert date string to data object
   let newDate = new Date();
   newDate.setHours(0, 0, 0, 0);
@@ -149,19 +122,9 @@ const filePreprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
  * Initializes the date range (list of years)
  * @param {Function} setYearList Sets the year list to the given list
  */
-const yearListInitialization = (setYearList) => {
+const exampleYearListInitialization = (setYearList) => {
   datasetLoaded.then(dataset => {
-    const latestYear = dataset[0].Date.getFullYear();
-    const earliestYear = dataset[dataset.length - 1].Date.getFullYear();
-
-    let currYear = latestYear;
-
-    let uniqueYears = [];
-    while (currYear >= earliestYear) {
-      uniqueYears.push(currYear);
-      currYear -= 1;
-    }
-    setYearList(uniqueYears);
+    yearListInitialization(dataset, setYearList);
   });
 }
 
@@ -169,7 +132,7 @@ const yearListInitialization = (setYearList) => {
  * Initializes the date range (list of years)
  * @param {Function} setYearList Sets the year list to the given list
  */
-const fileYearListInitialization = (dataset, setYearList) => {
+const yearListInitialization = (dataset, setYearList) => {
   const latestYear = dataset[0].Date.getFullYear();
   const earliestYear = dataset[dataset.length - 1].Date.getFullYear();
 
@@ -203,15 +166,15 @@ const finishedLoading = () => {
  */
 export const setup = (setDatasetBuckets, setDatasetMonth, setYearList) => {
   loadData();
-  preprocessData(setDatasetBuckets, setDatasetMonth);
-  yearListInitialization(setYearList);
+  examplePreprocessData(setDatasetBuckets, setDatasetMonth);
+  exampleYearListInitialization(setYearList);
 
   finishedLoading();
 }
 
 export const uploadedDataSetup = (data, setDatasetBuckets, setDatasetMonth, setYearList) => {
-  filePreprocessData(data, setDatasetBuckets, setDatasetMonth);
-  fileYearListInitialization(data, setYearList);
+  preprocessData(data, setDatasetBuckets, setDatasetMonth);
+  yearListInitialization(data, setYearList);
 
   finishedLoading();
 }
