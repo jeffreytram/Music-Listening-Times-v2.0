@@ -1,10 +1,11 @@
 import React from 'react';
+import * as d3 from "d3";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faMoon, faSearch, faFilter, faRedoAlt, faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
 import SongInfo from './components/SongInfo';
-import { setup, filterDay } from './logic/chart.js';
+import { setup, uploadedDataSetup, filterDay } from './logic/chart.js';
 import { getNextMonth, getPrevMonth } from './logic/chart.js';
 import './App.css';
 class App extends React.Component {
@@ -165,6 +166,26 @@ class App extends React.Component {
     });
   }
 
+  handleFileUpload = (event) => {
+    const fileList = event.target.files;
+    const file = fileList[0];
+
+    const fileReader = new FileReader();
+
+    const parseFile = () => {
+      var data = d3.csvParse(fileReader.result, function (d) {
+        return d;
+      });
+      console.log(data);
+      uploadedDataSetup(data, this.setDatasetBuckets, this.setDatasetMonth, this.setYearList);
+    }
+
+    fileReader.addEventListener("load", parseFile, false);
+    if (file) {
+      fileReader.readAsText(file);
+    }
+  }
+
   render() {
     const body = document.getElementsByTagName('body')[0];
     body.className = (this.state.isDarkTheme) ? '' : 'light-theme';
@@ -305,6 +326,7 @@ class App extends React.Component {
             }
           </div>
           <h1>Music Listening Times</h1>
+          <input type="file" accept=".csv" id="input" onChange={this.handleFileUpload}></input>
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />
