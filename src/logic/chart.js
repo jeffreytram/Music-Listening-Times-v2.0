@@ -73,20 +73,20 @@ const loadData = () => {
 /**
  * Processes the data into buckets
  * @param {Function} setDatasetBuckets 
- * @param {Function} setDatasetMonth 
+ * @param {Function} setDataset
  */
-const examplePreprocessData = (setDatasetBuckets, setDatasetMonth) => {
+const examplePreprocessData = (setDatasetBuckets, setDataset) => {
   datasetLoaded.then(dataset => {
-    preprocessData(dataset, setDatasetBuckets, setDatasetMonth);
+    preprocessData(dataset, setDatasetBuckets, setDataset);
   });
 }
 
 /**
  * Processes the data into buckets
  * @param {Function} setDatasetBuckets 
- * @param {Function} setDatasetMonth 
+ * @param {Function} setDataset
  */
-const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
+const preprocessData = (dataset, setDatasetBuckets, setDataset) => {
   //sorts all the data into buckets by the month and year
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   let buckets = {};
@@ -125,7 +125,7 @@ const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
 
   const latestDate = dataset[0].Date;
 
-  setDatasetMonth(latestDate.getMonth() + 1, latestDate.getFullYear());
+  setDataset(latestDate.getMonth() + 1, latestDate.getFullYear());
 }
 
 /**
@@ -171,19 +171,19 @@ const finishedLoading = () => {
 /**
  * Setup for the application
  * @param {Function} setDatasetBuckets 
- * @param {Function} setDatasetMonth 
+ * @param {Function} setDataset
  * @param {Function} setYearList 
  */
-export const setup = (setDatasetBuckets, setDatasetMonth, setYearList) => {
+export const setup = (setDatasetBuckets, setDataset, setYearList) => {
   loadData();
-  examplePreprocessData(setDatasetBuckets, setDatasetMonth);
+  examplePreprocessData(setDatasetBuckets, setDataset);
   exampleYearListInitialization(setYearList);
 
   finishedLoading();
 }
 
-export const uploadedDataSetup = (data, setDatasetBuckets, setDatasetMonth, setYearList) => {
-  preprocessData(data, setDatasetBuckets, setDatasetMonth);
+export const uploadedDataSetup = (data, setDatasetBuckets, setDataset, setYearList) => {
+  preprocessData(data, setDatasetBuckets, setDataset);
   yearListInitialization(data, setYearList);
 
   finishedLoading();

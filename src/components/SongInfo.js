@@ -11,25 +11,25 @@ export default class SongInfo extends React.Component {
   }
 
   handleInfoClick = (type, value) => {
-    const { setFilteredDatasetMonth, setSearchType, data } = this.props;
+    const { setFilteredDataset, setSearchType, data } = this.props;
 
     // set the datalist setting to artist
     setSearchType(type);
 
     // filter the dataset
     const filteredDataset = searchFilter(type, value, data);
-    setFilteredDatasetMonth(filteredDataset, 'search');
+    setFilteredDataset(filteredDataset, 'search');
   }
 
   handlePointChange = (change) => {
     // filterView is assumed to be in 'select'
-    const { setFilteredDatasetMonth, setClickedPoint, clickedPoint, data } = this.props;
+    const { setFilteredDataset, setClickedPoint, clickedPoint, data } = this.props;
 
     const newId = clickedPoint + change;
     // check if valid change, if out of range dont do anything
     if (newId >= 0 && newId < data.length) {
       // need to change filtereddatasetmonth 
-      setFilteredDatasetMonth([data[newId]], 'select');
+      setFilteredDataset([data[newId]], 'select');
       setClickedPoint(newId);
     }
 

@@ -135,7 +135,7 @@ export default class Graph extends React.Component {
    */
   drawGraph = () => {
     // OTHER INITIALIZATION
-    const { data, setClickedPoint, setFilteredDatasetMonth, sampleDate } = this.props;
+    const { data, setClickedPoint, setFilteredDataset, sampleDate } = this.props;
 
     // TODO: need to improve this
     // initial state, loading icon
@@ -197,7 +197,7 @@ export default class Graph extends React.Component {
       .style('opacity', defaultOpacity)
       .on("click", function (e, d) {
         setClickedPoint(d.monthId);
-        setFilteredDatasetMonth([d], 'select');
+        setFilteredDataset([d], 'select');
         // TODO: when clicked, need to update graph so only the selected point is viewed
         // need to pass a filteredDatasetMonth setter to this component so we can set the filtereddataset to
         // an array with only 1 point, the selected point.

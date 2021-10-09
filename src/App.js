@@ -14,8 +14,8 @@ class App extends React.Component {
     this.state = {
       isDarkTheme: false,
       datasetBuckets: {},
-      datasetMonth: [],
-      filteredDatasetMonth: [],
+      dataset: [],
+      filteredDataset: [],
       filterView: 'none',
       yearList: [],
       month: 0,
@@ -29,7 +29,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    setup(this.setDatasetBuckets, this.setDatasetMonth, this.setYearList);
+    setup(this.setDatasetBuckets, this.setDataset, this.setYearList);
   }
 
   /**
@@ -47,10 +47,10 @@ class App extends React.Component {
    * @param {number} month The numerical month you use normally (1 = Janurary, 12 = December)
    * @param {number} year The numerical full year (ex: 2021)
    */
-  setDatasetMonth = (month, year) => {
+  setDataset = (month, year) => {
     this.setState((prevState) => ({
-      datasetMonth: prevState.datasetBuckets[`${month} ${year}`],
-      filteredDatasetMonth: prevState.datasetBuckets[`${month} ${year}`],
+      dataset: prevState.datasetBuckets[`${month} ${year}`],
+      filteredDataset: prevState.datasetBuckets[`${month} ${year}`],
       filterView: 'none',
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       month: month,
@@ -58,7 +58,7 @@ class App extends React.Component {
       newLoad: true,
       clickedPoint: -1,
     }), () => {
-      if (this.state.datasetMonth) {
+      if (this.state.dataset) {
         this.setDatalist();
       }
     });
@@ -82,7 +82,7 @@ class App extends React.Component {
     const songSet = new Set();
     const albumSet = new Set();
 
-    this.state.datasetMonth.forEach(d => {
+    this.state.dataset.forEach(d => {
       artistSet.add(d.Artist);
       songSet.add(d.Song);
       albumSet.add(d.Album);
@@ -118,9 +118,9 @@ class App extends React.Component {
    * @param {*} dataset 
    * @param {*} viewType 
    */
-  setFilteredDatasetMonth = (dataset, viewType) => {
+  setFilteredDataset = (dataset, viewType) => {
     this.setState(() => ({
-      filteredDatasetMonth: dataset,
+      filteredDataset: dataset,
       filterView: viewType,
     }))
   }
@@ -161,7 +161,7 @@ class App extends React.Component {
     }, () => {
       const filteredDataset = filterDay(this.state.dayFilter, this.state.datasetBuckets[`${this.state.month} ${this.state.year}`]);
       this.setState(() => ({
-        filteredDatasetMonth: filteredDataset,
+        filteredDataset: filteredDataset,
       }));
       // 
     });
@@ -177,7 +177,7 @@ class App extends React.Component {
       var data = d3.csvParse(fileReader.result, function (d) {
         return d;
       });
-      uploadedDataSetup(data, this.setDatasetBuckets, this.setDatasetMonth, this.setYearList);
+      uploadedDataSetup(data, this.setDatasetBuckets, this.setDataset, this.setYearList);
     }
 
     fileReader.addEventListener("load", parseFile, false);
@@ -204,8 +204,8 @@ class App extends React.Component {
           <br />
           <SearchForm
             setting={this.state.datalistSetting}
-            setFilteredDatasetMonth={this.setFilteredDatasetMonth}
-            data={this.state.datasetMonth}
+            setFilteredDataset={this.setFilteredDataset}
+            data={this.state.dataset}
             datalist={`${this.state.datalistSetting}-datalist`}
           />
         </div >
@@ -248,26 +248,26 @@ class App extends React.Component {
 
     const handleMonthChange = (event) => {
       const month = event.target.value;
-      this.setDatasetMonth(month, this.state.year);
+      this.setDataset(month, this.state.year);
     };
 
     const handleYearChange = (event) => {
       const year = event.target.value;
-      this.setDatasetMonth(this.state.month, year);
+      this.setDataset(this.state.month, year);
     }
 
     const handleNextMonthChange = () => {
       const nextMonth = getNextMonth(this.state.month, this.state.year);
       const month = nextMonth.getMonth() + 1;
       const year = nextMonth.getFullYear();
-      this.setDatasetMonth(month, year);
+      this.setDataset(month, year);
     }
 
     const handlePrevMonthChange = () => {
       const prevMonth = getPrevMonth(this.state.month, this.state.year);
       const month = prevMonth.getMonth() + 1;
       const year = prevMonth.getFullYear();
-      this.setDatasetMonth(month, year);
+      this.setDataset(month, year);
     }
 
     const DateNavigation = (props) => {
@@ -335,27 +335,27 @@ class App extends React.Component {
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />
-            <button id="reset" className="button" onClick={() => this.setDatasetMonth(this.state.month, this.state.year)}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
+            <button id="reset" className="button" onClick={() => this.setDataset(this.state.month, this.state.year)}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
             <SongInfo
               clickedPoint={this.state.clickedPoint}
-              setFilteredDatasetMonth={this.setFilteredDatasetMonth}
+              setFilteredDataset={this.setFilteredDataset}
               setSearchType={this.setSearchType}
               setClickedPoint={this.setClickedPoint}
-              data={this.state.datasetMonth}
+              data={this.state.dataset}
             />
           </div>
           <div className="side-container">
-            <div id="entries">{(this.state.filteredDatasetMonth) ? this.state.filteredDatasetMonth.length : 0} entries</div>
+            <div id="entries">{(this.state.filteredDataset) ? this.state.filteredDataset.length : 0} entries</div>
             <DateNavigation />
           </div>
           <div id="main">
             <Graph
-              data={this.state.datasetMonth}
-              filteredData={this.state.filteredDatasetMonth}
+              data={this.state.dataset}
+              filteredData={this.state.filteredDataset}
               filterView={this.state.filterView}
               newLoad={this.state.newLoad}
               setClickedPoint={this.setClickedPoint}
-              setFilteredDatasetMonth={this.setFilteredDatasetMonth}
+              setFilteredDataset={this.setFilteredDataset}
               sampleDate={new Date(`${this.state.month} 1 ${this.state.year}`)}
             />
           </div>
