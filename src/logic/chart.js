@@ -89,11 +89,12 @@ const examplePreprocessData = (setDatasetBuckets, setDatasetMonth) => {
  */
 const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
   //sorts all the data into buckets by the month and year
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   dataset.forEach(d => {
     d.ConvertedDateTime = new Date(d.ConvertedDateTime);
     d.Date = new Date(d.ConvertedDateTime.toDateString());
     d.Time = new Date().setHours(d.ConvertedDateTime.getHours(), d.ConvertedDateTime.getMinutes());
-    // d.Day = d.ConvertedDateTime.toLocaleString('default', { weekday: 'long'});
+    d.Day = days[d.ConvertedDateTime.getDay()];
     //add to bucket
     let key = (d.Date.getMonth() + 1) + " " + d.Date.getFullYear();
     if (buckets[key] === undefined) {
