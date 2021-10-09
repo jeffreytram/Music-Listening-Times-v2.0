@@ -54,7 +54,7 @@ export default class SongInfo extends React.Component {
           src="https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png" />
         <div className="info">
           <span className="artist" onClick={() => this.handleInfoClick('artist', point.Artist)}>{point.Artist}
-          </span> - <span className="song" onClick={() => this.handleInfoClick('song', point.SongTitle)}>{point.SongTitle}</span>
+          </span> - <span className="song" onClick={() => this.handleInfoClick('song', point.Song)}>{point.Song}</span>
         </div>
         <div className="info album" onClick={() => this.handleInfoClick('album', point.Album)}>{point.Album}</div>
         <div className="info date">{(point.ConvertedDateTime) ? point.ConvertedDateTime.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' }) : ''}</div>

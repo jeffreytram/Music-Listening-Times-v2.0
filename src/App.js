@@ -84,7 +84,7 @@ class App extends React.Component {
 
     this.state.datasetMonth.forEach(d => {
       artistSet.add(d.Artist);
-      songSet.add(d.SongTitle);
+      songSet.add(d.Song);
       albumSet.add(d.Album);
     });
 

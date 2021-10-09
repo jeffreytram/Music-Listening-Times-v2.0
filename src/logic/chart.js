@@ -26,7 +26,7 @@ export function generateYState(date) {
  */
 export function searchFilter(type, value, dataset) {
   const settings = ['song', 'artist', 'album'];
-  const keys = ['SongTitle', 'Artist', 'Album'];
+  const keys = ['Song', 'Artist', 'Album'];
   for (let i = 0; i < settings.length; i++) {
     if (type === settings[i]) {
       return dataset.filter(d => d[keys[i]] === value);
@@ -92,7 +92,7 @@ const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   dataset.forEach(d => {
     d.ConvertedDateTime = new Date(d.RawDateTime);
-    
+
      // minus 5 for BST -> EDT conversion
      // This conversion will be off by an hour or so during times of daylight savings transition
      // TODO: get user's timezone, allow user to input timezone to convert 

@@ -41,7 +41,7 @@
 //   let divDate = document.getElementsByClassName('date');
 
 //   divArtist[0].innerText = song.Artist;
-//   divSong[0].innerText = song.SongTitle;
+//   divSong[0].innerText = song.Song;
 //   divAlbum[0].innerText = song.Album;
 //   divDate[0].innerText = song.Day + ' ' + song.ConvertedDateTime;
 
