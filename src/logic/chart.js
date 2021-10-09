@@ -91,7 +91,12 @@ const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
   //sorts all the data into buckets by the month and year
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   dataset.forEach(d => {
-    d.ConvertedDateTime = new Date(d.ConvertedDateTime);
+    d.ConvertedDateTime = new Date(d.RawDateTime);
+    
+     // minus 5 for BST -> EDT conversion
+     // This conversion will be off by an hour or so during times of daylight savings transition
+     // TODO: get user's timezone, allow user to input timezone to convert 
+    d.ConvertedDateTime.setHours(d.ConvertedDateTime.getHours() - 5);
     d.Date = new Date(d.ConvertedDateTime.toDateString());
     d.Time = new Date().setHours(d.ConvertedDateTime.getHours(), d.ConvertedDateTime.getMinutes());
     d.Day = days[d.ConvertedDateTime.getDay()];

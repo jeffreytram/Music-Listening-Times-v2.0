@@ -176,7 +176,6 @@ class App extends React.Component {
       var data = d3.csvParse(fileReader.result, function (d) {
         return d;
       });
-      console.log(data);
       uploadedDataSetup(data, this.setDatasetBuckets, this.setDatasetMonth, this.setYearList);
     }
 
