@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from "d3";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faMoon, faSearch, faFilter, faRedoAlt, faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faSun, faMoon, faSearch, faFilter, faRedoAlt, faCaretUp, faCaretDown, faUpload } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
 import SongInfo from './components/SongInfo';
@@ -317,16 +317,21 @@ class App extends React.Component {
           <h2>Loading...</h2>
         </div>
         <div id="content-container">
-          <div id="theme-switcher" onClick={this.toggleDarkTheme}>
-            {
-              (this.state.isDarkTheme) ?
-                (<FontAwesomeIcon icon={faMoon} />)
-                :
-                (<FontAwesomeIcon icon={faSun} />)
-            }
+          <div id="side-options-container" onClick={this.toggleDarkTheme}>
+            <label for="file-upload" className="side-option button">
+              <FontAwesomeIcon icon={faUpload} /> Import CSV
+            </label>
+            <input id="file-upload" type="file" accept=".csv" onChange={this.handleFileUpload}></input>
+            <div className="button side-option">
+              {
+                (this.state.isDarkTheme) ?
+                  (<FontAwesomeIcon icon={faMoon} />)
+                  :
+                  (<FontAwesomeIcon icon={faSun} />)
+              }
+            </div>
           </div>
           <h1>Music Listening Times</h1>
-          <input type="file" accept=".csv" id="input" onChange={this.handleFileUpload}></input>
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />

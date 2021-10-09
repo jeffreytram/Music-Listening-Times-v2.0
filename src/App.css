@@ -108,12 +108,7 @@ html, body {
   font-style: italic;
 }
 
-/* Title bar style */
-
-.title {
-  font-weight: bold;
-  font-size: large;
-}
+/* Graph Settings */
 
 #month-select, #year-select {
   margin-left: 10px;
@@ -126,11 +121,22 @@ html, body {
   font-size: x-large;
 }
 
-/* Sidebar */
+/* Top right options */
 
-#theme-switcher {
+#side-options-container {
   position: absolute;
   right: 0;
+}
+
+.side-option {
+  display: inline-block;
+  margin: 0 0 0 .75em;
+  padding: .5em .75em;
+  font-size: smaller;
+}
+
+#file-upload {
+  display: none;
 }
 
 /* Filters */
@@ -213,11 +219,10 @@ input[type=checkbox] {
   font-weight: 600;
   background-color: var(--secondary-color);
   color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
+  cursor: pointer;
 }
 
-#theme-switcher, .checkbox:hover, .checkbox>input:hover, 
-button:hover, select:hover, .point:hover, .artist:hover, 
-.song:hover, .album:hover, .arrow:hover {
+.checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover, .arrow:hover {
   cursor: pointer;
 }
 
