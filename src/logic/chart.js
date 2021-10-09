@@ -88,14 +88,12 @@ const examplePreprocessData = (setDatasetBuckets, setDatasetMonth) => {
  * @param {Function} setDatasetMonth 
  */
 const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
-  //convert date string to data object
-  let newDate = new Date();
-  newDate.setHours(0, 0, 0, 0);
-  let newDateMilis = newDate.getTime();
-
   //sorts all the data into buckets by the month and year
   dataset.forEach(d => {
-    d.Date = new Date(d.Date);
+    d.ConvertedDateTime = new Date(d.ConvertedDateTime);
+    d.Date = new Date(d.ConvertedDateTime.toDateString());
+    d.Time = new Date().setHours(d.ConvertedDateTime.getHours(), d.ConvertedDateTime.getMinutes());
+    // d.Day = d.ConvertedDateTime.toLocaleString('default', { weekday: 'long'});
     //add to bucket
     let key = (d.Date.getMonth() + 1) + " " + d.Date.getFullYear();
     if (buckets[key] === undefined) {
@@ -103,12 +101,6 @@ const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
     }
     d.monthId = buckets[key].length;
     buckets[key].push(d);
-
-    var parts = d.Time.split(/:/);
-    var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
-      (parseInt(parts[1], 10) * 60 * 1000)
-    d.Time = new Date()
-    d.Time.setTime(newDateMilis + timePeriodMillis);
   });
   
   setDatasetBuckets(buckets);
