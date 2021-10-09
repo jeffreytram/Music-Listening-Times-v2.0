@@ -109,6 +109,7 @@ class App extends React.Component {
     this.setState(() => ({
       clickedPoint: id,
       filterView: 'select',
+      dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
     }))
   }
 
