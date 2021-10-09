@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 
 let datasetLoaded = [];
-let buckets = {};
 
 /**
  * Generates the yState for the month given a date in the month
@@ -90,6 +89,7 @@ const examplePreprocessData = (setDatasetBuckets, setDatasetMonth) => {
 const preprocessData = (dataset, setDatasetBuckets, setDatasetMonth) => {
   //sorts all the data into buckets by the month and year
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  let buckets = {};
 
   for (let i = 0; i < dataset.length; i++) {
     const d = dataset[i];
