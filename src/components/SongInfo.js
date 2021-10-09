@@ -57,7 +57,7 @@ export default class SongInfo extends React.Component {
           </span> - <span className="song" onClick={() => this.handleInfoClick('song', point.SongTitle)}>{point.SongTitle}</span>
         </div>
         <div className="info album" onClick={() => this.handleInfoClick('album', point.Album)}>{point.Album}</div>
-        <div className="info date">{point.Day + ' ' + point.ConvertedDateTime}</div>
+        <div className="info date">{(point.ConvertedDateTime) ? point.ConvertedDateTime.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' }) : ''}</div>
         <div className="song-arrows">
           <FontAwesomeIcon icon={faLongArrowAltLeft}
             onClick={() => this.handlePointChange(1)}
