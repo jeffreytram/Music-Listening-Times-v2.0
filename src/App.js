@@ -25,6 +25,7 @@ class App extends React.Component {
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       newLoad: false,
       clickedPoint: -1,
+      timePeriod: 'monthly',
     };
   }
 
@@ -186,6 +187,12 @@ class App extends React.Component {
     }
   }
 
+  setTimePeriod = (period) => {
+    this.setState(() => ({
+      timePeriod: period,
+    }));
+  }
+
   render() {
     const body = document.getElementsByTagName('body')[0];
     body.className = (this.state.isDarkTheme) ? '' : 'light-theme';
@@ -310,6 +317,16 @@ class App extends React.Component {
         </div>
       )
     }
+
+    const TimePeriodButton = ({ value }) => (
+      <>
+        <input id={value} type="radio" value={value} name="time-period" checked={this.state.timePeriod === value}
+          onChange={() => this.setTimePeriod(value)}
+        />
+        <label for={value}>{value}</label>
+      </>
+    )
+
     return (
       <div class="site-container" >
         <div id="loading">
@@ -332,6 +349,9 @@ class App extends React.Component {
             </div>
           </div>
           <h1>Music Listening Times</h1>
+          <TimePeriodButton value="monthly" />
+          <TimePeriodButton value="yearly" />
+          <TimePeriodButton value="all" />
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />
