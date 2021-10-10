@@ -326,7 +326,7 @@ input[type=checkbox] {
   display: flex;
   justify-content: space-between;
   align-content: center;
-  margin: 10px 0px;
+  margin: 1em 0;
 }
 
 .time-period {

@@ -408,7 +408,7 @@ class App extends React.Component {
               <TimePeriodButton value="yearly" />
             </div>
             <div className="side-container">
-              <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
+              <div id="entries">{(filteredDataset) ? filteredDataset.length - 1 : 0} entries</div>
               <DateNavigation />
             </div>
           </div>
