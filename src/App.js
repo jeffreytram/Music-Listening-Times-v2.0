@@ -130,7 +130,7 @@ class App extends React.Component {
   }
 
   /**
-   * 
+   * Not used for day filter
    * @param {*} dataset 
    * @param {*} viewType 
    */
@@ -138,7 +138,8 @@ class App extends React.Component {
     this.setState(() => ({
       filteredDataset: dataset,
       filterView: viewType,
-    }))
+      dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
+    }));
   }
 
   /**
@@ -179,7 +180,6 @@ class App extends React.Component {
       this.setState(() => ({
         filteredDataset: filteredDataset,
       }));
-      // 
     });
   }
 
