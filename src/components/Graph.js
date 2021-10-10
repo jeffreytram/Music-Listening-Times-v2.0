@@ -14,23 +14,25 @@ let yAxisG = {};
 
 let xScale = {};
 
-const defaultRadius = 3;
-const mediumRadius = 5;
-const largeRadius = 7;
-
-const defaultOpacity = .3;
-const mediumOpacity = .5;
-const highOpacity = .7;
-const hiddenOpacity = .05;
-
-const dict = [
-  ['none', [defaultOpacity, defaultRadius]],
-  ['day', [defaultOpacity, defaultRadius]],
-  ['search', [mediumOpacity, mediumRadius]],
-  ['select', [highOpacity, largeRadius]],
+// opacity, radius
+const monthlySettings = [
+  ['none', [.3, 3]],
+  ['day', [.3, 3]],
+  ['search', [.5, 5]],
+  ['select', [.7, 7]],
+  ['hidden', [.05, 3]],
 ]
 
-const circleSettings = new Map(dict);
+const yearlySettings = [
+  ['none', [.3, 2]],
+  ['day', [.3, 2]],
+  ['search', [.4, 3]],
+  ['select', [.7, 7]],
+  ['hidden', [.03, 2]],
+]
+
+const monthlyCircleSettings = new Map(monthlySettings);
+const yearlyCircleSettings = new Map(yearlySettings);
 
 export default class Graph extends React.Component {
   constructor(props) {
@@ -189,10 +191,15 @@ export default class Graph extends React.Component {
         return 'translate(' + [tx, ty] + ')';
       });
 
+    const circleSettings = (timePeriod === 'monthly') ? monthlyCircleSettings : yearlyCircleSettings;
+
+    const opacity = circleSettings.get('none')[0];
+    const radius = circleSettings.get('none')[1];
+
     //add circle to group
     pointEnter.append('circle')
-      .attr('r', defaultRadius)
-      .style('opacity', defaultOpacity)
+      .attr('r', radius)
+      .style('opacity', opacity)
       .on("click", function (e, d) {
         setClickedPoint(d.ID);
         setFilteredDataset([d], 'select');
@@ -217,14 +224,20 @@ export default class Graph extends React.Component {
    * Updates the current data in the graph (same month, no month change. filter update)
    */
   updateGraph = () => {
-    const { filteredData, filterView } = this.props;
+    const { filteredData, filterView, timePeriod } = this.props;
 
     //filtered selection
     var point = svg.selectAll('.point')
       .data(filteredData, d => d.ConvertedDateTime);
-      
+
+    const circleSettings = (timePeriod === 'monthly') ? monthlyCircleSettings : yearlyCircleSettings;
+
     const opacity = circleSettings.get(filterView)[0];
     const radius = circleSettings.get(filterView)[1];
+    const hiddenOpacity = circleSettings.get('hidden')[0];
+    const hiddenRadius = circleSettings.get('hidden')[1];
+
+
 
     point.select("circle")
       .attr('r', radius)
@@ -233,7 +246,7 @@ export default class Graph extends React.Component {
     //remove filtered out circles
     point.exit()
       .select("circle")
-      .attr('r', defaultRadius)
+      .attr('r', hiddenRadius)
       .style('opacity', hiddenOpacity);
 
     this.drawCanvasBars(filteredData);
