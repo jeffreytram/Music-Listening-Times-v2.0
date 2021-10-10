@@ -135,14 +135,14 @@ export default class Graph extends React.Component {
    */
   drawGraph = () => {
     // OTHER INITIALIZATION
-    const { data, setClickedPoint, setFilteredDataset, sampleDate } = this.props;
+    const { data, setClickedPoint, setFilteredDataset, sampleDate, timePeriod } = this.props;
 
     // TODO: need to improve this
     // initial state, loading icon
     // empty state for when no data
     // if (data) {
     const dateInMonth = sampleDate;
-    const yState = generateYState(dateInMonth);
+    const yState = generateYState(dateInMonth, timePeriod);
 
     //y-axis scale
     const yScale = d3.scaleTime()
@@ -262,7 +262,7 @@ export default class Graph extends React.Component {
       let d = data[i];
 
       //draw rect
-      context.fillStyle = `rgba(${rgb}, .1)`;
+      context.fillStyle = `rgba(${rgb}, .01)`;
       context.fillRect(xScale(d.Time), 0, 3, cHeight);
     }
   }

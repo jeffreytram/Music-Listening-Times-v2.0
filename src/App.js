@@ -49,9 +49,24 @@ class App extends React.Component {
    * @param {number} year The numerical full year (ex: 2021)
    */
   setDataset = (month, year) => {
+    let dataset = [];
+
+    if (this.state.timePeriod === 'monthly') {
+      dataset = this.state.datasetBuckets[`${month} ${year}`];
+    } else if (this.state.timePeriod === 'yearly') {
+      // get dataset for the year
+      for (let i = 1; i <= 12; i++) {
+        let monthDataset = this.state.datasetBuckets[`${i} ${year}`];
+        if (monthDataset) {
+          dataset = dataset.concat(monthDataset);
+        }
+      }
+    } else if (this.state.timePeriod === 'all') {
+
+    }
     this.setState((prevState) => ({
-      dataset: prevState.datasetBuckets[`${month} ${year}`],
-      filteredDataset: prevState.datasetBuckets[`${month} ${year}`],
+      dataset: dataset,
+      filteredDataset: dataset,
       filterView: 'none',
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       month: month,
@@ -160,7 +175,7 @@ class App extends React.Component {
         filterView: 'day',
       };
     }, () => {
-      const filteredDataset = filterDay(this.state.dayFilter, this.state.datasetBuckets[`${this.state.month} ${this.state.year}`]);
+      const filteredDataset = filterDay(this.state.dayFilter, this.state.dataset);
       this.setState(() => ({
         filteredDataset: filteredDataset,
       }));
@@ -190,7 +205,9 @@ class App extends React.Component {
   setTimePeriod = (period) => {
     this.setState(() => ({
       timePeriod: period,
-    }));
+    }), () => {
+      this.setDataset(this.state.month, this.state.year);
+    });
   }
 
   render() {
@@ -263,18 +280,26 @@ class App extends React.Component {
       this.setDataset(this.state.month, year);
     }
 
-    const handleNextMonthChange = () => {
-      const nextMonth = getNextMonth(this.state.month, this.state.year);
-      const month = nextMonth.getMonth() + 1;
-      const year = nextMonth.getFullYear();
-      this.setDataset(month, year);
+    const handleNextPeriodChange = (timePeriod) => {
+      if (timePeriod === 'monthly') {
+        const nextMonth = getNextMonth(this.state.month, this.state.year);
+        const month = nextMonth.getMonth() + 1;
+        const year = nextMonth.getFullYear();
+        this.setDataset(month, year);
+      } else if (timePeriod === 'yearly') {
+        this.setDataset(this.state.month, parseInt(this.state.year) + 1);
+      }
     }
 
-    const handlePrevMonthChange = () => {
-      const prevMonth = getPrevMonth(this.state.month, this.state.year);
-      const month = prevMonth.getMonth() + 1;
-      const year = prevMonth.getFullYear();
-      this.setDataset(month, year);
+    const handlePrevPeriodChange = (timePeriod) => {
+      if (timePeriod === 'monthly') {
+        const prevMonth = getPrevMonth(this.state.month, this.state.year);
+        const month = prevMonth.getMonth() + 1;
+        const year = prevMonth.getFullYear();
+        this.setDataset(month, year);
+      } else if (timePeriod === 'yearly') {
+        this.setDataset(this.state.month, parseInt(this.state.year) - 1);
+      }
     }
 
     const DateNavigation = (props) => {
@@ -289,24 +314,35 @@ class App extends React.Component {
       const prevMonth = prevMonthDate.getMonth() + 1;
       const prevYear = prevMonthDate.getFullYear();
 
-      const nextDisabled = (this.state.datasetBuckets[`${nextMonth} ${nextYear}`]) ? '' : 'disabled-arrow';
-      const prevDisabled = (this.state.datasetBuckets[`${prevMonth} ${prevYear}`]) ? '' : 'disabled-arrow';
+      let nextDisabled;
+      let prevDisabled;
+
+      if (this.state.timePeriod === 'monthly') {
+        nextDisabled = (this.state.datasetBuckets[`${nextMonth} ${nextYear}`]) ? '' : 'disabled-arrow';
+        prevDisabled = (this.state.datasetBuckets[`${prevMonth} ${prevYear}`]) ? '' : 'disabled-arrow';
+      } else if (this.state.timePeriod === 'yearly') {
+        nextDisabled = (this.state.yearList.indexOf(parseInt(this.state.year) + 1) === -1) && 'disabled-arrow';
+        prevDisabled = (this.state.yearList.indexOf(parseInt(this.state.year) - 1) === -1) && 'disabled-arrow';
+      }
+
 
       return (
         <div className="date-navigation">
-          <FontAwesomeIcon icon={faCaretUp} className={`up-caret arrow ${prevDisabled}`} onClick={handlePrevMonthChange}
-            title="Go to the previous month"
+          <FontAwesomeIcon icon={faCaretUp} className={`up-caret arrow ${prevDisabled}`} onClick={() => handlePrevPeriodChange(this.state.timePeriod)}
+            title={`Go to previous ${(this.state.timePeriod === 'monthly') ? 'month' : 'year'}`}
           />
-          <FontAwesomeIcon icon={faCaretDown} className={`down-caret arrow ${nextDisabled}`} onClick={handleNextMonthChange}
-            title="Go to the next month"
+          <FontAwesomeIcon icon={faCaretDown} className={`down-caret arrow ${nextDisabled}`} onClick={() => handleNextPeriodChange(this.state.timePeriod)}
+            title={`Go to the next ${(this.state.timePeriod === 'monthly') ? 'month' : 'year'}`}
           />
-          <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
-            {months.map((month, i) => {
-              return (
-                <option value={abbrev[i]}>{month}</option>
-              )
-            })}
-          </select>
+          {(this.state.timePeriod === 'monthly') && (
+            <select id="month-select" onChange={handleMonthChange} value={this.state.month}>
+              {months.map((month, i) => {
+                return (
+                  <option value={abbrev[i]}>{month}</option>
+                )
+              })}
+            </select>
+          )}
           <select id="year-select" onChange={handleYearChange} value={this.state.year}>
             {this.state.yearList.map((year) => {
               return (
@@ -351,7 +387,6 @@ class App extends React.Component {
           <h1>Music Listening Times</h1>
           <TimePeriodButton value="monthly" />
           <TimePeriodButton value="yearly" />
-          <TimePeriodButton value="all" />
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />
@@ -377,6 +412,7 @@ class App extends React.Component {
               setClickedPoint={this.setClickedPoint}
               setFilteredDataset={this.setFilteredDataset}
               sampleDate={new Date(`${this.state.month} 1 ${this.state.year}`)}
+              timePeriod={this.state.timePeriod}
             />
           </div>
         </div>

@@ -7,13 +7,26 @@ let datasetLoaded = [];
  * @param {Date} date Date object whose date is in the month
  * @returns Array consisting of 2 elements: the last day and first day of the month
  */
-export function generateYState(date) {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  const yState = [lastDay, firstDay];
-  return yState;
+export function generateYState(date, timePeriod) {
+  if (timePeriod === 'monthly') {
+    // get first day and last day of the month
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const yState = [lastDay, firstDay];
+    return yState;
+  } else if (timePeriod === 'yearly') {
+    // get first day and last day of the year
+    const year = date.getFullYear();
+    const firstDay = new Date(`1 1 ${year}`);
+    const lastDay = new Date(`1 1 ${year + 1}`);
+    lastDay.setDate(lastDay.getDate() - 1);
+    const yState = [lastDay, firstDay];
+    return yState;
+  } else {
+    // get first data point and last data point
+  }
 }
 
 /**
