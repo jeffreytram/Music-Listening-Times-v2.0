@@ -153,11 +153,11 @@ export default class Graph extends React.Component {
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
-      .ticks(d3.timeHour.every(2))
+      .ticks(d3.timeHour.every(1))
       .tickFormat(d3.timeFormat('%H:%M'));
 
     //y-axis line
-    var yAxis = d3.axisLeft(yScale)
+    var yAxis = d3.axisLeft(yScale);
 
     xAxisG.call(xAxis);
     yAxisG.call(yAxis);
