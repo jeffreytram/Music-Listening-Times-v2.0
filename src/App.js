@@ -13,8 +13,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       isDarkTheme: false,
-      datasetBuckets: {},
+      datasetBuckets: new Map(),
       dataset: [],
+      entireDataset: [],
       filteredDataset: [],
       filterView: 'none',
       yearList: [],
@@ -26,6 +27,7 @@ class App extends React.Component {
       newLoad: false,
       clickedPoint: -1,
       timePeriod: 'monthly',
+      timeRange: [],
     };
   }
 
@@ -36,10 +38,14 @@ class App extends React.Component {
   /**
    * Initializes the datasetBuckets state
    * @param {Object} bucket Object with attributes of data by month
+   * @param {Array} dataset The entire dataset
+   * @param {Array} timeRange the bounds of the entire dataset
    */
-  setDatasetBuckets = (bucket) => {
+  setDatasetBuckets = (bucket, dataset, timeRange) => {
     this.setState(() => ({
       datasetBuckets: bucket,
+      entireDataset: dataset,
+      timeRange: timeRange,
     }));
   }
 
@@ -54,15 +60,10 @@ class App extends React.Component {
     const { timePeriod, datasetBuckets } = this.state;
 
     if (timePeriod === 'monthly') {
-      dataset = datasetBuckets[`${month} ${year}`];
+      dataset = datasetBuckets.get(year)[month];
     } else if (timePeriod === 'yearly') {
       // get dataset for the year
-      for (let i = 1; i <= 12; i++) {
-        let monthDataset = datasetBuckets[`${i} ${year}`];
-        if (monthDataset) {
-          dataset = dataset.concat(monthDataset);
-        }
-      }
+      dataset = datasetBuckets.get(year).yearArr;
     }
     this.setState((prevState) => ({
       dataset: dataset,
@@ -212,8 +213,8 @@ class App extends React.Component {
 
   render() {
     const {
-      dataset, filteredDataset, datasetBuckets, datalist, datalistSetting, 
-      dayFilter, filterView, month, year, timePeriod, yearList, clickedPoint, 
+      dataset, filteredDataset, entireDataset, datalist, datalistSetting, 
+      dayFilter, filterView, month, year, timePeriod, timeRange, yearList, clickedPoint, 
       newLoad, isDarkTheme,
     } = this.state;
 
@@ -278,12 +279,12 @@ class App extends React.Component {
     }
 
     const handleMonthChange = (event) => {
-      const newMonth = event.target.value;
+      const newMonth = parseInt(event.target.value);
       this.setDataset(newMonth, year);
     };
 
     const handleYearChange = (event) => {
-      const newYear = event.target.value;
+      const newYear = parseInt(event.target.value);
       this.setDataset(month, newYear);
     }
 
@@ -314,19 +315,14 @@ class App extends React.Component {
       const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
       const nextMonthDate = getNextMonth(month, year);
-      const nextMonth = nextMonthDate.getMonth() + 1;
-      const nextYear = nextMonthDate.getFullYear();
-
       const prevMonthDate = getPrevMonth(month, year);
-      const prevMonth = prevMonthDate.getMonth() + 1;
-      const prevYear = prevMonthDate.getFullYear();
 
       let nextDisabled;
       let prevDisabled;
 
       if (timePeriod === 'monthly') {
-        nextDisabled = (datasetBuckets[`${nextMonth} ${nextYear}`]) ? '' : 'disabled-arrow';
-        prevDisabled = (datasetBuckets[`${prevMonth} ${prevYear}`]) ? '' : 'disabled-arrow';
+        nextDisabled = (nextMonthDate > timeRange[1]) ? 'disabled-arrow' : '';
+        prevDisabled = (prevMonthDate < timeRange[0]) ? 'disabled-arrow' : '';
       } else if (timePeriod === 'yearly') {
         nextDisabled = (yearList.indexOf(parseInt(year) + 1) === -1) && 'disabled-arrow';
         prevDisabled = (yearList.indexOf(parseInt(year) - 1) === -1) && 'disabled-arrow';
@@ -404,6 +400,8 @@ class App extends React.Component {
               setSearchType={this.setSearchType}
               setClickedPoint={this.setClickedPoint}
               data={dataset}
+              entireDataset={entireDataset}
+              timePeriod={timePeriod}
             />
           </div>
           <div className="side-container">

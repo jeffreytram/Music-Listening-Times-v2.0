@@ -102,7 +102,8 @@ const examplePreprocessData = (setDatasetBuckets, setDataset) => {
 const preprocessData = (dataset, setDatasetBuckets, setDataset) => {
   //sorts all the data into buckets by the month and year
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  let buckets = {};
+
+  const dataMap = new Map();
 
   for (let i = 0; i < dataset.length; i++) {
     const d = dataset[i];
@@ -125,18 +126,32 @@ const preprocessData = (dataset, setDatasetBuckets, setDataset) => {
     d.Time = new Date().setHours(d.ConvertedDateTime.getHours(), d.ConvertedDateTime.getMinutes());
     d.Day = days[d.ConvertedDateTime.getDay()];
 
-    //add to bucket
-    let key = (d.Date.getMonth() + 1) + " " + d.Date.getFullYear();
-    if (buckets[key] === undefined) {
-      buckets[key] = [];
+    const yearKey = (d.Date.getFullYear());
+    if (!dataMap.has(yearKey)) {
+      dataMap.set(yearKey, { yearArr: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [], 10: [], 11: [], 12: [] });
     }
-    d.monthId = buckets[key].length;
-    buckets[key].push(d);
+
+    const yearData = dataMap.get(yearKey);
+    const monthBucket = yearData[d.Date.getMonth() + 1];
+
+    d.monthID = monthBucket.length;
+    d.yearID = yearData.yearArr.length;
+    d.ID = i;
+
+    monthBucket.push(d);
+    yearData.yearArr.push(d);
   }
 
-  setDatasetBuckets(buckets);
+  let latestDate = dataset[0].Date;
+  const earliestDate = dataset[dataset.length - 1].Date;
 
-  const latestDate = dataset[0].Date;
+  latestDate = new Date(`${latestDate.getMonth() + 2} 1 ${latestDate.getFullYear()}`);
+  latestDate.setHours(0, 0, 0, latestDate.getMilliseconds() - 1);
+
+  earliestDate.setDate(1);
+  earliestDate.setHours(0, 0, 0, 0);
+
+  setDatasetBuckets(dataMap, dataset, [earliestDate, latestDate]);
 
   setDataset(latestDate.getMonth() + 1, latestDate.getFullYear());
 }

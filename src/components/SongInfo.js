@@ -23,31 +23,40 @@ export default class SongInfo extends React.Component {
 
   handlePointChange = (change) => {
     // filterView is assumed to be in 'select'
-    const { setFilteredDataset, setClickedPoint, clickedPoint, data } = this.props;
+    const { setFilteredDataset, setClickedPoint, clickedPoint, data, entireDataset } = this.props;
 
-    const newId = clickedPoint + change;
+    const newID = clickedPoint + change;
     // check if valid change, if out of range dont do anything
-    if (newId >= 0 && newId < data.length) {
+    if (newID >= 0 && newID < entireDataset.length) {
       // need to change filtereddatasetmonth 
-      setFilteredDataset([data[newId]], 'select');
-      setClickedPoint(newId);
+      setFilteredDataset([entireDataset[newID]], 'select');
+      setClickedPoint(newID);
     }
 
   }
 
   render() {
-    const { clickedPoint, data } = this.props;
+    const { clickedPoint, data, entireDataset, timePeriod } = this.props;
 
     let dataset = data;
     if (data === undefined) dataset = [];
 
-    let point = dataset[clickedPoint];
+    let point = entireDataset[clickedPoint];
     if (point === undefined) point = {};
 
     const visibility = (point.Artist === undefined) ? 'hidden' : '';
 
-    const leftArrowVisibility = (clickedPoint === dataset.length - 1) ? 'disabled-arrow' : '';
-    const rightArrowVisibility = (clickedPoint === 0) ? 'disabled-arrow' : '';
+    let leftArrowVisibility;
+    let rightArrowVisibility;
+
+    if (timePeriod === 'monthly') {
+      leftArrowVisibility = (point.monthID < dataset.length - 1) ? '' : 'disabled-arrow';
+      rightArrowVisibility = (point.monthID > 0) ? '' : 'disabled-arrow';
+    } else if (timePeriod === 'yearly') {
+      leftArrowVisibility = (point.yearID < dataset.length - 1) ? '' : 'disabled-arrow';
+      rightArrowVisibility = (point.yearID > 0) ? '' : 'disabled-arrow';
+    }
+
     return (
       <div className={`song-info-grid ${visibility}`}>
         <img id="album-art"

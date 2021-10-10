@@ -160,8 +160,6 @@ export default class Graph extends React.Component {
     xAxisG.call(xAxis);
     yAxisG.call(yAxis);
 
-
-
     const inputData = (data) ? data : [];
     // clear 'no data message'
     svg.select('.no-data-message').remove();
@@ -196,7 +194,7 @@ export default class Graph extends React.Component {
       .attr('r', defaultRadius)
       .style('opacity', defaultOpacity)
       .on("click", function (e, d) {
-        setClickedPoint(d.monthId);
+        setClickedPoint(d.ID);
         setFilteredDataset([d], 'select');
         // TODO: when clicked, need to update graph so only the selected point is viewed
         // need to pass a filteredDatasetMonth setter to this component so we can set the filtereddataset to
