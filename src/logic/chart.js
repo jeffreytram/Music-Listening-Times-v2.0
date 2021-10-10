@@ -142,14 +142,12 @@ const preprocessData = (dataset, setDatasetBuckets, setDataset) => {
     yearData.yearArr.push(d);
   }
 
-  let latestDate = dataset[0].Date;
-  const earliestDate = dataset[dataset.length - 1].Date;
 
-  latestDate = new Date(`${latestDate.getMonth() + 2} 1 ${latestDate.getFullYear()}`);
+  const latestDate = new Date(`${dataset[0].Date.getMonth() + 2} 1 ${dataset[0].Date.getFullYear()}`);
+  const earliestDate = new Date(dataset[dataset.length - 1].Date);
+
   latestDate.setHours(0, 0, 0, latestDate.getMilliseconds() - 1);
-
   earliestDate.setDate(1);
-  earliestDate.setHours(0, 0, 0, 0);
 
   setDatasetBuckets(dataMap, dataset, [earliestDate, latestDate]);
 
