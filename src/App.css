@@ -322,8 +322,42 @@ input[type=checkbox] {
   transition: background-color .5s ease-out;
 }
 
+.time-settings {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  margin: 10px 0px;
+}
+
+.time-period {
+  align-self: center;
+}
+
+#monthly, #yearly {
+  display: none;
+}
+
+input[type="radio"]:checked + label {
+  font-weight: 500;
+  color: var(--main-text);
+  font-size: x-large;
+  border-bottom: 2px solid var(--main-text);
+}
+
+input[type="radio"]:hover + label {
+  cursor: pointer;
+  color: var(--main-text);
+}
+
+input[type="radio"] + label {
+  color: gray;
+}
+
+.time-period-button {
+  padding: .5em .5em;
+}
+
 .side-container {
-  float: right;
   text-align: right;
   margin: 10px 0px;
 }

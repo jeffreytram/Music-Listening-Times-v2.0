@@ -213,8 +213,8 @@ class App extends React.Component {
 
   render() {
     const {
-      dataset, filteredDataset, entireDataset, datalist, datalistSetting, 
-      dayFilter, filterView, month, year, timePeriod, timeRange, yearList, clickedPoint, 
+      dataset, filteredDataset, entireDataset, datalist, datalistSetting,
+      dayFilter, filterView, month, year, timePeriod, timeRange, yearList, clickedPoint,
       newLoad, isDarkTheme,
     } = this.state;
 
@@ -358,12 +358,12 @@ class App extends React.Component {
     }
 
     const TimePeriodButton = ({ value }) => (
-      <>
+      <span className="time-period-button">
         <input id={value} type="radio" value={value} name="time-period" checked={timePeriod === value}
           onChange={() => this.setTimePeriod(value)}
         />
         <label for={value}>{value}</label>
-      </>
+      </span>
     )
 
     return (
@@ -388,8 +388,6 @@ class App extends React.Component {
             </div>
           </div>
           <h1>Music Listening Times</h1>
-          <TimePeriodButton value="monthly" />
-          <TimePeriodButton value="yearly" />
           <div className="info-grid">
             <SearchFilter />
             <DayFilter />
@@ -404,9 +402,15 @@ class App extends React.Component {
               timePeriod={timePeriod}
             />
           </div>
-          <div className="side-container">
-            <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
-            <DateNavigation />
+          <div className="time-settings">
+            <div className="time-period">
+              <TimePeriodButton value="monthly" />
+              <TimePeriodButton value="yearly" />
+            </div>
+            <div className="side-container">
+              <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
+              <DateNavigation />
+            </div>
           </div>
           <div id="main">
             <Graph
