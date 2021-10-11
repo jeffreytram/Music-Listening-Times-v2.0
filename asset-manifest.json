@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Music-Listening-Times-v2.0/static/css/main.9663181b.chunk.css",
+    "main.js": "/Music-Listening-Times-v2.0/static/js/main.bebb4988.chunk.js",
+    "main.js.map": "/Music-Listening-Times-v2.0/static/js/main.bebb4988.chunk.js.map",
+    "runtime-main.js": "/Music-Listening-Times-v2.0/static/js/runtime-main.6b629f83.js",
+    "runtime-main.js.map": "/Music-Listening-Times-v2.0/static/js/runtime-main.6b629f83.js.map",
+    "static/js/2.170682da.chunk.js": "/Music-Listening-Times-v2.0/static/js/2.170682da.chunk.js",
+    "static/js/2.170682da.chunk.js.map": "/Music-Listening-Times-v2.0/static/js/2.170682da.chunk.js.map",
+    "static/js/3.69ddf8be.chunk.js": "/Music-Listening-Times-v2.0/static/js/3.69ddf8be.chunk.js",
+    "static/js/3.69ddf8be.chunk.js.map": "/Music-Listening-Times-v2.0/static/js/3.69ddf8be.chunk.js.map",
+    "index.html": "/Music-Listening-Times-v2.0/index.html",
+    "static/css/main.9663181b.chunk.css.map": "/Music-Listening-Times-v2.0/static/css/main.9663181b.chunk.css.map",
+    "static/js/2.170682da.chunk.js.LICENSE.txt": "/Music-Listening-Times-v2.0/static/js/2.170682da.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6b629f83.js",
+    "static/js/2.170682da.chunk.js",
+    "static/css/main.9663181b.chunk.css",
+    "static/js/main.bebb4988.chunk.js"
+  ]
+}
