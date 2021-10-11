@@ -362,19 +362,19 @@ class App extends React.Component {
         <input id={value} type="radio" value={value} name="time-period" checked={timePeriod === value}
           onChange={() => this.setTimePeriod(value)}
         />
-        <label for={value}>{value}</label>
+        <label htmlFor={value}>{value}</label>
       </span>
     )
 
     return (
-      <div class="site-container" >
+      <div className="site-container" >
         <div id="loading">
           <div className="lds-dual-ring"></div>
           <h2>Loading...</h2>
         </div>
         <div id="content-container">
           <div id="side-options-container" onClick={this.toggleDarkTheme}>
-            <label for="file-upload" className="side-option button">
+            <label htmlFor="file-upload" className="side-option button">
               <FontAwesomeIcon icon={faUpload} /> Import CSV
             </label>
             <input id="file-upload" type="file" accept=".csv" onChange={this.handleFileUpload}></input>
