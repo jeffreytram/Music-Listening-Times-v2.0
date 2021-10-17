@@ -13,9 +13,12 @@ let xAxisG = {};
 let yAxisG = {};
 
 let xScale = {};
+let yScale = {};
 
 let clipGroup = {};
 let pointGroup = {};
+
+let zoom = {};
 
 // opacity, radius
 const monthlySettings = [
@@ -96,6 +99,9 @@ export default class Graph extends React.Component {
       .domain([startDay, endDay])
       .range([padding.left, width - padding.right]);
 
+    yScale = d3.scaleTime()
+      .range([padding.top, height - padding.down]);
+
     //cursor position vertical line
     let line = svg.append('path')
       .style('stroke', 'var(--secondary-color')
@@ -137,8 +143,46 @@ export default class Graph extends React.Component {
     // point group
     clipGroup = svg.append('g')
       .attr("clip-path", "url(#clip)");
-    pointGroup = clipGroup.append('g')
+    pointGroup = clipGroup.append('g');
 
+    // Add a clipPath: everything out of this area won't be drawn.
+    var clip = svg.append("defs")
+      .append("clipPath")
+      .attr("id", "clip")
+      .append("rect")
+      .attr("width", width - padding.left - padding.right)
+      .attr("height", height - padding.top - padding.down + 14)
+      .attr("x", padding.left)
+      .attr("y", padding.top - 7);
+
+    zoom = d3.zoom()
+      .scaleExtent([1, 10])
+      .extent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]])
+      .translateExtent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]]);
+
+    svg.call(zoom).call(zoom.transform, d3.zoomIdentity);
+  }
+
+  // A function that updates the chart when the user zoom and thus new boundaries are available
+  zoomed = ({ transform }, pointEnter, radius) => {
+    // recover the new scale
+    const zx = transform.rescaleX(xScale).interpolate(d3.interpolateRound);
+    const zy = transform.rescaleY(yScale).interpolate(d3.interpolateRound);
+
+    // update circle position
+    pointGroup.attr('transform', transform);
+    pointEnter
+      .selectAll("circle")
+      .attr('r', radius / transform.k);
+
+    const xAxis = d3.axisBottom(zx)
+      .ticks(d3.timeHour.every(1))
+      .tickFormat(d3.timeFormat('%H:%M'));
+
+    const yAxis = d3.axisLeft(zy);
+
+    xAxisG.call(xAxis);
+    yAxisG.call(yAxis);
   }
 
   /**
@@ -155,10 +199,8 @@ export default class Graph extends React.Component {
     const dateInMonth = sampleDate;
     const yState = generateYState(dateInMonth, timePeriod);
 
-    //y-axis scale
-    const yScale = d3.scaleTime()
-      .domain(yState)
-      .range([padding.top, height - padding.down]);
+    //y-axis scale    
+    yScale.domain(yState);
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
@@ -183,16 +225,6 @@ export default class Graph extends React.Component {
         .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${(height - padding.down - padding.top) / 2})`)
         .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric' })}`);
     }
-
-    // Add a clipPath: everything out of this area won't be drawn.
-    var clip = svg.append("defs")
-      .append("clipPath")
-      .attr("id", "clip")
-      .append("rect")
-      .attr("width", width - padding.left - padding.right)
-      .attr("height", height - padding.top - padding.down + 14)
-      .attr("x", padding.left)
-      .attr("y", padding.top - 7);
 
     // RENDER CIRCLES
     //filtered selection
@@ -228,39 +260,9 @@ export default class Graph extends React.Component {
     //remove filtered out circles
     point.exit().remove();
 
-
     this.drawCanvasBars(inputData);
 
-    const zoom = d3.zoom()
-      .scaleExtent([1, 10])
-      .extent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]])
-      .translateExtent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]])
-      .on("zoom", zoomed);
-
-    svg.call(zoom).call(zoom.transform, d3.zoomIdentity);
-    // A function that updates the chart when the user zoom and thus new boundaries are available
-    function zoomed({ transform }) {
-      // recover the new scale
-      const zx = transform.rescaleX(xScale).interpolate(d3.interpolateRound);
-      const zy = transform.rescaleY(yScale).interpolate(d3.interpolateRound);
-
-      // update circle position
-      pointGroup.attr('transform', transform);
-      pointEnter
-        .selectAll("circle")
-        .attr('r', radius / transform.k);
-
-      const xAxisFunc = (g, x) => g
-        .call(d3.axisBottom(x)
-          .ticks(d3.timeHour.every(1))
-          .tickFormat(d3.timeFormat('%H:%M')));
-
-      const yAxisFunc = (g, y) => g
-        .call(d3.axisLeft(y));
-
-      xAxisG.call(xAxisFunc, zx);
-      yAxisG.call(yAxisFunc, zy);
-    }
+    zoom.on("zoom", (event) => this.zoomed(event, pointEnter, radius));
   }
 
   /**
@@ -269,10 +271,6 @@ export default class Graph extends React.Component {
   updateGraph = () => {
     const { filteredData, filterView, timePeriod } = this.props;
 
-    //filtered selection
-    var point = svg.selectAll('.point')
-      .data(filteredData, d => d.ConvertedDateTime);
-
     const circleSettings = (timePeriod === 'monthly') ? monthlyCircleSettings : yearlyCircleSettings;
 
     const opacity = circleSettings.get(filterView)[0];
@@ -280,7 +278,9 @@ export default class Graph extends React.Component {
     const hiddenOpacity = circleSettings.get('hidden')[0];
     const hiddenRadius = circleSettings.get('hidden')[1];
 
-
+    //filtered selection
+    var point = pointGroup.selectAll('.point')
+      .data(filteredData, d => d.ConvertedDateTime);
 
     point.select("circle")
       .attr('r', radius)
@@ -293,6 +293,8 @@ export default class Graph extends React.Component {
       .style('opacity', hiddenOpacity);
 
     this.drawCanvasBars(filteredData);
+
+    zoom.on("zoom", (event) => this.zoomed(event, point.enter(), radius));
   }
 
   /**
