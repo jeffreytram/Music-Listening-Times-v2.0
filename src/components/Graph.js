@@ -157,8 +157,8 @@ export default class Graph extends React.Component {
 
     zoom = d3.zoom()
       .scaleExtent([1, 16])
-      .extent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]])
-      .translateExtent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]]);
+      .extent([[padding.left, padding.top], [width - padding.right, height - padding.down]])
+      .translateExtent([[padding.left, padding.top], [width - padding.right, height - padding.down]]);
 
     svg.call(zoom).call(zoom.transform, d3.zoomIdentity);
   }
@@ -171,10 +171,6 @@ export default class Graph extends React.Component {
 
     // update circle position
     pointGroup.attr('transform', transform);
-
-    // pointGroup
-    //   .selectAll('circle')
-    //   .attr('r', defaultRadius / transform.k);
 
     const xAxis = d3.axisBottom(zx)
       .ticks(d3.timeHour.every(1))
