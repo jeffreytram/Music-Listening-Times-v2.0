@@ -156,7 +156,7 @@ export default class Graph extends React.Component {
       .attr("y", padding.top - 7);
 
     zoom = d3.zoom()
-      .scaleExtent([1, 10])
+      .scaleExtent([1, 16])
       .extent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]])
       .translateExtent([[0, 0], [width - padding.left - padding.right, height - padding.top - padding.down]]);
 
@@ -164,7 +164,7 @@ export default class Graph extends React.Component {
   }
 
   // A function that updates the chart when the user zoom and thus new boundaries are available
-  zoomed = ({ transform }, pointEnter, defaultRadius) => {
+  zoomed = ({ transform }, defaultRadius) => {
     // recover the new scale
     const zx = transform.rescaleX(xScale).interpolate(d3.interpolateRound);
     const zy = transform.rescaleY(yScale).interpolate(d3.interpolateRound);
@@ -172,9 +172,9 @@ export default class Graph extends React.Component {
     // update circle position
     pointGroup.attr('transform', transform);
 
-    pointGroup
-      .selectAll('circle')
-      .attr('r', defaultRadius / transform.k);
+    // pointGroup
+    //   .selectAll('circle')
+    //   .attr('r', defaultRadius / transform.k);
 
     const xAxis = d3.axisBottom(zx)
       .ticks(d3.timeHour.every(1))
@@ -263,7 +263,7 @@ export default class Graph extends React.Component {
 
     this.drawCanvasBars(inputData);
 
-    zoom.on("zoom", (event) => this.zoomed(event, pointEnter, radius));
+    zoom.on("zoom", (event) => this.zoomed(event, radius));
   }
 
   /**
@@ -297,7 +297,7 @@ export default class Graph extends React.Component {
 
     this.drawCanvasBars(filteredData);
 
-    zoom.on("zoom", (event) => this.zoomed(event, point.enter(), defaultRadius));
+    zoom.on("zoom", (event) => this.zoomed(event, defaultRadius));
   }
 
   /**
