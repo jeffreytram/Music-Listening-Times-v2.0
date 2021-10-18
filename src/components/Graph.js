@@ -146,7 +146,7 @@ export default class Graph extends React.Component {
     pointGroup = clipGroup.append('g');
 
     // Add a clipPath: everything out of this area won't be drawn.
-    var clip = svg.append("defs")
+    svg.append("defs")
       .append("clipPath")
       .attr("id", "clip")
       .append("rect")
@@ -164,7 +164,7 @@ export default class Graph extends React.Component {
   }
 
   // A function that updates the chart when the user zoom and thus new boundaries are available
-  zoomed = ({ transform }, defaultRadius) => {
+  zoomed = ({ transform }) => {
     // recover the new scale
     const zx = transform.rescaleX(xScale).interpolate(d3.interpolateRound);
     const zy = transform.rescaleY(yScale).interpolate(d3.interpolateRound);
@@ -259,7 +259,7 @@ export default class Graph extends React.Component {
 
     this.drawCanvasBars(inputData);
 
-    zoom.on("zoom", (event) => this.zoomed(event, radius));
+    zoom.on("zoom", (event) => this.zoomed(event));
   }
 
   /**
@@ -274,8 +274,6 @@ export default class Graph extends React.Component {
     const radius = circleSettings.get(filterView)[1];
     const hiddenOpacity = circleSettings.get('hidden')[0];
     const hiddenRadius = circleSettings.get('hidden')[1];
-    const defaultRadius = circleSettings.get('none')[1];
-
 
     //filtered selection
     var point = pointGroup.selectAll('.point')
@@ -293,7 +291,7 @@ export default class Graph extends React.Component {
 
     this.drawCanvasBars(filteredData);
 
-    zoom.on("zoom", (event) => this.zoomed(event, defaultRadius));
+    zoom.on("zoom", (event) => this.zoomed(event));
   }
 
   /**

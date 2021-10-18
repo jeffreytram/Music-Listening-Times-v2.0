@@ -23,7 +23,7 @@ export default class SongInfo extends React.Component {
 
   handlePointChange = (change) => {
     // filterView is assumed to be in 'select'
-    const { setFilteredDataset, setClickedPoint, clickedPoint, data, entireDataset } = this.props;
+    const { setFilteredDataset, setClickedPoint, clickedPoint, entireDataset } = this.props;
 
     const newID = clickedPoint + change;
     // check if valid change, if out of range dont do anything
@@ -59,7 +59,7 @@ export default class SongInfo extends React.Component {
 
     return (
       <div className={`song-info-grid ${visibility}`}>
-        <img id="album-art"
+        <img id="album-art" alt="placeholder"
           src="https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png" />
         <div className="info">
           <span className="artist" onClick={() => this.handleInfoClick('artist', point.Artist)}>{point.Artist}
