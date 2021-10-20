@@ -5,9 +5,28 @@ import { faSun, faMoon, faSearch, faFilter, faRedoAlt, faCaretUp, faCaretDown, f
 import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
 import SongInfo from './components/SongInfo';
+import Settings from './components/Settings';
 import { setup, uploadedDataSetup, filterDay } from './logic/chart.js';
 import { getNextMonth, getPrevMonth } from './logic/chart.js';
 import './App.css';
+
+const categoriesKey = ['none', 'day', 'search', 'select', 'hidden'];
+
+const defaultMonthlySettings = [
+  [.3, 3],
+  [.3, 3],
+  [.5, 5],
+  [.7, 7],
+  [.05, 3],
+]
+
+const defaultYearlySettings = [
+  [.3, 2],
+  [.3, 2],
+  [.4, 3],
+  [.7, 7],
+  [.03, 2],
+]
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -28,6 +47,8 @@ class App extends React.Component {
       clickedPoint: -1,
       timePeriod: 'monthly',
       timeRange: [],
+      monthlySettings: defaultMonthlySettings,
+      yearlySettings: defaultYearlySettings,
     };
   }
 
@@ -208,6 +229,19 @@ class App extends React.Component {
       timePeriod: period,
     }), () => {
       this.setDataset(this.state.month, this.state.year);
+    });
+  }
+
+  setSetting = (timePeriod, category, setting, value) => {
+    this.setState((prevState) => {
+      const timeSetting = (timePeriod === 'monthly') ? 'monthlySettings' : 'yearlySettings';
+      const settingIndex = (setting === 'opacity') ? 0 : 1;
+      const newSettings = [...prevState[timeSetting]];
+      const index = categoriesKey.indexOf(category);
+      newSettings[index][settingIndex] = value;
+      return ({
+        [timeSetting]: newSettings,
+      });
     });
   }
 
@@ -422,6 +456,7 @@ class App extends React.Component {
               setFilteredDataset={this.setFilteredDataset}
               sampleDate={new Date(`${month} 1 ${year}`)}
               timePeriod={timePeriod}
+              settings={(this.state.timePeriod==='monthly') ? this.state.monthlySettings : this.state.yearlySettings}
             />
           </div>
         </div>
@@ -440,6 +475,12 @@ class App extends React.Component {
             return <option>{option}</option>
           })}
         </datalist>
+        <Settings
+          setSetting={this.setSetting}
+          monthlySettings={this.state.monthlySettings}
+          yearlySettings={this.state.yearlySettings}
+          timePeriod={timePeriod}
+        />
       </div>
     );
   }

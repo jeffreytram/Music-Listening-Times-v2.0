@@ -20,26 +20,6 @@ let pointGroup = {};
 
 let zoom = {};
 
-// opacity, radius
-const monthlySettings = [
-  ['none', [.3, 3]],
-  ['day', [.3, 3]],
-  ['search', [.5, 5]],
-  ['select', [.7, 7]],
-  ['hidden', [.05, 3]],
-]
-
-const yearlySettings = [
-  ['none', [.3, 2]],
-  ['day', [.3, 2]],
-  ['search', [.4, 3]],
-  ['select', [.7, 7]],
-  ['hidden', [.03, 2]],
-]
-
-const monthlyCircleSettings = new Map(monthlySettings);
-const yearlyCircleSettings = new Map(yearlySettings);
-
 export default class Graph extends React.Component {
   constructor(props) {
     super(props);
@@ -187,7 +167,7 @@ export default class Graph extends React.Component {
    */
   drawGraph = () => {
     // OTHER INITIALIZATION
-    const { data, setClickedPoint, setFilteredDataset, sampleDate, timePeriod } = this.props;
+    const { data, setClickedPoint, setFilteredDataset, sampleDate, timePeriod, settings } = this.props;
 
     // TODO: need to improve this
     // initial state, loading icon
@@ -240,10 +220,8 @@ export default class Graph extends React.Component {
         return 'translate(' + [tx, ty] + ')';
       });
 
-    const circleSettings = (timePeriod === 'monthly') ? monthlyCircleSettings : yearlyCircleSettings;
-
-    const opacity = circleSettings.get('none')[0];
-    const radius = circleSettings.get('none')[1];
+    const opacity = settings[0][0];
+    const radius = settings[0][1];
 
     //add circle to group
     pointEnter.append('circle')
@@ -266,14 +244,14 @@ export default class Graph extends React.Component {
    * Updates the current data in the graph (same month, no month change. filter update)
    */
   updateGraph = () => {
-    const { filteredData, filterView, timePeriod } = this.props;
+    const { filteredData, filterView, settings } = this.props;
 
-    const circleSettings = (timePeriod === 'monthly') ? monthlyCircleSettings : yearlyCircleSettings;
+    const categories = ['none', 'day', 'search', 'select', 'hidden'];
 
-    const opacity = circleSettings.get(filterView)[0];
-    const radius = circleSettings.get(filterView)[1];
-    const hiddenOpacity = circleSettings.get('hidden')[0];
-    const hiddenRadius = circleSettings.get('hidden')[1];
+    const opacity = settings[categories.indexOf(filterView)][0];
+    const radius = settings[categories.indexOf(filterView)][1];
+    const hiddenOpacity = settings[categories.indexOf('hidden')][0];
+    const hiddenRadius = settings[categories.indexOf('hidden')][1];
 
     //filtered selection
     var point = pointGroup.selectAll('.point')
