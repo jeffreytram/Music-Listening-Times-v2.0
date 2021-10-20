@@ -2,10 +2,9 @@ import React from 'react';
 
 const categories = ['none', 'day', 'search', 'select', 'hidden'];
 
-const TimeSettings = ({ display, timePeriod, settings, setSetting }) => {
+const TimeSettings = ({ display, timePeriod, settings, setSetting, setDefaultSetting }) => {
   return (
     <div className="time-setting">
-
       <h3>{display} Settings</h3>
       <div className="settings-container">
         <div>
@@ -35,6 +34,7 @@ const TimeSettings = ({ display, timePeriod, settings, setSetting }) => {
           </div>
         </div>
       </div>
+      <button className="button reset-default" onClick={() => setDefaultSetting(timePeriod)}>Reset Default</button>
     </div>
   )
 };
@@ -47,12 +47,14 @@ export default class Settings extends React.Component {
   }
 
   render() {
-    const { setSetting, monthlySettings, yearlySettings } = this.props
+    const { setSetting, monthlySettings, yearlySettings, setDefaultSetting } = this.props
 
     return (
       <div>
-        <TimeSettings display="Monthly" timePeriod="monthly" settings={monthlySettings} setSetting={setSetting} />
-        <TimeSettings display="Yearly" timePeriod="yearly" settings={yearlySettings} setSetting={setSetting}/>
+        <TimeSettings display="Monthly" timePeriod="monthly" settings={monthlySettings}
+          setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
+        <TimeSettings display="Yearly" timePeriod="yearly" settings={yearlySettings}
+          setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
       </div >
     );
   }

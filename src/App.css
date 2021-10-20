@@ -422,6 +422,11 @@ input[type="radio"]+label {
   grid-template-columns: 180px;
 }
 
+.reset-default {
+  margin-top: 1em;
+  padding: .5em .75em;
+}
+
 @media (min-width:800px) {
   #day-filters {
     width: 100%;

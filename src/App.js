@@ -11,22 +11,6 @@ import { getNextMonth, getPrevMonth } from './logic/chart.js';
 import './App.css';
 
 const categoriesKey = ['none', 'day', 'search', 'select', 'hidden'];
-
-const defaultMonthlySettings = [
-  [.3, 3],
-  [.3, 3],
-  [.5, 5],
-  [.7, 7],
-  [.05, 3],
-]
-
-const defaultYearlySettings = [
-  [.3, 2],
-  [.3, 2],
-  [.4, 3],
-  [.7, 7],
-  [.03, 2],
-]
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -47,8 +31,20 @@ class App extends React.Component {
       clickedPoint: -1,
       timePeriod: 'monthly',
       timeRange: [],
-      monthlySettings: defaultMonthlySettings,
-      yearlySettings: defaultYearlySettings,
+      monthlySettings: [
+        [.3, 3],
+        [.3, 3],
+        [.5, 5],
+        [.7, 7],
+        [.05, 3],
+      ],
+      yearlySettings: [
+        [.3, 2],
+        [.3, 2],
+        [.4, 3],
+        [.7, 7],
+        [.03, 2],
+      ],
     };
   }
 
@@ -243,6 +239,29 @@ class App extends React.Component {
         [timeSetting]: newSettings,
       });
     });
+  }
+
+  setDefaultSetting = (timePeriod) => {
+    const defaultMonthlySettings = [
+      [.3, 3],
+      [.3, 3],
+      [.5, 5],
+      [.7, 7],
+      [.05, 3],
+    ];
+
+    const defaultYearlySettings = [
+      [.3, 2],
+      [.3, 2],
+      [.4, 3],
+      [.7, 7],
+      [.03, 2],
+    ];
+    const defaultSettings = (timePeriod === 'monthly') ? defaultMonthlySettings : defaultYearlySettings;
+    const setting = (timePeriod === 'monthly') ? 'monthlySettings' : 'yearlySettings';
+    this.setState({
+      [setting]: defaultSettings
+    })
   }
 
   render() {
@@ -456,7 +475,7 @@ class App extends React.Component {
               setFilteredDataset={this.setFilteredDataset}
               sampleDate={new Date(`${month} 1 ${year}`)}
               timePeriod={timePeriod}
-              settings={(this.state.timePeriod==='monthly') ? this.state.monthlySettings : this.state.yearlySettings}
+              settings={(this.state.timePeriod === 'monthly') ? this.state.monthlySettings : this.state.yearlySettings}
             />
           </div>
         </div>
@@ -480,6 +499,7 @@ class App extends React.Component {
           monthlySettings={this.state.monthlySettings}
           yearlySettings={this.state.yearlySettings}
           timePeriod={timePeriod}
+          setDefaultSetting={this.setDefaultSetting}
         />
       </div>
     );
