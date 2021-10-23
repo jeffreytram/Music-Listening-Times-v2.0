@@ -6,6 +6,7 @@ import Graph from './components/Graph';
 import SearchForm from './components/SearchForm';
 import SongInfo from './components/SongInfo';
 import Settings from './components/Settings';
+import Datalist from './components/Datalist';
 import { setup, uploadedDataSetup, filterDay } from './logic/chart.js';
 import { getNextMonth, getPrevMonth } from './logic/chart.js';
 import './App.css';
@@ -24,7 +25,6 @@ class App extends React.Component {
       yearList: [],
       month: 0,
       year: 0,
-      datalist: { artist: [], song: [], album: [] },
       datalistSetting: 'artist',
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       newLoad: false,
@@ -92,9 +92,7 @@ class App extends React.Component {
       newLoad: true,
       clickedPoint: -1,
     }), () => {
-      if (this.state.dataset) {
-        this.setDatalist();
-      }
+      this.setState({ newLoad: false });
     });
   }
 
@@ -106,33 +104,6 @@ class App extends React.Component {
     this.setState(() => ({
       yearList: years,
     }))
-  }
-
-  /**
-   * Sets the artist, song, and album datalist for the current month
-   */
-  setDatalist = () => {
-    const artistSet = new Set();
-    const songSet = new Set();
-    const albumSet = new Set();
-
-    this.state.dataset.forEach(d => {
-      artistSet.add(d.Artist);
-      songSet.add(d.Song);
-      albumSet.add(d.Album);
-    });
-
-    const ignoreCaseSort = (a, b) => {
-      return a.toLowerCase().localeCompare(b.toLowerCase());
-    };
-    const artistList = Array.from(artistSet).sort(ignoreCaseSort);
-    const songList = Array.from(songSet).sort(ignoreCaseSort);
-    const albumList = Array.from(albumSet).sort(ignoreCaseSort);
-
-    this.setState(() => ({
-      datalist: { artist: artistList, song: songList, album: albumList },
-      newLoad: false,
-    }));
   }
 
   /**
@@ -266,7 +237,7 @@ class App extends React.Component {
 
   render() {
     const {
-      dataset, filteredDataset, entireDataset, datalist, datalistSetting,
+      dataset, filteredDataset, entireDataset, datalistSetting,
       dayFilter, filterView, month, year, timePeriod, timeRange, yearList, clickedPoint,
       newLoad, isDarkTheme,
     } = this.state;
@@ -479,21 +450,7 @@ class App extends React.Component {
             />
           </div>
         </div>
-        <datalist id="artist-datalist">
-          {datalist.artist.map(option => {
-            return <option>{option}</option>
-          })}
-        </datalist>
-        <datalist id="song-datalist">
-          {datalist.song.map(option => {
-            return <option>{option}</option>
-          })}
-        </datalist>
-        <datalist id="album-datalist">
-          {datalist.album.map(option => {
-            return <option>{option}</option>
-          })}
-        </datalist>
+        <Datalist dataset={dataset} />
         <Settings
           setSetting={this.setSetting}
           monthlySettings={this.state.monthlySettings}
