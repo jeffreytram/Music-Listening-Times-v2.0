@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as d3 from "d3";
 import { generateYState } from '../logic/chart';
 
@@ -20,32 +20,26 @@ let pointGroup = {};
 
 let zoom = {};
 
-export default class Graph extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
+export default function Graph(props) {
+  useEffect(() => {
+    initializeGraph();
+  }, []);
 
-  componentDidMount() {
-    this.initializeGraph();
-  }
-
-  componentDidUpdate() {
-    const { newLoad } = this.props;
+  useEffect(() => {
+    const { newLoad } = props;
     if (newLoad) {
       // brand new month data load
-      this.drawGraph();
+      drawGraph();
     } else {
       // updating the current month data with a filter/reset
-      this.updateGraph();
+      updateGraph();
     }
-  }
+  });
 
   /**
    * Initializes the graph for the first time application load
    */
-  initializeGraph = () => {
+  const initializeGraph = () => {
     // GENERATE ELEMENTS 
     //Where to add the graph to
     svg = d3.select('#main-graph')
@@ -144,7 +138,7 @@ export default class Graph extends React.Component {
   }
 
   // A function that updates the chart when the user zoom and thus new boundaries are available
-  zoomed = ({ transform }) => {
+  const zoomed = ({ transform }) => {
     // recover the new scale
     const zx = transform.rescaleX(xScale).interpolate(d3.interpolateRound);
     const zy = transform.rescaleY(yScale).interpolate(d3.interpolateRound);
@@ -165,9 +159,9 @@ export default class Graph extends React.Component {
   /**
    * Draws the graph with new data (month change)
    */
-  drawGraph = () => {
+  const drawGraph = () => {
     // OTHER INITIALIZATION
-    const { data, setClickedPoint, setFilteredDataset, sampleDate, timePeriod, settings } = this.props;
+    const { data, setClickedPoint, setFilteredDataset, sampleDate, timePeriod, settings } = props;
 
     // TODO: need to improve this
     // initial state, loading icon
@@ -235,16 +229,16 @@ export default class Graph extends React.Component {
     //remove filtered out circles
     point.exit().remove();
 
-    this.drawCanvasBars(inputData);
+    drawCanvasBars(inputData);
 
-    zoom.on("zoom", (event) => this.zoomed(event));
+    zoom.on("zoom", (event) => zoomed(event));
   }
 
   /**
    * Updates the current data in the graph (same month, no month change. filter update)
    */
-  updateGraph = () => {
-    const { filteredData, filterView, settings } = this.props;
+  const updateGraph = () => {
+    const { filteredData, filterView, settings } = props;
 
     const categories = ['none', 'day', 'search', 'select', 'hidden'];
 
@@ -267,16 +261,16 @@ export default class Graph extends React.Component {
       .attr('r', hiddenRadius)
       .style('opacity', hiddenOpacity);
 
-    this.drawCanvasBars(filteredData);
+    drawCanvasBars(filteredData);
 
-    zoom.on("zoom", (event) => this.zoomed(event));
+    zoom.on("zoom", (event) => zoomed(event));
   }
 
   /**
    * Draws the vertical bars on the single axis time graph
    * @param {Array} data The data to use for the graph
    */
-  drawCanvasBars = (data) => {
+  const drawCanvasBars = (data) => {
     const cWidth = canvas.node().width;
     const cHeight = canvas.node().height;
 
@@ -298,10 +292,8 @@ export default class Graph extends React.Component {
     }
   }
 
-  render() {
-    return <div>
-      <canvas id="canvas"></canvas>
-      <svg id="main-graph"></svg>
-    </div>
-  }
+  return <div>
+    <canvas id="canvas"></canvas>
+    <svg id="main-graph"></svg>
+  </div>
 }
