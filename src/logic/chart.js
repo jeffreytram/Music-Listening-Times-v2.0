@@ -78,7 +78,7 @@ export const filterDay = (dayFilter, dataset) => {
  * Loads the music data from the csv
  */
 const loadData = () => {
-  datasetLoaded = d3.csv('/Music-Listening-Times-v2.0/lastfm-data-utf.csv').then((data) => {
+  datasetLoaded = d3.csv('/lastfm-data-utf.csv').then((data) => {
     return data;
   });
 }
