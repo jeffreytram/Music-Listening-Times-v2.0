@@ -236,7 +236,7 @@ input[type=checkbox] {
 
 #album-art {
   grid-row: 1 / 6;
-  width: 100px;
+  width: 115px;
   margin: 5px 0px;
   border-radius: calc(var(--border-radius) + 5px);
   -webkit-box-shadow: 7px 7px 7px 0px var(--shadow);
@@ -269,25 +269,21 @@ input[type=checkbox] {
 
 .date {
   font-size: smaller;
-  grid-row: 4 / 5
+  grid-row: 4 / 5;
 }
 
 .song-arrows {
   grid-row: 5 / 6;
-}
-
-#tagList {
-  margin: 10px 0px;
+  align-self: center;
 }
 
 .tag {
   display: inline-block;
-  font-weight: 600;
-  font-size: 14px;
+  font-size: 10px;
+  font-weight: 500;
   border-radius: 15px;
-  margin: 2px 0px;
-  margin-right: 3px;
-  padding: 4px 10px;
+  margin: 0px 2px 0px 0px;
+  padding: 1px 6px;
   background-color: var(--secondary-color);
   color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
@@ -387,9 +383,9 @@ input[type="radio"]+label {
 .song-info-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: 100px 1fr;
-  grid-template-rows: 24px 24px 18px 18px 18px;
-  gap: 0px 10px;
+  grid-template-columns: 115px 1fr;
+  grid-template-rows: 23px 23px 42px 18px 14px;
+  gap: 0px 12px;
 }
 
 #main {

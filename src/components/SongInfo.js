@@ -12,7 +12,7 @@ export default function SongInfo({ clickedPoint, data, entireDataset, timePeriod
 
   const { tags } = FetchArtistTags(point.Artist);
   return (
-    <div className={`song-info-grid`}>
+    <div className="song-info-grid">
       <img id="album-art" alt="placeholder"
         src={albumArt} />
       <div className="info">
@@ -20,6 +20,11 @@ export default function SongInfo({ clickedPoint, data, entireDataset, timePeriod
         </span> - <span className="song" onClick={() => handleInfoClick('song', point.Song)}>{point.Song}</span>
       </div>
       <div className="info album" onClick={() => handleInfoClick('album', point.Album)}>{point.Album}</div>
+      <div className="tagList">
+        {tags.map((tag) => {
+          return (<span className="tag">{tag}</span>)
+        })}
+      </div>
       <div className="info date">{(point.ConvertedDateTime) ? point.ConvertedDateTime.toLocaleString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' }) : ''}</div>
       <div className="song-arrows">
         <FontAwesomeIcon icon={faLongArrowAltLeft}
@@ -33,11 +38,6 @@ export default function SongInfo({ clickedPoint, data, entireDataset, timePeriod
           style={{ marginLeft: '10px' }}
           title="Go to the previous point"
         />
-      </div>
-      <div id="tagList">
-        {tags.map((tag) => {
-          return (<span className="tag">{tag}</span>)
-        })}
       </div>
     </div>
   );
