@@ -416,15 +416,17 @@ class App extends React.Component {
             <SearchFilter />
             <DayFilter />
             <button id="reset" className="button" onClick={() => this.setDataset(month, year)}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
-            <SongInfo
-              clickedPoint={clickedPoint}
-              setFilteredDataset={this.setFilteredDataset}
-              setSearchType={this.setSearchType}
-              setClickedPoint={this.setClickedPoint}
-              data={dataset}
-              entireDataset={entireDataset}
-              timePeriod={timePeriod}
-            />
+            {clickedPoint !== -1 && (
+              <SongInfo
+                clickedPoint={clickedPoint}
+                setFilteredDataset={this.setFilteredDataset}
+                setSearchType={this.setSearchType}
+                setClickedPoint={this.setClickedPoint}
+                data={dataset}
+                entireDataset={entireDataset}
+                timePeriod={timePeriod}
+              />
+            )}
           </div>
           <div className="time-settings">
             <div className="time-period">

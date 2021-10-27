@@ -1,16 +1,20 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft, faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons'
-import { SongInfoLogic, SongInfoHandler } from './SongInfoLogic';
+import { SongInfoLogic, SongInfoHandler, FetchAlbumInfo, FetchArtistTags } from './SongInfoLogic';
 
-export default function SongInfo(props) {
-  const { point, visibility, leftArrowVisibility, rightArrowVisibility } = SongInfoLogic(props);
+export default function SongInfo({ clickedPoint, data, entireDataset, timePeriod, setFilteredDataset, setClickedPoint, setSearchType }) {
+  const { point, leftArrowVisibility, rightArrowVisibility } = SongInfoLogic(clickedPoint, data, entireDataset, timePeriod);
 
-  const { handlePointChange, handleInfoClick } = SongInfoHandler(props);
+  const { handlePointChange, handleInfoClick } = SongInfoHandler(setFilteredDataset, setClickedPoint, clickedPoint, entireDataset, setSearchType, data);
+
+  const { albumArt } = FetchAlbumInfo(point);
+
+  const { tags } = FetchArtistTags(point.Artist);
   return (
-    <div className={`song-info-grid ${visibility}`}>
+    <div className={`song-info-grid`}>
       <img id="album-art" alt="placeholder"
-        src="https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png" />
+        src={albumArt} />
       <div className="info">
         <span className="artist" onClick={() => handleInfoClick('artist', point.Artist)}>{point.Artist}
         </span> - <span className="song" onClick={() => handleInfoClick('song', point.Song)}>{point.Song}</span>
@@ -30,7 +34,11 @@ export default function SongInfo(props) {
           title="Go to the previous point"
         />
       </div>
-      <div id="tagList">{ }</div>
+      <div id="tagList">
+        {tags.map((tag) => {
+          return (<span className="tag">{tag}</span>)
+        })}
+      </div>
     </div>
   );
 }

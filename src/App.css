@@ -446,10 +446,6 @@ input[type="radio"]+label {
   }
 }
 
-.hidden {
-  display: none;
-}
-
 .disabled-arrow {
   pointer-events: none;
   color: var(--light);
