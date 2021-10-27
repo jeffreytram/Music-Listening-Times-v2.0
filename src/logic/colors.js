@@ -12,7 +12,7 @@ function setBodyStyle(r, g, b, alpha) {
   const body = document.getElementsByTagName('body')[0];
 
   body.style.setProperty('--secondary-color', `rgba(${r},${g},${b}, ${alpha[0]})`);
-  body.style.setProperty('--light-secondary', `rgba(${r},${g},${b},${alpha[1]})`);
+  // body.style.setProperty('--light-secondary', `rgba(${r},${g},${b},${alpha[1]})`);
   // body.style.setProperty('--very-light-secondary', `rgba(${r},${g},${b},${alpha[2]})`);
   body.style.setProperty('--secondary-r', `${r}`);
   body.style.setProperty('--secondary-g', `${g}`);

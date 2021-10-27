@@ -30,13 +30,13 @@ export default function SongInfo({ clickedPoint, data, entireDataset, timePeriod
         <FontAwesomeIcon icon={faLongArrowAltLeft}
           onClick={() => handlePointChange(1)}
           className={`${leftArrowVisibility} arrow`}
-          title="Go to next point"
+          title="Go to previous point"
         />
         <FontAwesomeIcon icon={faLongArrowAltRight}
           onClick={() => handlePointChange(-1)}
           className={`${rightArrowVisibility} arrow`}
           style={{ marginLeft: '10px' }}
-          title="Go to the previous point"
+          title="Go to the next point"
         />
       </div>
     </div>
