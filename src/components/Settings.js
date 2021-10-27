@@ -1,6 +1,6 @@
 import React from 'react';
 
-const categories = ['none', 'day', 'search', 'select', 'hidden'];
+const categories = ['default', 'day', 'search', 'select', 'hidden'];
 
 const TimeSettings = ({ display, timePeriod, settings, setSetting, setDefaultSetting }) => {
   return (

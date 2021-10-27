@@ -11,7 +11,7 @@ import { setup, uploadedDataSetup, filterDay } from './logic/chart.js';
 import { getNextMonth, getPrevMonth } from './logic/chart.js';
 import './App.css';
 
-const categoriesKey = ['none', 'day', 'search', 'select', 'hidden'];
+const categoriesKey = ['default', 'day', 'search', 'select', 'hidden'];
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +21,7 @@ class App extends React.Component {
       dataset: [],
       entireDataset: [],
       filteredDataset: [],
-      filterView: 'none',
+      filterView: 'default',
       yearList: [],
       month: 0,
       year: 0,
@@ -85,7 +85,7 @@ class App extends React.Component {
     this.setState((prevState) => ({
       dataset: dataset,
       filteredDataset: dataset,
-      filterView: 'none',
+      filterView: 'default',
       dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
       month: month,
       year: year,

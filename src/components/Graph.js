@@ -240,7 +240,7 @@ export default function Graph(props) {
   const updateGraph = () => {
     const { filteredData, filterView, settings } = props;
 
-    const categories = ['none', 'day', 'search', 'select', 'hidden'];
+    const categories = ['default', 'day', 'search', 'select', 'hidden'];
 
     const opacity = settings[categories.indexOf(filterView)][0];
     const radius = settings[categories.indexOf(filterView)][1];
