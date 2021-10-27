@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getFunctions, httpsCallable } from '@firebase/functions';
 import { searchFilter } from '../logic/chart';
+import { setContrastingColors } from '../logic/colors';
 
 export const SongInfoLogic = (clickedPoint, data, entireDataset, timePeriod) => {
   let dataset = data;
@@ -55,17 +56,16 @@ export const FetchAlbumInfo = (point) => {
     const functions = getFunctions();
     const getAlbumInfo = httpsCallable(functions, 'getAlbumInfo');
     getAlbumInfo(point).then(result => {
-      console.log(result);
       const albumInfo = JSON.parse(result.data);
       let albumLink = albumInfo.album.image[2]['#text'];
       if (albumLink === '') {
         albumLink = defaultImage;
       }
       setAlbumArt(albumLink);
-      // setContrastingColors(albumLink);
+      setContrastingColors(albumLink);
     })
       .catch(error => {
-        // setContrastingColors(defaultImage);
+        setContrastingColors(defaultImage);
         setAlbumArt(defaultImage);
         console.log(error);
       });
