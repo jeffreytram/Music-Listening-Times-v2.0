@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { getNextMonth, getPrevMonth } from "../logic/chart";
 
-const DateNavigation = ({ month, year, timePeriod, timeRange, yearList, setDataset}) => {
+const DateNavigation = ({ month, year, timePeriod, timeRange, yearList, setDataset }) => {
 
   const handleMonthChange = (event) => {
     const newMonth = parseInt(event.target.value);

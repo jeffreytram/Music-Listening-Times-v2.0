@@ -9,7 +9,7 @@ const TimeSettings = ({ display, timePeriod, settings, setSetting, setDefaultSet
       <div className="settings-container">
         <div>
           <h4>Point Opacity</h4>
-          <div className="settings-grid">
+          <div className="settings-flexbox">
             {categories.map((cat, i) => {
               return (
                 <>
@@ -22,7 +22,7 @@ const TimeSettings = ({ display, timePeriod, settings, setSetting, setDefaultSet
         </div>
         <div>
           <h4>Point Radius</h4>
-          <div className="settings-grid">
+          <div className="settings-flexbox">
             {categories.map((cat, i) => {
               return (
                 <>
@@ -50,7 +50,7 @@ export default class Settings extends React.Component {
     const { setSetting, monthlySettings, yearlySettings, setDefaultSetting } = this.props
 
     return (
-      <div>
+      <div className="time-settings-container">
         <TimeSettings display="Monthly" timePeriod="monthly" settings={monthlySettings}
           setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
         <TimeSettings display="Yearly" timePeriod="yearly" settings={yearlySettings}

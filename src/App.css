@@ -407,18 +407,25 @@ input[type="radio"]+label {
 
 /* Settings style */
 
+.time-settings-container {
+  display: grid;
+  gap: 0 4em;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 20%));
+}
+
 .time-setting {
-  margin: 5em 0;
+  margin: 2em 0;
 }
 
 .settings-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(175px, 20%));
+  display: flex;
+  gap: 0 3em;
 }
 
-.settings-grid {
-  display: grid;
-  grid-template-columns: 100px;
+.settings-flexbox {
+  display: flex;
+  flex-direction: column;
+  width: 125px;
 }
 
 .reset-default {
