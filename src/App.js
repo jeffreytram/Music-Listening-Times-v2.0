@@ -1,14 +1,15 @@
 import React from 'react';
 import * as d3 from "d3";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faMoon, faSearch, faFilter, faRedoAlt, faCaretUp, faCaretDown, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faSun, faMoon, faRedoAlt, faUpload } from '@fortawesome/free-solid-svg-icons'
 import Graph from './components/Graph';
-import SearchForm from './components/SearchForm';
+import SearchFilter from './components/SearchFilter';
+import DayFilter from './components/DayFilter';
+import DateNavigation from './components/DateNavigation';
 import SongInfo from './components/SongInfo';
 import Settings from './components/Settings';
 import Datalist from './components/Datalist';
 import { setup, uploadedDataSetup, filterDay } from './logic/chart.js';
-import { getNextMonth, getPrevMonth } from './logic/chart.js';
 import './App.css';
 
 const categoriesKey = ['default', 'day', 'search', 'select', 'hidden'];
@@ -245,142 +246,6 @@ class App extends React.Component {
     const body = document.getElementsByTagName('body')[0];
     body.className = (isDarkTheme) ? '' : 'light-theme';
 
-
-    const SearchFilter = (props) => {
-      return (
-        <div id="search-filter">
-          <label htmlFor="general-filter">
-            <span><FontAwesomeIcon icon={faSearch} /> Search by </span>
-            <select id="filter-select" onChange={(event) => this.setSearchType(event.target.value)} value={datalistSetting}>
-              <option value="artist">Artist</option>
-              <option value="song">Song</option>
-              <option value="album">Album</option>
-            </select>
-          </label>
-          <br />
-          <SearchForm
-            setting={datalistSetting}
-            setFilteredDataset={this.setFilteredDataset}
-            data={dataset}
-            datalist={`${datalistSetting}-datalist`}
-          />
-        </div >
-      )
-    }
-
-    const DayButton = (props) => {
-      const { abbrevation, fullName, displayName } = props;
-      return (
-        <label htmlFor={abbrevation}>
-          <input
-            type="checkbox"
-            name={abbrevation}
-            id={abbrevation}
-            value={fullName}
-            checked={dayFilter[abbrevation]}
-            onChange={this.toggleDayCheckbox}
-          />
-          <span className="checkbox">{displayName}</span>
-        </label>
-      )
-    }
-
-    const DayFilter = (props) => {
-      return (
-        <div id="day-filters">
-          <label><FontAwesomeIcon icon={faFilter} /> Filter by day of the week:</label>
-          <div id="day-container">
-            <DayButton abbrevation="mon" fullName="Monday" displayName="Mon" />
-            <DayButton abbrevation="tue" fullName="Tuesday" displayName="Tue" />
-            <DayButton abbrevation="wed" fullName="Wednesday" displayName="Wed" />
-            <DayButton abbrevation="thu" fullName="Thursday" displayName="Thu" />
-            <DayButton abbrevation="fri" fullName="Friday" displayName="Fri" />
-            <DayButton abbrevation="sat" fullName="Saturday" displayName="Sat" />
-            <DayButton abbrevation="sun" fullName="Sunday" displayName="Sun" />
-          </div>
-        </div>
-      )
-    }
-
-    const handleMonthChange = (event) => {
-      const newMonth = parseInt(event.target.value);
-      this.setDataset(newMonth, year);
-    };
-
-    const handleYearChange = (event) => {
-      const newYear = parseInt(event.target.value);
-      this.setDataset(month, newYear);
-    }
-
-    const handleNextPeriodChange = (timePeriod) => {
-      if (timePeriod === 'monthly') {
-        const nextMonthDate = getNextMonth(month, year);
-        const nextMonth = nextMonthDate.getMonth() + 1;
-        const nextMonthYear = nextMonthDate.getFullYear();
-        this.setDataset(nextMonth, nextMonthYear);
-      } else if (timePeriod === 'yearly') {
-        this.setDataset(month, parseInt(year) + 1);
-      }
-    }
-
-    const handlePrevPeriodChange = (timePeriod) => {
-      if (timePeriod === 'monthly') {
-        const prevMonthDate = getPrevMonth(month, year);
-        const prevMonth = prevMonthDate.getMonth() + 1;
-        const prevYear = prevMonthDate.getFullYear();
-        this.setDataset(prevMonth, prevYear);
-      } else if (timePeriod === 'yearly') {
-        this.setDataset(month, parseInt(year) - 1);
-      }
-    }
-
-    const DateNavigation = (props) => {
-      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      const abbrev = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-      const nextMonthDate = getNextMonth(month, year);
-      const prevMonthDate = getPrevMonth(month, year);
-
-      let nextDisabled;
-      let prevDisabled;
-
-      if (timePeriod === 'monthly') {
-        nextDisabled = (nextMonthDate > timeRange[1]) ? 'disabled-arrow' : '';
-        prevDisabled = (prevMonthDate < timeRange[0]) ? 'disabled-arrow' : '';
-      } else if (timePeriod === 'yearly') {
-        nextDisabled = (yearList.indexOf(parseInt(year) + 1) === -1) && 'disabled-arrow';
-        prevDisabled = (yearList.indexOf(parseInt(year) - 1) === -1) && 'disabled-arrow';
-      }
-
-
-      return (
-        <div className="date-navigation">
-          <FontAwesomeIcon icon={faCaretUp} className={`up-caret arrow ${prevDisabled}`} onClick={() => handlePrevPeriodChange(timePeriod)}
-            title={`Go to previous ${(timePeriod === 'monthly') ? 'month' : 'year'}`}
-          />
-          <FontAwesomeIcon icon={faCaretDown} className={`down-caret arrow ${nextDisabled}`} onClick={() => handleNextPeriodChange(timePeriod)}
-            title={`Go to the next ${(timePeriod === 'monthly') ? 'month' : 'year'}`}
-          />
-          {(timePeriod === 'monthly') && (
-            <select id="month-select" onChange={handleMonthChange} value={month}>
-              {months.map((month, i) => {
-                return (
-                  <option value={abbrev[i]}>{month}</option>
-                )
-              })}
-            </select>
-          )}
-          <select id="year-select" onChange={handleYearChange} value={year}>
-            {yearList.map((year) => {
-              return (
-                <option value={year}>{year}</option>
-              )
-            })}
-          </select>
-        </div>
-      )
-    }
-
     const TimePeriodButton = ({ value }) => (
       <span className="time-period-button">
         <input id={value} type="radio" value={value} name="time-period" checked={timePeriod === value}
@@ -413,8 +278,13 @@ class App extends React.Component {
           </div>
           <h1>Music Listening Times</h1>
           <div className="info-grid">
-            <SearchFilter />
-            <DayFilter />
+            <SearchFilter
+              setSearchType={this.setSearchType}
+              datalistSetting={datalistSetting}
+              setFilteredDataset={this.setFilteredDataset}
+              dataset={dataset}
+            />
+            <DayFilter dayFilter={dayFilter} toggleDayCheckbox={this.toggleDayCheckbox} />
             <button id="reset" className="button" onClick={() => this.setDataset(month, year)}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
             {clickedPoint !== -1 && (
               <SongInfo
@@ -435,7 +305,14 @@ class App extends React.Component {
             </div>
             <div className="side-container">
               <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
-              <DateNavigation />
+              <DateNavigation
+                month={month}
+                year={year}
+                timePeriod={timePeriod}
+                timeRange={timeRange}
+                yearList={yearList}
+                setDataset={this.setDataset}
+              />
             </div>
           </div>
           <div id="main">
