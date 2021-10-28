@@ -30,10 +30,13 @@ body.light-theme {
   --shadow: rgba(50, 50, 50, 0.3);
   background: var(--very-light-secondary);
   background: linear-gradient(170deg, var(--very-light-secondary) 10%, var(--light-secondary) 100%);
+  /* background-image: url('./images/test3.svg');
+  background-repeat: no-repeat;
+  background-size: contain; */
 }
 
 * {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Maven Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html, body {
@@ -410,12 +413,12 @@ input[type="radio"]+label {
 
 .settings-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 30%));
+  grid-template-columns: repeat(auto-fit, minmax(175px, 20%));
 }
 
 .settings-grid {
   display: grid;
-  grid-template-columns: 180px;
+  grid-template-columns: 100px;
 }
 
 .reset-default {
