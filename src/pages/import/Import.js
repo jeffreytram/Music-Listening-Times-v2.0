@@ -1,6 +1,8 @@
 function Import(props) {
   return (
-    <div>Import page</div>
+    <div>
+      <h1>Importing a CSV</h1>
+    </div>
   )
 }
 

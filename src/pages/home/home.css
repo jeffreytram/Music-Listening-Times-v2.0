@@ -1,0 +1,69 @@
+.home-page-container {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
+.content-grid {
+  display: grid;
+  width: 100vw;
+  height: 100%;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 100%;
+}
+
+.title-container {
+  width: 100%;
+  height: 100%;
+  text-align: right;
+}
+
+.home-title {
+  font-size: 3em;
+}
+
+.diamond-container {
+  position: relative;
+}
+
+.diamond-button {
+  transform: rotate(45deg);
+  background-color: var(--light-blue);
+  border: none;
+}
+
+.diamond-button:hover {
+  background-color: var(--blue);
+  cursor: pointer;
+  color: white;
+}
+
+.larger-diamond-shape {
+  height: 150px;
+  width: 150px;
+  font-size: x-large;
+}
+
+.smaller-diamond-shape {
+  height: 100px;
+  width: 100px;
+  font-size: larger;
+}
+
+.diamond-text {
+  transform: rotate(-45deg);
+}
+
+.d1 {
+  position: relative;
+  bottom: 55px;
+  left: 13px;
+}
+
+.d2 {
+  position: relative;
+  top: 40px;
+  right: -12px;
+}

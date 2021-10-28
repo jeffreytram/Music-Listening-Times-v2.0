@@ -256,7 +256,7 @@ class Visualization extends React.Component {
     )
 
     return (
-      <div className="site-container" >
+      <div>
         <div id="loading">
           <div className="lds-dual-ring"></div>
           <h2>Loading...</h2>
