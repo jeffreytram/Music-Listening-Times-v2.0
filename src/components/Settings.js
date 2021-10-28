@@ -2,9 +2,9 @@ import React from 'react';
 
 const categories = ['default', 'day', 'search', 'select', 'hidden'];
 
-const TimeSettings = ({ display, timePeriod, settings, setSetting, setDefaultSetting }) => {
+const PointSettings = ({ display, timePeriod, settings, setSetting, setDefaultSetting }) => {
   return (
-    <div className="time-setting">
+    <div className="point-setting">
       <h3>{display} Settings</h3>
       <div className="settings-container">
         <div>
@@ -39,23 +39,15 @@ const TimeSettings = ({ display, timePeriod, settings, setSetting, setDefaultSet
   )
 };
 
-export default class Settings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
-  render() {
-    const { setSetting, monthlySettings, yearlySettings, setDefaultSetting } = this.props
-
-    return (
-      <div className="time-settings-container">
-        <TimeSettings display="Monthly" timePeriod="monthly" settings={monthlySettings}
-          setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
-        <TimeSettings display="Yearly" timePeriod="yearly" settings={yearlySettings}
-          setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
-      </div >
-    );
-  }
+function Settings({ setSetting, monthlySettings, yearlySettings, setDefaultSetting }) {
+  return (
+    <div className="point-settings-container">
+      <PointSettings display="Monthly" timePeriod="monthly" settings={monthlySettings}
+        setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
+      <PointSettings display="Yearly" timePeriod="yearly" settings={yearlySettings}
+        setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
+    </div >
+  );
 }
+
+export default Settings;

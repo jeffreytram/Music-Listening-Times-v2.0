@@ -229,7 +229,7 @@ input[type=checkbox] {
   cursor: pointer;
 }
 
-#date-range, #filter-select, #filter-input, .checkbox, .button, #year-select, #month-select {
+#date-range, #filter-select, #filter-input, .checkbox, .button, #year-select, #month-select, .point-setting {
   -webkit-box-shadow: 1px 1px 3px 0px var(--shadow);
   -moz-box-shadow: 1px 1px 3px 0px var(--shadow);
   box-shadow: 1px 1px 3px 0px var(--shadow);
@@ -407,14 +407,17 @@ input[type="radio"]+label {
 
 /* Settings style */
 
-.time-settings-container {
+.point-settings-container {
+
   display: grid;
-  gap: 0 4em;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 20%));
+  gap: 0 2em;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 20%));
 }
 
-.time-setting {
+.point-setting {
   margin: 2em 0;
+  padding: 1em 2em;
+  border-radius: calc(var(--border-radius) + 5px);
 }
 
 .settings-container {
