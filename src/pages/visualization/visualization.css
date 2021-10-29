@@ -358,6 +358,8 @@ input[type="radio"]+label {
   gap: 2em;
   grid-template-columns: repeat(auto-fit, minmax(200px, 400px));
   text-align: center;
+  justify-content: center;
+  margin: 2em 0;
 }
 
 .point-setting {

@@ -2,3 +2,7 @@
   width: 100%;
   max-width: 500px;
 }
+
+.steps > li {
+  margin: 2em 0;
+}

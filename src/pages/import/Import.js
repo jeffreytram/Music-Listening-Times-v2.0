@@ -6,8 +6,7 @@ function Import(props) {
     <div className="site-container">
       <h1>Importing a CSV</h1>
       <h2>How to import your own LastFM data into the application</h2>
-      <h3>Steps:</h3>
-      <ol>
+      <ol className="steps">
         <li>Go to <a href="https://benjaminbenben.com/lastfm-to-csv/"><strong>benjaminbenben.com/lastfm-to-csv/</strong></a></li>
         <li>Enter your <strong>LastFM username</strong></li>
         <li>Click <strong>Fetch track</strong> to export your data into a CSV</li>
