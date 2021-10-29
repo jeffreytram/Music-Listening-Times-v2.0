@@ -147,7 +147,6 @@ export default function Graph(props) {
     pointGroup.attr('transform', transform);
 
     const xAxis = d3.axisBottom(zx)
-      .ticks(d3.timeHour.every(1))
       .tickFormat(d3.timeFormat('%H:%M'));
 
     const yAxis = d3.axisLeft(zy);
@@ -175,7 +174,6 @@ export default function Graph(props) {
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
-      .ticks(d3.timeHour.every(1))
       .tickFormat(d3.timeFormat('%H:%M'));
 
     //y-axis line
