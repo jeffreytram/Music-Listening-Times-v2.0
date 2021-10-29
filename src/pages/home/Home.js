@@ -7,6 +7,7 @@ function Home(props) {
       <div className="content-grid">
         <div className="title-container">
           <h1 className="home-title">Music Listening Times</h1>
+          <p>explore your music listening trends</p>
         </div>
         <div className="diamond-container">
           <Link to="/import">
