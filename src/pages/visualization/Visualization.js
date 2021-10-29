@@ -244,7 +244,7 @@ class Visualization extends React.Component {
     } = this.state;
 
     const body = document.getElementsByTagName('body')[0];
-    body.className = (isDarkTheme) ? '' : 'light-theme';
+    body.className = (isDarkTheme) ? 'dark-theme' : '';
 
     const TimePeriodButton = ({ value }) => (
       <span className="time-period-button">

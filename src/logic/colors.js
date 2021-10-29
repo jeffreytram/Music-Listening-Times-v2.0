@@ -38,9 +38,9 @@ export function setContrastingColors(albumArt) {
       const r = value[0], g = value[1], b = value[2];
       const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
       const bodyClassName = document.getElementsByTagName('body').className;
-      if (bodyClassName !== 'light-theme' && luma > 225) {
+      if (bodyClassName === 'dark-theme' && luma > 225) {
         setBodyStyle(30, 30, 30, [1, .2, .1]);
-      } else if (bodyClassName === 'light-theme' && luma < 90) {
+      } else if (bodyClassName !== 'dark-theme' && luma < 90) {
         setBodyStyle(247, 247, 247, [1, 8, .7]);
       } else {
         setBodyStyle(r, g, b, [1, .3, .15]);

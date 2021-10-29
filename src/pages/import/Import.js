@@ -16,7 +16,7 @@ function Import(props) {
         <li>Add the headers exactly as followed in the same order and case sensitivity</li>
         <ul>
           <li><strong>Artist, Album, Song, RawDateTime</strong></li>
-          <li><img src={screenshot} /></li>
+          <li><img src={screenshot} alt="excel example"/></li>
         </ul>
         <li>Ensure you've entered the headers exactly as written to limit errors with the application</li>
         <li><strong>Save the CSV</strong></li>
