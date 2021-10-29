@@ -354,27 +354,37 @@ input[type="radio"]+label {
 /* Settings style */
 
 .point-settings-container {
-
   display: grid;
-  gap: 0 2em;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 20%));
+  gap: 2em;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 400px));
+  text-align: center;
 }
 
 .point-setting {
-  margin: 2em 0;
-  padding: 1em 2em;
-  border-radius: calc(var(--border-radius) + 5px);
+  border-radius: calc(var(--border-radius) + 10px);
+  width: calc(100% - 4em);
+  padding: .5em 2em;
 }
 
 .settings-container {
   display: flex;
-  gap: 0 3em;
+  justify-content: space-around;
+  gap: 0 2em;
+  width: 100%;
 }
 
 .settings-flexbox {
   display: flex;
   flex-direction: column;
-  width: 125px;
+  width: 100%;
+}
+
+.settings-flexbox>label {
+  text-align: left;
+}
+
+.settings-flexbox>input {
+  width: 100%;
 }
 
 .reset-default {
