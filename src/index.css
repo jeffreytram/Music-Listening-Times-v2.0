@@ -44,7 +44,7 @@ body.light-theme {
   font-family: 'Maven Pro', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-html, body, #root, .site-container {
+html, body, #root {
   color: var(--main-text);
   margin: 0;
   height: 100%;

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import './home.css';
 
 function Home(props) {
@@ -8,12 +9,16 @@ function Home(props) {
           <h1 className="home-title">Music Listening Times</h1>
         </div>
         <div className="diamond-container">
-          <button className="larger-diamond-shape diamond-button d1">
-            <div className="diamond-text">Import CSV</div>
-          </button>
-          <button className="smaller-diamond-shape diamond-button d2">
-            <div className="diamond-text">View Example</div>
-          </button>
+          <Link to="/import">
+            <button className="larger-diamond-shape diamond-button d1">
+              <div className="diamond-text">Import CSV</div>
+            </button>
+          </Link>
+          <Link to="/visualize">
+            <button className="smaller-diamond-shape diamond-button d2">
+              <div className="diamond-text">View Example</div>
+            </button>
+          </Link>
         </div>
       </div>
     </div>
