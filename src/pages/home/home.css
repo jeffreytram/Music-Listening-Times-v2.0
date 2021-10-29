@@ -12,14 +12,16 @@
   display: grid;
   width: 100vw;
   height: 100%;
-  grid-template-columns: 40% 60%;
-  grid-template-rows: 100%;
+  grid-template-columns: 100%;
+  grid-template-rows: 100% 100%;
 }
 
 .title-container {
   width: 100%;
   height: 100%;
-  text-align: right;
+  grid-row: 2 / 3;
+  text-align: center;
+  margin-top: -50px;
 }
 
 .home-title {
@@ -27,7 +29,9 @@
 }
 
 .diamond-container {
+  display: flex;
   position: relative;
+  justify-content: center;
 }
 
 .diamond-button {
@@ -61,12 +65,36 @@
 
 .d1 {
   position: relative;
-  bottom: 50px;
+  bottom: -20px;
   left: 23px;
 }
 
 .d2 {
   position: relative;
-  top: 45px;
-  right: -22px;
+  top: 150px;
+  right: -4px;
+}
+
+@media (min-width: 475px) {
+  .content-grid {
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 100%;
+    align-items: center;
+  }
+  .title-container {
+    grid-row: 1 / 2;
+    text-align: right;
+  }
+  .diamond-container {
+    display: block;
+  }
+  .d1 {
+    bottom: 50px;
+    left: 40px;
+  }
+  
+  .d2 {
+    top: 45px;
+    right: -22px;
+  }
 }
