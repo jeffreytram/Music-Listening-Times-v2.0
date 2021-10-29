@@ -269,9 +269,10 @@ input[type=checkbox] {
 
 .time-settings {
   display: flex;
-  justify-content: space-between;
-  align-content: center;
+  flex-wrap: wrap;
+  flex-basis: 70%;
   margin: 1em 0;
+  justify-content: center;
 }
 
 .time-period {
@@ -304,7 +305,6 @@ input[type="radio"]+label {
 
 .side-container {
   text-align: right;
-  margin: 10px 0px;
 }
 
 .date-navigation {
@@ -313,13 +313,13 @@ input[type="radio"]+label {
 
 .up-caret {
   position: absolute;
-  left: -15px;
+  left: -8px;
   top: 2px;
 }
 
 .down-caret {
   position: absolute;
-  left: -15px;
+  left: -8px;
   bottom: 2px;
 }
 
@@ -390,6 +390,12 @@ input[type="radio"]+label {
 .reset-default {
   margin-top: 1em;
   padding: .5em .75em;
+}
+
+@media(min-width: 460px) {
+  .time-settings {
+    justify-content: space-between;
+  }
 }
 
 @media (min-width:800px) {
