@@ -4,6 +4,8 @@
   display: grid;
   justify-content: center;
   align-content: center;
+  background-image: linear-gradient(rgba(68, 76, 247, .02) 4px, transparent 4px), linear-gradient(to right, rgba(69, 78, 247, .02) 4px, transparent 4px);
+  background-size: 240px 240px;
 }
 
 .content-grid {
@@ -32,6 +34,7 @@
   transform: rotate(45deg);
   background-color: var(--light-blue);
   border: none;
+  border-radius: 2px;
 }
 
 .diamond-button:hover {
@@ -58,12 +61,12 @@
 
 .d1 {
   position: relative;
-  bottom: 55px;
-  left: 13px;
+  bottom: 50px;
+  left: 23px;
 }
 
 .d2 {
   position: relative;
-  top: 40px;
-  right: -12px;
+  top: 45px;
+  right: -22px;
 }

@@ -13,11 +13,11 @@ body {
   --shadow: rgba(0, 0, 0, .6);
   --border-radius: 5px;
   background: #202020; */
-  --blue: rgba(0, 113, 188, .7);
-  --light-blue: rgba(0, 113, 188, .2);
+  --blue: rgb(77, 156, 208);
+  --light-blue: rgb(204, 227, 242);
   background-image: url('./images/blue-diamond-bg.svg');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 1200px;
 }
 
 body.light-theme {
