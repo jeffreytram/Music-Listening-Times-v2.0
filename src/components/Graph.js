@@ -29,12 +29,7 @@ export default function Graph(props) {
   useEffect(() => {
     // DRAW GRAPH
     // brand new month data load
-    /**
-     * Draws the graph with new data (month change)
-     */
-
-
-    console.log('draww graph');
+    // Draws the graph with new data (month change)
 
     // clear 'no data message'
     svg.select('.no-data-message').remove();
@@ -45,65 +40,62 @@ export default function Graph(props) {
         .attr('class', 'no-data-message')
         .attr('text-anchor', 'middle')
         .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${(height - padding.down - padding.top) / 2})`)
-        // .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric' })}`);
-        .text(`No data for the period`);
-    } else {
-      const dateInMonth = data[0].Date;
-      const yState = generateYState(dateInMonth, timePeriod);
-
-      //y-axis scale    
-      yScale.domain(yState);
-
-      //x-axis line
-      var xAxis = d3.axisBottom(xScale)
-        .tickFormat(d3.timeFormat('%H:%M'));
-
-      //y-axis line
-      var yAxis = d3.axisLeft(yScale);
-
-      xAxisG.call(xAxis);
-      yAxisG.call(yAxis);
-
-      // RENDER CIRCLES
-      var point = pointGroup.selectAll('.point')
-        .data(data, d => d.ConvertedDateTime);
-
-      var pointEnter = point.enter()
-        .append('g')
-        .attr('class', 'point');
-
-      pointEnter.merge(point)
-        .attr('transform', d => {
-          var tx = xScale(d.Time);
-          var ty = yScale(d.Date);
-          return 'translate(' + [tx, ty] + ')';
-        });
-
-      const radius = settings['default']['radius'];
-      const opacity = settings['default']['opacity'];
-
-      //add circle to group
-      pointEnter.append('circle')
-        .attr('r', radius)
-        .style('opacity', opacity)
-        .on("click", function (e, d) {
-          dispatchFilter({ type: 'select', value: d });
-        });
-
-      //remove filtered out circles
-      point.exit().remove();
-
-      drawCanvasBars(data);
-
-      zoom.on("zoom", (event) => zoomed(event));
+        .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric' })}`);
     }
-  }, [data, timePeriod, dispatchFilter, settings]);
+    const dateInMonth = sampleDate;
+    const yState = generateYState(dateInMonth, timePeriod);
+
+    //y-axis scale    
+    yScale.domain(yState);
+
+    //x-axis line
+    var xAxis = d3.axisBottom(xScale)
+      .tickFormat(d3.timeFormat('%H:%M'));
+
+    //y-axis line
+    var yAxis = d3.axisLeft(yScale);
+
+    xAxisG.call(xAxis);
+    yAxisG.call(yAxis);
+
+    // RENDER CIRCLES
+    var point = pointGroup.selectAll('.point')
+      .data(data, d => d.ConvertedDateTime);
+
+    var pointEnter = point.enter()
+      .append('g')
+      .attr('class', 'point');
+
+    pointEnter.merge(point)
+      .attr('transform', d => {
+        var tx = xScale(d.Time);
+        var ty = yScale(d.Date);
+        return 'translate(' + [tx, ty] + ')';
+      });
+
+    const radius = settings['default']['radius'];
+    const opacity = settings['default']['opacity'];
+
+    //add circle to group
+    pointEnter.append('circle')
+      .attr('r', radius)
+      .style('opacity', opacity)
+      .on("click", function (e, d) {
+        dispatchFilter({ type: 'select', value: d });
+      });
+
+    //remove filtered out circles
+    point.exit().remove();
+
+    drawCanvasBars(data);
+
+    zoom.on("zoom", (event) => zoomed(event));
+  }, [data, sampleDate, timePeriod, dispatchFilter, settings]);
 
   useEffect(() => {
     // Update Graph
     // Updates the current data in the graph (same time period, no time change. filter update)
 
-    console.log('update graph');
     const opacity = settings[filterView]['opacity'];
     const radius = settings[filterView]['radius'];
     const hiddenOpacity = settings['hidden']['opacity'];
