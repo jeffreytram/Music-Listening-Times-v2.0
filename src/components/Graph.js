@@ -21,20 +21,112 @@ let pointGroup = {};
 let zoom = {};
 
 export default function Graph(props) {
+  const { data, filteredData, sampleDate, timePeriod, settings, dispatchFilter, filterView } = props;
   useEffect(() => {
     initializeGraph();
   }, []);
 
   useEffect(() => {
-    const { newLoad } = props;
-    if (newLoad) {
-      // brand new month data load
-      drawGraph();
+    // DRAW GRAPH
+    // brand new month data load
+    /**
+     * Draws the graph with new data (month change)
+     */
+
+
+    console.log('draww graph');
+
+    // clear 'no data message'
+    svg.select('.no-data-message').remove();
+    if (data.length === 0) {
+      // genereate 'no data' text
+      //append x-axis label
+      svg.append('text')
+        .attr('class', 'no-data-message')
+        .attr('text-anchor', 'middle')
+        .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${(height - padding.down - padding.top) / 2})`)
+        // .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric' })}`);
+        .text(`No data for the period`);
     } else {
-      // updating the current month data with a filter/reset
-      updateGraph();
+      const dateInMonth = data[0].Date;
+      const yState = generateYState(dateInMonth, timePeriod);
+
+      //y-axis scale    
+      yScale.domain(yState);
+
+      //x-axis line
+      var xAxis = d3.axisBottom(xScale)
+        .tickFormat(d3.timeFormat('%H:%M'));
+
+      //y-axis line
+      var yAxis = d3.axisLeft(yScale);
+
+      xAxisG.call(xAxis);
+      yAxisG.call(yAxis);
+
+      // RENDER CIRCLES
+      var point = pointGroup.selectAll('.point')
+        .data(data, d => d.ConvertedDateTime);
+
+      var pointEnter = point.enter()
+        .append('g')
+        .attr('class', 'point');
+
+      pointEnter.merge(point)
+        .attr('transform', d => {
+          var tx = xScale(d.Time);
+          var ty = yScale(d.Date);
+          return 'translate(' + [tx, ty] + ')';
+        });
+
+      const radius = settings['default']['radius'];
+      const opacity = settings['default']['opacity'];
+
+      //add circle to group
+      pointEnter.append('circle')
+        .attr('r', radius)
+        .style('opacity', opacity)
+        .on("click", function (e, d) {
+          dispatchFilter({ type: 'select', value: d });
+        });
+
+      //remove filtered out circles
+      point.exit().remove();
+
+      drawCanvasBars(data);
+
+      zoom.on("zoom", (event) => zoomed(event));
     }
-  });
+  }, [data, timePeriod, dispatchFilter, settings]);
+
+  useEffect(() => {
+    // Update Graph
+    // Updates the current data in the graph (same time period, no time change. filter update)
+
+    console.log('update graph');
+    const opacity = settings[filterView]['opacity'];
+    const radius = settings[filterView]['radius'];
+    const hiddenOpacity = settings['hidden']['opacity'];
+    const hiddenRadius = settings['hidden']['radius'];
+
+    //filtered selection
+    var point = pointGroup.selectAll('.point')
+      .data(filteredData, d => d.ConvertedDateTime);
+
+    point.select("circle")
+      .attr('r', radius)
+      .style('opacity', opacity);
+
+    //remove filtered out circles
+    point.exit()
+      .select("circle")
+      .attr('r', hiddenRadius)
+      .style('opacity', hiddenOpacity);
+
+    drawCanvasBars(filteredData);
+
+    zoom.on("zoom", (event) => zoomed(event));
+  }, [filteredData, filterView, settings]);
 
   /**
    * Initializes the graph for the first time application load
@@ -153,115 +245,6 @@ export default function Graph(props) {
 
     xAxisG.call(xAxis);
     yAxisG.call(yAxis);
-  }
-
-  /**
-   * Draws the graph with new data (month change)
-   */
-  const drawGraph = () => {
-    // OTHER INITIALIZATION
-    const { data, setClickedPoint, setFilteredDataset, sampleDate, timePeriod, settings } = props;
-
-    // TODO: need to improve this
-    // initial state, loading icon
-    // empty state for when no data
-    // if (data) {
-    const dateInMonth = sampleDate;
-    const yState = generateYState(dateInMonth, timePeriod);
-
-    //y-axis scale    
-    yScale.domain(yState);
-
-    //x-axis line
-    var xAxis = d3.axisBottom(xScale)
-      .tickFormat(d3.timeFormat('%H:%M'));
-
-    //y-axis line
-    var yAxis = d3.axisLeft(yScale);
-
-    xAxisG.call(xAxis);
-    yAxisG.call(yAxis);
-
-    const inputData = (data) ? data : [];
-    // clear 'no data message'
-    svg.select('.no-data-message').remove();
-    if (inputData.length === 0) {
-      // genereate 'no data' text
-      //append x-axis label
-      svg.append('text')
-        .attr('class', 'no-data-message')
-        .attr('text-anchor', 'middle')
-        .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${(height - padding.down - padding.top) / 2})`)
-        .text(`No data for ${sampleDate.toLocaleString('default', { month: 'long', year: 'numeric' })}`);
-    }
-
-    // RENDER CIRCLES
-    //filtered selection
-
-    var point = pointGroup.selectAll('.point')
-      .data(inputData, d => d.ConvertedDateTime);
-
-    var pointEnter = point.enter()
-      .append('g')
-      .attr('class', 'point');
-
-    pointEnter.merge(point)
-      .attr('transform', d => {
-        var tx = xScale(d.Time);
-        var ty = yScale(d.Date);
-        return 'translate(' + [tx, ty] + ')';
-      });
-
-    const opacity = settings[0][0];
-    const radius = settings[0][1];
-
-    //add circle to group
-    pointEnter.append('circle')
-      .attr('r', radius)
-      .style('opacity', opacity)
-      .on("click", function (e, d) {
-        setClickedPoint(d.ID);
-        setFilteredDataset([d], 'select');
-      });
-
-    //remove filtered out circles
-    point.exit().remove();
-
-    drawCanvasBars(inputData);
-
-    zoom.on("zoom", (event) => zoomed(event));
-  }
-
-  /**
-   * Updates the current data in the graph (same month, no month change. filter update)
-   */
-  const updateGraph = () => {
-    const { filteredData, filterView, settings } = props;
-
-    const categories = ['default', 'day', 'search', 'select', 'hidden'];
-
-    const opacity = settings[categories.indexOf(filterView)][0];
-    const radius = settings[categories.indexOf(filterView)][1];
-    const hiddenOpacity = settings[categories.indexOf('hidden')][0];
-    const hiddenRadius = settings[categories.indexOf('hidden')][1];
-
-    //filtered selection
-    var point = pointGroup.selectAll('.point')
-      .data(filteredData, d => d.ConvertedDateTime);
-
-    point.select("circle")
-      .attr('r', radius)
-      .style('opacity', opacity);
-
-    //remove filtered out circles
-    point.exit()
-      .select("circle")
-      .attr('r', hiddenRadius)
-      .style('opacity', hiddenOpacity);
-
-    drawCanvasBars(filteredData);
-
-    zoom.on("zoom", (event) => zoomed(event));
   }
 
   /**

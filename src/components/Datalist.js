@@ -12,7 +12,6 @@ const DatalistItem = ({ setting, list }) => {
 }
 
 export default function Datalist({ dataset }) {
-
   const { datalist } = useDatalist(dataset);
 
   return (

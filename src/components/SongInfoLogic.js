@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { getFunctions, httpsCallable } from '@firebase/functions';
-import { searchFilter } from '../logic/chart';
 import { setContrastingColors } from '../logic/colors';
 
 export const SongInfoLogic = (clickedPoint, data, entireDataset, timePeriod) => {
@@ -23,26 +22,21 @@ export const SongInfoLogic = (clickedPoint, data, entireDataset, timePeriod) => 
   return { dataset, point, leftArrowVisibility, rightArrowVisibility };
 };
 
-export const SongInfoHandler = (setFilteredDataset, setClickedPoint, clickedPoint, entireDataset, setSearchType, data) => {
+export const SongInfoHandler = (dispatchFilter, clickedPoint, entireDataset, setDatalistSetting, data) => {
   const handlePointChange = (change) => {
     // filterView is assumed to be in 'select'
-
     const newID = clickedPoint + change;
     // check if valid change, if out of range dont do anything
     if (newID >= 0 && newID < entireDataset.length) {
       // need to change filtereddatasetmonth 
-      setFilteredDataset([entireDataset[newID]], 'select');
-      setClickedPoint(newID);
+      dispatchFilter( {type: 'select', value: entireDataset[newID]} );
     }
   }
 
   const handleInfoClick = (type, value) => {
     // set the datalist setting to artist
-    setSearchType(type);
-
-    // filter the dataset
-    const filteredDataset = searchFilter(type, value, data);
-    setFilteredDataset(filteredDataset, 'search');
+    setDatalistSetting(type);
+    dispatchFilter({type: 'search', value: value, dataset: data, datalistSetting: type });
   }
 
   return { handlePointChange, handleInfoClick };

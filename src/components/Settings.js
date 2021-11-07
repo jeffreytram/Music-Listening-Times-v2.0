@@ -2,7 +2,7 @@ import React from 'react';
 
 const categories = ['default', 'day', 'search', 'select', 'hidden'];
 
-const PointSettings = ({ display, timePeriod, settings, setSetting, setDefaultSetting }) => {
+const PointSettings = ({ display, timePeriod, settings, setSetting, }) => {
   return (
     <div className="point-setting">
       <h3>{display} Settings</h3>
@@ -14,7 +14,7 @@ const PointSettings = ({ display, timePeriod, settings, setSetting, setDefaultSe
               return (
                 <>
                   <label htmlFor={`${timePeriod}-${cat}-opacity-setting`}>{cat}</label>
-                  <input type="range" step=".01" min="0" max="1" value={settings[i][0]} onChange={(event) => setSetting(timePeriod, cat, 'opacity', event.target.value)} id={`${timePeriod}-${cat}-opacity-setting`} />
+                  <input type="range" step=".01" min="0" max="1" value={settings[cat]['opacity']} onChange={(event) => setSetting({ type: cat, setting: 'opacity', value: event.target.value })} id={`${timePeriod}-${cat}-opacity-setting`} />
                 </>
               );
             })}
@@ -27,25 +27,25 @@ const PointSettings = ({ display, timePeriod, settings, setSetting, setDefaultSe
               return (
                 <>
                   <label htmlFor={`${timePeriod}-${cat}-radius-setting`}>{cat}</label>
-                  <input type="range" step=".5" min="1" max="10" value={settings[i][1]} onChange={(event) => setSetting(timePeriod, cat, 'radius', event.target.value)} id={`${timePeriod}-${cat}-radius-setting`} />
+                  <input type="range" step=".5" min="1" max="10" value={settings[cat]['radius']} onChange={(event) => setSetting({ type: cat, setting: 'radius', value: event.target.value })} id={`${timePeriod}-${cat}-radius-setting`} />
                 </>
               );
             })}
           </div>
         </div>
       </div>
-      <button className="button reset-default" onClick={() => setDefaultSetting(timePeriod)}>Reset Default</button>
+      <button className="button reset-default" onClick={() => setSetting({ mode: `reset-${timePeriod}-settings` })}>Reset Default</button>
     </div>
   )
 };
 
-function Settings({ setSetting, monthlySettings, yearlySettings, setDefaultSetting }) {
+function Settings({ dispatchMonth, dispatchYear, monthlySettings, yearlySettings }) {
   return (
     <div className="point-settings-container">
       <PointSettings display="Monthly" timePeriod="monthly" settings={monthlySettings}
-        setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
+        setSetting={dispatchMonth} />
       <PointSettings display="Yearly" timePeriod="yearly" settings={yearlySettings}
-        setSetting={setSetting} setDefaultSetting={setDefaultSetting} />
+        setSetting={dispatchYear} />
     </div >
   );
 }

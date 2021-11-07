@@ -86,20 +86,20 @@ const loadData = () => {
 /**
  * Processes the data into buckets
  * @param {Function} setDatasetBuckets 
- * @param {Function} setDataset
+ * @param {Function} changeDataset
  */
-const examplePreprocessData = (setDatasetBuckets, setDataset) => {
+const examplePreprocessData = (setInitData) => {
   datasetLoaded.then(dataset => {
-    preprocessData(dataset, setDatasetBuckets, setDataset);
+    preprocessData(dataset, setInitData);
   });
 }
 
 /**
  * Processes the data into buckets
- * @param {Function} setDatasetBuckets 
- * @param {Function} setDataset
+ * @param {Function} setInitData
+ * @param {Function} changeDataset
  */
-const preprocessData = (dataset, setDatasetBuckets, setDataset) => {
+const preprocessData = (dataset, setInitData) => {
   //sorts all the data into buckets by the month and year
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -145,32 +145,27 @@ const preprocessData = (dataset, setDatasetBuckets, setDataset) => {
 
   const latestDate = new Date(`${dataset[0].Date.getMonth() + 2} 1 ${dataset[0].Date.getFullYear()}`);
   const earliestDate = new Date(dataset[dataset.length - 1].Date);
+  const timeRange = [earliestDate, latestDate];
+  const yearList = getYearList(earliestDate, latestDate);
 
   latestDate.setHours(0, 0, 0, latestDate.getMilliseconds() - 1);
   earliestDate.setDate(1);
 
-  setDatasetBuckets(dataMap, dataset, [earliestDate, latestDate]);
-
-  setDataset(latestDate.getMonth() + 1, latestDate.getFullYear());
+  setInitData({
+    datasetBuckets: dataMap,
+    entireDataset: dataset,
+    timeRange: timeRange,
+    yearList: yearList,
+  })
 }
 
 /**
  * Initializes the date range (list of years)
  * @param {Function} setYearList Sets the year list to the given list
  */
-const exampleYearListInitialization = (setYearList) => {
-  datasetLoaded.then(dataset => {
-    yearListInitialization(dataset, setYearList);
-  });
-}
-
-/**
- * Initializes the date range (list of years)
- * @param {Function} setYearList Sets the year list to the given list
- */
-const yearListInitialization = (dataset, setYearList) => {
-  const latestYear = dataset[0].Date.getFullYear();
-  const earliestYear = dataset[dataset.length - 1].Date.getFullYear();
+const getYearList = (earliestDate, latestDate) => {
+  const latestYear = latestDate.getFullYear();
+  const earliestYear = earliestDate.getFullYear();
 
   let currYear = latestYear;
 
@@ -179,7 +174,7 @@ const yearListInitialization = (dataset, setYearList) => {
     uniqueYears.push(currYear);
     currYear -= 1;
   }
-  setYearList(uniqueYears);
+  return uniqueYears;
 }
 
 /**
@@ -196,21 +191,17 @@ const finishedLoading = () => {
 
 /**
  * Setup for the application
- * @param {Function} setDatasetBuckets 
- * @param {Function} setDataset
- * @param {Function} setYearList 
+ * @param {Function} setInitData
  */
-export const setup = (setDatasetBuckets, setDataset, setYearList) => {
+export const setup = (setInitData) => {
   loadData();
-  examplePreprocessData(setDatasetBuckets, setDataset);
-  exampleYearListInitialization(setYearList);
+  examplePreprocessData(setInitData);
 
   finishedLoading();
 }
 
-export const uploadedDataSetup = (data, setDatasetBuckets, setDataset, setYearList) => {
-  preprocessData(data, setDatasetBuckets, setDataset);
-  yearListInitialization(data, setYearList);
+export const uploadedDataSetup = (data, setInitData) => {
+  preprocessData(data, setInitData);
 
   finishedLoading();
 }

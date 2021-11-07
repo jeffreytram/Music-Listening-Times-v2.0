@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
 
-const DayFilter = ({ dayFilter, toggleDayCheckbox }) => {
+const DayFilter = ({ dayFilter, dispatchFilter, dataset }) => {
   const DayButton = ({ abbrevation, fullName, displayName }) => {
     return (
       <label htmlFor={abbrevation}>
@@ -11,7 +11,7 @@ const DayFilter = ({ dayFilter, toggleDayCheckbox }) => {
           id={abbrevation}
           value={fullName}
           checked={dayFilter[abbrevation]}
-          onChange={toggleDayCheckbox}
+          onChange={() => dispatchFilter({ type: 'toggle-day-filter', value: abbrevation, dataset: dataset })}
         />
         <span className="checkbox">{displayName}</span>
       </label>

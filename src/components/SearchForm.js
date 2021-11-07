@@ -1,5 +1,4 @@
 import React from 'react';
-import { searchFilter } from '../logic/chart';
 
 export default class SearchForm extends React.Component {
   constructor(props) {
@@ -17,10 +16,9 @@ export default class SearchForm extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-
-    const { setting, setFilteredDataset, data } = this.props;
-    const filteredDataset = searchFilter(setting, this.state.value, data);
-    setFilteredDataset(filteredDataset, 'search');
+    
+    const { setting, data, dispatchFilter } = this.props;
+    dispatchFilter({ type: 'search', value: this.state.value, dataset: data, datalistSetting: setting });
   }
 
   render() {

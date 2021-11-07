@@ -2,16 +2,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { getNextMonth, getPrevMonth } from "../logic/chart";
 
-const DateNavigation = ({ month, year, timePeriod, timeRange, yearList, setDataset }) => {
+const DateNavigation = ({ month, year, timePeriod, timeRange, yearList, setMonth, setYear }) => {
 
   const handleMonthChange = (event) => {
     const newMonth = parseInt(event.target.value);
-    setDataset(newMonth, year);
+    setMonth(newMonth);
   };
 
   const handleYearChange = (event) => {
     const newYear = parseInt(event.target.value);
-    setDataset(month, newYear);
+    setYear(newYear);
   }
 
   const handleNextPeriodChange = (timePeriod) => {
@@ -19,9 +19,10 @@ const DateNavigation = ({ month, year, timePeriod, timeRange, yearList, setDatas
       const nextMonthDate = getNextMonth(month, year);
       const nextMonth = nextMonthDate.getMonth() + 1;
       const nextMonthYear = nextMonthDate.getFullYear();
-      setDataset(nextMonth, nextMonthYear);
+      setMonth(nextMonth);
+      setYear(nextMonthYear);
     } else if (timePeriod === 'yearly') {
-      setDataset(month, parseInt(year) + 1);
+      setYear(parseInt(year) + 1);
     }
   }
 
@@ -29,10 +30,11 @@ const DateNavigation = ({ month, year, timePeriod, timeRange, yearList, setDatas
     if (timePeriod === 'monthly') {
       const prevMonthDate = getPrevMonth(month, year);
       const prevMonth = prevMonthDate.getMonth() + 1;
-      const prevYear = prevMonthDate.getFullYear();
-      setDataset(prevMonth, prevYear);
+      const prevMonthYear = prevMonthDate.getFullYear();
+      setMonth(prevMonth);
+      setYear(prevMonthYear);
     } else if (timePeriod === 'yearly') {
-      setDataset(month, parseInt(year) - 1);
+      setYear(parseInt(year) - 1);
     }
   }
 
