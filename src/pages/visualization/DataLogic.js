@@ -6,81 +6,90 @@ function useData() {
   return { data, dispatchData };
 }
 
-function datasetReducer(state, { type, nMonth, nYear, datasetBuckets, value, dataset, datalistSetting }) {
+function datasetReducer(state, { type, nMonth, nYear, value, dataset, datalistSetting, init }) {
   switch (type) {
+    case 'init': {
+      const { datasetBuckets, timeRange } = init;
+
+      const lastDate = timeRange[1];
+      const month = lastDate.getMonth() + 1;
+      const year = lastDate.getFullYear();
+
+      const newDataset = datasetBuckets.get(year)[month];
+      return {
+        ...state,
+        ...init,
+        dataset: newDataset,
+        filteredDataset: newDataset,
+        month: month,
+        year: year,
+        timePeriod: 'monthly',
+      };
+    }
     // handle month time change while on monthly time period view
     case 'monthly-month-change': {
-      const year = state.year;
+      const { year, datasetBuckets } = state;
       const newDataset = datasetBuckets.get(year)[nMonth];
       return {
         ...state,
         dataset: newDataset,
         filteredDataset: newDataset,
         month: nMonth,
-        filterView: 'default',
-        dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-        clickedPoint: -1,
+        ...defaultFilter,
       };
     }
     // handle year time change while on monthly time period view
     case 'monthly-year-change': {
-      const month = state.month;
+      const { month, datasetBuckets } = state;
       const newDataset = datasetBuckets.get(nYear)[month];
       return {
         ...state,
         dataset: newDataset,
         filteredDataset: newDataset,
         year: nYear,
-        filterView: 'default',
-        dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-        clickedPoint: -1,
+        ...defaultFilter,
       };
     }
     // handle year time change while on yearly time period view
     // handle next/prev year change
     case 'year-change': {
+      const { datasetBuckets } = state;
       const newDataset = datasetBuckets.get(nYear)['yearArr'];
       return {
         ...state,
         dataset: newDataset,
         filteredDataset: newDataset,
         year: nYear,
-        filterView: 'default',
-        dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-        clickedPoint: -1,
+        ...defaultFilter,
       };
     }
     // handle click on monthly time period
     case 'change-to-monthly': {
-      const month = state.month;
-      const year = state.year;
+      const { month, year, datasetBuckets } = state;
       const newDataset = datasetBuckets.get(year)[month];
       return {
         ...state,
         dataset: newDataset,
         filteredDataset: newDataset,
         timePeriod: 'monthly',
-        filterView: 'default',
-        dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-        clickedPoint: -1,
+        ...defaultFilter,
       };
     }
     // handle click on yearly time period
     case 'change-to-yearly': {
-      const year = state.year;
+      const { year, datasetBuckets } = state;
       const newDataset = datasetBuckets.get(year)['yearArr'];
       return {
         ...state,
         dataset: newDataset,
         filteredDataset: newDataset,
         timePeriod: 'yearly',
-        filterView: 'default',
-        dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-        clickedPoint: -1,
+        ...defaultFilter,
       };
     }
     // handle next/prev month arrow click
     case 'month-change': {
+      const { datasetBuckets } = state;
       const newDataset = datasetBuckets.get(nYear)[nMonth];
       return {
         ...state,
@@ -88,9 +97,7 @@ function datasetReducer(state, { type, nMonth, nYear, datasetBuckets, value, dat
         filteredDataset: newDataset,
         month: nMonth,
         year: nYear,
-        filterView: 'default',
-        dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-        clickedPoint: -1,
+        ...defaultFilter,
       };
     }
 
@@ -142,9 +149,7 @@ function datasetReducer(state, { type, nMonth, nYear, datasetBuckets, value, dat
     case 'reset': {
       return {
         filteredDataset: state.dataset,
-        filterView: 'default',
-        dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
-        clickedPoint: -1,
+        ...defaultFilter
       };
     }
     default:
@@ -155,11 +160,21 @@ function datasetReducer(state, { type, nMonth, nYear, datasetBuckets, value, dat
 export default useData;
 
 const initialState = {
+  datasetBuckets: new Map(),
+  entireDataset: [],
+  timeRange: [],
+  yearList: [],
   dataset: [],
   filteredDataset: [],
   month: new Date().getMonth() + 1,
   year: new Date().getFullYear(),
   timePeriod: 'monthly',
+  filterView: 'default',
+  dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
+  clickedPoint: -1,
+}
+
+const defaultFilter = {
   filterView: 'default',
   dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
   clickedPoint: -1,

@@ -88,18 +88,18 @@ const loadData = () => {
  * @param {Function} setDatasetBuckets 
  * @param {Function} changeDataset
  */
-const examplePreprocessData = (setInitData) => {
+const examplePreprocessData = (dispatchData) => {
   datasetLoaded.then(dataset => {
-    preprocessData(dataset, setInitData);
+    preprocessData(dataset, dispatchData);
   });
 }
 
 /**
  * Processes the data into buckets
- * @param {Function} setInitData
+ * @param {Function} dispatchData
  * @param {Function} changeDataset
  */
-const preprocessData = (dataset, setInitData) => {
+const preprocessData = (dataset, dispatchData) => {
   //sorts all the data into buckets by the month and year
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -151,11 +151,16 @@ const preprocessData = (dataset, setInitData) => {
   latestDate.setHours(0, 0, 0, latestDate.getMilliseconds() - 1);
   earliestDate.setDate(1);
 
-  setInitData({
+  const init = {
     datasetBuckets: dataMap,
     entireDataset: dataset,
     timeRange: timeRange,
     yearList: yearList,
+  };
+
+  dispatchData({
+    type: 'init',
+    init: init,
   })
 }
 
@@ -191,17 +196,17 @@ const finishedLoading = () => {
 
 /**
  * Setup for the application
- * @param {Function} setInitData
+ * @param {Function} dispatchData
  */
-export const setup = (setInitData) => {
+export const setup = (dispatchData) => {
   loadData();
-  examplePreprocessData(setInitData);
+  examplePreprocessData(dispatchData);
 
   finishedLoading();
 }
 
-export const uploadedDataSetup = (data, setInitData) => {
-  preprocessData(data, setInitData);
+export const uploadedDataSetup = (data, dispatchData) => {
+  preprocessData(data, dispatchData);
 
   finishedLoading();
 }

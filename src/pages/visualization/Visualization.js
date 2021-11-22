@@ -15,24 +15,20 @@ import { setup, uploadedDataSetup } from '../../logic/chart.js';
 import './visualization.css';
 
 function Visualization(props) {
-  const [initData, setInitData] = useState({
-    datasetBuckets: new Map(),
-    entireDataset: [],
-    timeRange: [],
-    yearList: [],
-  });
-  const { datasetBuckets, entireDataset, timeRange, yearList } = initData;
   const { data, dispatchData } = useData();
 
-  const { dataset, filteredDataset, month, year, timePeriod, dayFilter, clickedPoint, filterView } = data;
+  const {
+    dataset, filteredDataset, month, year, timePeriod, dayFilter, clickedPoint, filterView,
+    datasetBuckets, entireDataset, timeRange, yearList
+  } = data;
 
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [datalistSetting, setDatalistSetting] = useState('artist');
   const { monthlySettings, dispatchMonth, yearlySettings, dispatchYear } = useSettings();
 
   useEffect(() => {
-    setup(setInitData);
-  }, [setInitData]);
+    setup(dispatchData);
+  }, [dispatchData]);
 
   const handleFileUpload = (event) => {
     const fileList = event.target.files;
@@ -44,7 +40,7 @@ function Visualization(props) {
       var data = d3.csvParse(fileReader.result, function (d) {
         return d;
       });
-      uploadedDataSetup(data, setInitData);
+      uploadedDataSetup(data, dispatchData);
     }
 
     fileReader.addEventListener("load", parseFile, false);
