@@ -183,32 +183,16 @@ const getYearList = (earliestDate, latestDate) => {
 }
 
 /**
- * Hides the loading icon and shows the application
- */
-const finishedLoading = () => {
-  //finished loading
-  const loading = document.getElementById('loading');
-  const content = document.getElementById('content-container');
-
-  loading.style.display = 'none';
-  content.style.display = 'block';
-}
-
-/**
  * Setup for the application
  * @param {Function} dispatchData
  */
 export const setup = (dispatchData) => {
   loadData();
   examplePreprocessData(dispatchData);
-
-  finishedLoading();
 }
 
 export const uploadedDataSetup = (data, dispatchData) => {
   preprocessData(data, dispatchData);
-
-  finishedLoading();
 }
 
 /**

@@ -19,7 +19,7 @@ function Visualization(props) {
 
   const {
     dataset, filteredDataset, month, year, timePeriod, dayFilter, clickedPoint, filterView,
-    datasetBuckets, entireDataset, timeRange, yearList
+    datasetBuckets, entireDataset, timeRange, yearList, loading
   } = data;
 
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -63,84 +63,94 @@ function Visualization(props) {
 
   return (
     <div className="site-container">
-      <div id="loading">
-        <div className="lds-dual-ring"></div>
-        <h2>Loading...</h2>
-      </div>
-      <div id="content-container">
-        <div id="side-options-container">
-          <label htmlFor="file-upload" className="side-option button">
-            <FontAwesomeIcon icon={faUpload} /> Import CSV
-          </label>
-          <input id="file-upload" type="file" accept=".csv" onChange={handleFileUpload}></input>
-          <div className="button side-option" onClick={() => setIsDarkTheme(!isDarkTheme)}>
-            {
-              (isDarkTheme) ?
-                (<FontAwesomeIcon icon={faMoon} />)
-                :
-                (<FontAwesomeIcon icon={faSun} />)
-            }
-          </div>
-        </div>
-        <h1>Music Listening Times</h1>
-        <div className="info-grid">
-          <SearchFilter
-            setDatalistSetting={setDatalistSetting}
-            dispatchFilter={dispatchData}
-            datalistSetting={datalistSetting}
-            dataset={dataset}
-          />
-          <DayFilter dayFilter={dayFilter} dispatchFilter={dispatchData} dataset={dataset} />
-          <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
-          {clickedPoint !== -1 && (
-            <SongInfo
-              clickedPoint={clickedPoint}
-              dispatchFilter={dispatchData}
-              setDatalistSetting={setDatalistSetting}
-              data={dataset}
-              entireDataset={entireDataset}
-              timePeriod={timePeriod}
-            />
-          )}
-        </div>
-        <div className="time-settings">
-          <div className="time-period">
-            <TimePeriodButton value="monthly" />
-            <TimePeriodButton value="yearly" />
-          </div>
-          <div className="side-container">
-            <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
-            <DateNavigation
-              month={month}
-              year={year}
-              timePeriod={timePeriod}
-              timeRange={timeRange}
-              yearList={yearList}
-              dispatchData={dispatchData}
-              datasetBuckets={datasetBuckets}
-            />
-          </div>
-        </div>
-        <div id="main">
-          <Graph
-            data={dataset}
-            filteredData={filteredDataset}
-            filterView={filterView}
-            dispatchFilter={dispatchData}
-            sampleDateString={`${month} 1 ${year}`}
-            timePeriod={timePeriod}
-            settings={(timePeriod === 'monthly') ? monthlySettings : yearlySettings}
-          />
-        </div>
-      </div>
-      <Datalist dataset={dataset} />
-      <Settings
-        dispatchMonth={dispatchMonth}
-        dispatchYear={dispatchYear}
-        monthlySettings={monthlySettings}
-        yearlySettings={yearlySettings}
-        timePeriod={timePeriod}
-      />
+      {
+        (loading) ?
+          (
+            <div id="loading">
+              <div className="lds-dual-ring"></div>
+              <h2>Loading...</h2>
+            </div>
+          )
+          :
+          (
+            <>
+              <div id="content-container">
+                <div id="side-options-container">
+                  <label htmlFor="file-upload" className="side-option button">
+                    <FontAwesomeIcon icon={faUpload} /> Import CSV
+                  </label>
+                  <input id="file-upload" type="file" accept=".csv" onChange={handleFileUpload}></input>
+                  <div className="button side-option" onClick={() => setIsDarkTheme(!isDarkTheme)}>
+                    {
+                      (isDarkTheme) ?
+                        (<FontAwesomeIcon icon={faMoon} />)
+                        :
+                        (<FontAwesomeIcon icon={faSun} />)
+                    }
+                  </div>
+                </div>
+                <h1>Music Listening Times</h1>
+                <div className="info-grid">
+                  <SearchFilter
+                    setDatalistSetting={setDatalistSetting}
+                    dispatchFilter={dispatchData}
+                    datalistSetting={datalistSetting}
+                    dataset={dataset}
+                  />
+                  <DayFilter dayFilter={dayFilter} dispatchFilter={dispatchData} dataset={dataset} />
+                  <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
+                  {clickedPoint !== -1 && (
+                    <SongInfo
+                      clickedPoint={clickedPoint}
+                      dispatchFilter={dispatchData}
+                      setDatalistSetting={setDatalistSetting}
+                      data={dataset}
+                      entireDataset={entireDataset}
+                      timePeriod={timePeriod}
+                    />
+                  )}
+                </div>
+                <div className="time-settings">
+                  <div className="time-period">
+                    <TimePeriodButton value="monthly" />
+                    <TimePeriodButton value="yearly" />
+                  </div>
+                  <div className="side-container">
+                    <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
+                    <DateNavigation
+                      month={month}
+                      year={year}
+                      timePeriod={timePeriod}
+                      timeRange={timeRange}
+                      yearList={yearList}
+                      dispatchData={dispatchData}
+                      datasetBuckets={datasetBuckets}
+                    />
+                  </div>
+                </div>
+                <div id="main">
+                  <Graph
+                    data={dataset}
+                    filteredData={filteredDataset}
+                    filterView={filterView}
+                    dispatchFilter={dispatchData}
+                    sampleDateString={`${month} 1 ${year}`}
+                    timePeriod={timePeriod}
+                    settings={(timePeriod === 'monthly') ? monthlySettings : yearlySettings}
+                  />
+                </div>
+              </div>
+              <Datalist dataset={dataset} />
+              <Settings
+                dispatchMonth={dispatchMonth}
+                dispatchYear={dispatchYear}
+                monthlySettings={monthlySettings}
+                yearlySettings={yearlySettings}
+                timePeriod={timePeriod}
+              />
+            </>
+          )
+      }
     </div>
   );
 }

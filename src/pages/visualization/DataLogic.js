@@ -19,6 +19,7 @@ function datasetReducer(state, { type, nMonth, nYear, value, dataset, datalistSe
       return {
         ...state,
         ...init,
+        loading: false,
         dataset: newDataset,
         filteredDataset: newDataset,
         month: month,
@@ -160,6 +161,7 @@ function datasetReducer(state, { type, nMonth, nYear, value, dataset, datalistSe
 export default useData;
 
 const initialState = {
+  loading: true,
   datasetBuckets: new Map(),
   entireDataset: [],
   timeRange: [],
