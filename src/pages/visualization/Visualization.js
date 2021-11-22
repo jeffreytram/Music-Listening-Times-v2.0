@@ -9,8 +9,7 @@ import DateNavigation from '../../components/DateNavigation';
 import SongInfo from '../../components/SongInfo';
 import Datalist from '../../components/Datalist';
 import Settings from '../../components/Settings';
-import useDataset from './DatasetLogic';
-import useFilter from './FilterReducer';
+import useData from './DataLogic';
 import useSettings from '../../components/SettingsLogic';
 import { setup, uploadedDataSetup } from '../../logic/chart.js';
 import './visualization.css';
@@ -23,12 +22,13 @@ function Visualization(props) {
     yearList: [],
   });
   const { datasetBuckets, entireDataset, timeRange, yearList } = initData;
-  const { dataset, month, setMonth, year, setYear, timePeriod, setTimePeriod } = useDataset(datasetBuckets);
-  const { filter, dispatchFilter } = useFilter(dataset);
+  const { data, dispatchData } = useData();
+
+  const { dataset, filteredDataset, month, year, timePeriod, dayFilter, clickedPoint, filterView } = data;
+
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [datalistSetting, setDatalistSetting] = useState('artist');
   const { monthlySettings, dispatchMonth, yearlySettings, dispatchYear } = useSettings();
-  const { dayFilter, clickedPoint, filteredDataset, filterView } = filter;
 
   useEffect(() => {
     setup(setInitData);
@@ -59,7 +59,7 @@ function Visualization(props) {
   const TimePeriodButton = ({ value }) => (
     <span className="time-period-button">
       <input id={value} type="radio" value={value} name="time-period" checked={timePeriod === value}
-        onChange={() => setTimePeriod(value)}
+        onChange={() => dispatchData({ type: `change-to-${value}`, datasetBuckets: datasetBuckets })}
       />
       <label htmlFor={value}>{value}</label>
     </span>
@@ -90,16 +90,16 @@ function Visualization(props) {
         <div className="info-grid">
           <SearchFilter
             setDatalistSetting={setDatalistSetting}
-            dispatchFilter={dispatchFilter}
+            dispatchFilter={dispatchData}
             datalistSetting={datalistSetting}
             dataset={dataset}
           />
-          <DayFilter dayFilter={dayFilter} dispatchFilter={dispatchFilter} dataset={dataset} />
-          <button id="reset" className="button" onClick={() => dispatchFilter({ type: 'default', dataset: dataset })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
+          <DayFilter dayFilter={dayFilter} dispatchFilter={dispatchData} dataset={dataset} />
+          <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
           {clickedPoint !== -1 && (
             <SongInfo
               clickedPoint={clickedPoint}
-              dispatchFilter={dispatchFilter}
+              dispatchFilter={dispatchData}
               setDatalistSetting={setDatalistSetting}
               data={dataset}
               entireDataset={entireDataset}
@@ -120,9 +120,8 @@ function Visualization(props) {
               timePeriod={timePeriod}
               timeRange={timeRange}
               yearList={yearList}
-              setMonth={setMonth}
-              setYear={setYear}
-              setTimePeriod={setTimePeriod}
+              dispatchData={dispatchData}
+              datasetBuckets={datasetBuckets}
             />
           </div>
         </div>
@@ -131,8 +130,8 @@ function Visualization(props) {
             data={dataset}
             filteredData={filteredDataset}
             filterView={filterView}
-            dispatchFilter={dispatchFilter}
-            sampleDate={new Date(`${month} 1 ${year}`)}
+            dispatchFilter={dispatchData}
+            sampleDateString={`${month} 1 ${year}`}
             timePeriod={timePeriod}
             settings={(timePeriod === 'monthly') ? monthlySettings : yearlySettings}
           />

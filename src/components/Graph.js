@@ -21,7 +21,8 @@ let pointGroup = {};
 let zoom = {};
 
 export default function Graph(props) {
-  const { data, filteredData, sampleDate, timePeriod, settings, dispatchFilter, filterView } = props;
+  const { data, filteredData, sampleDateString, timePeriod, settings, dispatchFilter, filterView } = props;
+
   useEffect(() => {
     initializeGraph();
   }, []);
@@ -30,6 +31,8 @@ export default function Graph(props) {
     // DRAW GRAPH
     // brand new month data load
     // Draws the graph with new data (month change)
+
+    const sampleDate = new Date(sampleDateString);
 
     // clear 'no data message'
     svg.select('.no-data-message').remove();
@@ -57,8 +60,11 @@ export default function Graph(props) {
 
     xAxisG.call(xAxis);
     yAxisG.call(yAxis);
+  }, [data, timePeriod, sampleDateString]);
 
+  useEffect(() => {
     // RENDER CIRCLES
+
     var point = pointGroup.selectAll('.point')
       .data(data, d => d.ConvertedDateTime);
 
@@ -66,17 +72,20 @@ export default function Graph(props) {
       .append('g')
       .attr('class', 'point');
 
+    const radius = settings['default']['radius'];
+    const opacity = settings['default']['opacity'];
+
     pointEnter.merge(point)
       .attr('transform', d => {
         var tx = xScale(d.Time);
         var ty = yScale(d.Date);
         return 'translate(' + [tx, ty] + ')';
-      });
+      })
+      .select('circle')
+      .attr('r', radius)
+      .style('opacity', opacity);
 
-    const radius = settings['default']['radius'];
-    const opacity = settings['default']['opacity'];
 
-    //add circle to group
     pointEnter.append('circle')
       .attr('r', radius)
       .style('opacity', opacity)
@@ -90,11 +99,12 @@ export default function Graph(props) {
     drawCanvasBars(data);
 
     zoom.on("zoom", (event) => zoomed(event));
-  }, [data, sampleDate, timePeriod, dispatchFilter, settings]);
+  }, [data]);
 
   useEffect(() => {
     // Update Graph
     // Updates the current data in the graph (same time period, no time change. filter update)
+    // filter updates, setting  updates
 
     const opacity = settings[filterView]['opacity'];
     const radius = settings[filterView]['radius'];
@@ -115,10 +125,16 @@ export default function Graph(props) {
       .attr('r', hiddenRadius)
       .style('opacity', hiddenOpacity);
 
-    drawCanvasBars(filteredData);
-
     zoom.on("zoom", (event) => zoomed(event));
+
+    // time period change is triggering a rerender
+    // since all switching from monthly settings -> yearly settings
   }, [filteredData, filterView, settings]);
+
+  useEffect(() => {
+    // draw canvas bars
+    drawCanvasBars(filteredData);
+  }, [filteredData])
 
   /**
    * Initializes the graph for the first time application load
