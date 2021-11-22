@@ -1,8 +1,10 @@
 .screenshot {
   width: 100%;
   max-width: 500px;
+  margin: 1em 0;
+  border-radius: 2px;
 }
 
 .steps > li {
-  margin: 2em 0;
+  margin: 4em 0;
 }

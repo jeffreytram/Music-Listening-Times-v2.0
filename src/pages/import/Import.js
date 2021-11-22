@@ -13,11 +13,10 @@ function Import(props) {
         <li><strong>Save/Download the CSV</strong> after it is done fetching</li>
         <li><strong>Open the CSV</strong></li>
         <li><strong>Insert a new row at the very top.</strong> This will be the header row</li>
-        <li>Add the headers exactly as followed in the same order and case sensitivity</li>
-        <ul>
-          <li><strong>Artist, Album, Song, RawDateTime</strong></li>
-        </ul>
-        <img className="screenshot" src={screenshot} alt="excel example" />
+        <li>Add the headers exactly as followed in the same order and case sensitivity:
+          <strong> Artist, Album, Song, RawDateTime</strong>
+          <img className="screenshot" src={screenshot} alt="excel example" />
+        </li>
         <li>Ensure you've entered the headers exactly as written to limit errors with the application</li>
         <li><strong>Save the CSV</strong></li>
         <li><strong>Import the CSV</strong> into Music Listening Times</li>
