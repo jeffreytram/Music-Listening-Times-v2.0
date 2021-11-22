@@ -126,6 +126,7 @@ function datasetReducer(state, { type, nMonth, nYear, value, dataset, datalistSe
     case 'select': {
       const newFilteredDataset = [value]
       return {
+        ...state,
         filteredDataset: newFilteredDataset,
         filterView: 'select',
         dayFilter: { mon: false, tue: false, wed: false, thu: false, fri: false, sat: false, sun: false },
