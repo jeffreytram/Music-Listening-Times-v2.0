@@ -27,6 +27,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -60,21 +61,21 @@
 /* Graph Settings */
 
 #month-select, #year-select {
-  margin-left: 10px;
+  margin: 0 .1em;
   padding: 2px 2px;
-  border-radius: var(--border-radius);
   border: none;
+  border-radius: var(--border-radius);
   background-color: var(--light);
   color: - var(--main-text);
-  font-weight: 400;
-  font-size: x-large;
+  font-size: xx-large;
 }
 
 /* Top right options */
 
 #side-options-container {
   position: absolute;
-  right: 0;
+  top: .5em;
+  right: .5em;
 }
 
 .side-option {
@@ -100,7 +101,7 @@
 
 #filter-input {
   display: inline-block;
-  width: clamp(100px, 50%, 350px);
+  width: clamp(100px, 50%, 300px);
   padding: 4px 8px;
   margin: 5px 5px 5px 0px;
   border: none;
@@ -116,8 +117,7 @@
 
 #day-filters {
   width: 100%;
-  grid-row: 2 / 3;
-  grid-column: 1 / 2;
+  margin: 1em 0;
 }
 
 input[type=text] {
@@ -139,7 +139,7 @@ input[type=checkbox] {
 :checked+span {
   font-weight: 600;
   background-color: var(--secondary-color);
-  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
+  color: rgb(var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
 .checkbox:hover {
@@ -158,8 +158,6 @@ input[type=checkbox] {
   width: 103px;
   height: 25px;
   padding: 4px 15px;
-  grid-row: 3 / 4;
-  grid-column: 1 / 2;
 }
 
 /* Hover */
@@ -167,18 +165,12 @@ input[type=checkbox] {
 .button:hover {
   font-weight: 600;
   background-color: var(--secondary-color);
-  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
+  color: rgb(var(--accessible-color), var(--accessible-color), var(--accessible-color));
   cursor: pointer;
 }
 
 .checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover, .arrow:hover {
   cursor: pointer;
-}
-
-#date-range, #filter-select, #filter-input, .checkbox, .button, #year-select, #month-select, .point-setting {
-  -webkit-box-shadow: 1px 1px 3px 0px var(--shadow);
-  -moz-box-shadow: 1px 1px 3px 0px var(--shadow);
-  box-shadow: 1px 1px 3px 0px var(--shadow);
 }
 
 /* Song info */
@@ -188,9 +180,6 @@ input[type=checkbox] {
   width: 115px;
   margin: 5px 0px;
   border-radius: calc(var(--border-radius) + 5px);
-  -webkit-box-shadow: 7px 7px 7px 0px var(--shadow);
-  -moz-box-shadow: 7px 7px 7px 0px var(--shadow);
-  box-shadow: 7px 7px 7px 0px var(--shadow);
 }
 
 .info {
@@ -234,7 +223,7 @@ input[type=checkbox] {
   margin: 0px 2px 0px 0px;
   padding: 1px 6px;
   background-color: var(--secondary-color);
-  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
+  color: rgb(var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
 /* Website layout */
@@ -243,6 +232,9 @@ input[type=checkbox] {
   display: grid;
   grid-template-columns: 100%;
   gap: 1em 1em;
+  margin: 2em 0;
+  text-align: center;
+  justify-items: center;
 }
 
 #content-container {
@@ -254,6 +246,7 @@ input[type=checkbox] {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -267,15 +260,13 @@ input[type=checkbox] {
 }
 
 .time-settings {
-  display: flex;
-  flex-wrap: wrap;
-  flex-basis: 70%;
-  margin: 1em 0;
-  justify-content: center;
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 6em;
 }
 
 .time-period {
-  align-self: center;
+  margin-bottom: 2em;
 }
 
 #monthly, #yearly {
@@ -283,10 +274,10 @@ input[type=checkbox] {
 }
 
 input[type="radio"]:checked+label {
-  font-weight: 500;
   color: var(--main-text);
-  font-size: x-large;
   border-bottom: 2px solid var(--main-text);
+  font-size: larger;
+  font-weight: 600;
 }
 
 input[type="radio"]:hover+label {
@@ -300,40 +291,41 @@ input[type="radio"]+label {
 
 .time-period-button {
   padding: .5em .5em;
-}
-
-.side-container {
-  text-align: right;
+  margin: 0 1em;
+  font-variant: small-caps;
 }
 
 .date-navigation {
+  margin: .5em 0;
   position: relative;
+  display: inline-block;
 }
 
 .up-caret {
   position: absolute;
-  left: -8px;
-  top: 2px;
+  left: -15px;
+  top: 7px;
 }
 
 .down-caret {
   position: absolute;
-  left: -8px;
-  bottom: 2px;
+  left: -15px;
+  bottom: 7px;
 }
 
 #search-filter {
   width: 100%;
-  grid-row: 1 / 2;
-  grid-column: 1 / 2;
+  margin: 1em 0;
 }
 
 .song-info-grid {
-  width: 100%;
+  width: 400px;
   display: grid;
+  margin: 2em 0;
   grid-template-columns: 115px 1fr;
   grid-template-rows: 23px 23px 42px 18px 14px;
   gap: 0px 12px;
+  text-align: left;
 }
 
 #main {
@@ -391,25 +383,6 @@ input[type="radio"]+label {
 .reset-default {
   margin-top: 1em;
   padding: .5em .75em;
-}
-
-@media(min-width: 460px) {
-  .time-settings {
-    justify-content: space-between;
-  }
-}
-
-@media (min-width:800px) {
-  #day-filters {
-    width: 100%;
-  }
-  .info-grid {
-    grid-template-columns: 50% 50%;
-  }
-  .song-info-grid {
-    grid-row: 1 / 4;
-    grid-column: 2 / 3;
-  }
 }
 
 .disabled-arrow {
