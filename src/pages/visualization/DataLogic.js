@@ -150,6 +150,7 @@ function datasetReducer(state, { type, nMonth, nYear, value, dataset, datalistSe
     // handle reset button
     case 'reset': {
       return {
+        ...state,
         filteredDataset: state.dataset,
         ...defaultFilter
       };
