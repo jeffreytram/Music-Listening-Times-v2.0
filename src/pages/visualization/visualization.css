@@ -445,8 +445,14 @@ input[type="radio"]+label {
     height: 100%;
     float: right;
     box-sizing: border-box;
-    padding: 0em 0em;
+    padding: 2em .25em;
     overflow-y: scroll;
+  }
+
+  #entries {
+    position: absolute;
+    top: .5em;
+    left: 1.5em;
   }
 
   /* Time Settings */
