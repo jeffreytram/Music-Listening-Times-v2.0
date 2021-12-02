@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 
-const initMonthlySettings = {
+const initPointSettings = {
   default: { opacity: .3, radius: 3 },
   day: { opacity: .3, radius: 3 },
   search: { opacity: .5, radius: 5 },
@@ -8,21 +8,11 @@ const initMonthlySettings = {
   hidden: { opacity: .05, radius: 3 },
 };
 
-const initYearlySettings = {
-  default: { opacity: .3, radius: 2 },
-  day: { opacity: .3, radius: 2 },
-  search: { opacity: .4, radius: 3 },
-  select: { opacity: .7, radius: 7 },
-  hidden: { opacity: .03, radius: 2 },
-}
-
 const useSettings = () => {
   function reducer(state, { mode, type, setting, value }) {
     switch (mode) {
-      case 'reset-monthly-settings':
-        return initMonthlySettings;
-      case 'reset-yearly-settings':
-        return initYearlySettings;
+      case 'reset-point-settings':
+        return initPointSettings;
       default:
         return {
           ...state,
@@ -33,10 +23,9 @@ const useSettings = () => {
         };
     }
   }
-  const [monthlySettings, dispatchMonth] = useReducer(reducer, initMonthlySettings);
-  const [yearlySettings, dispatchYear] = useReducer(reducer, initYearlySettings);
+  const [pointSettings, dispatchPointSettings] = useReducer(reducer, initPointSettings);
 
-  return { monthlySettings, dispatchMonth, yearlySettings, dispatchYear };
+  return { pointSettings, dispatchPointSettings };
 }
 
 export default useSettings;

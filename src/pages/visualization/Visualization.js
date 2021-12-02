@@ -24,7 +24,7 @@ function Visualization(props) {
 
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [datalistSetting, setDatalistSetting] = useState('artist');
-  const { monthlySettings, dispatchMonth, yearlySettings, dispatchYear } = useSettings();
+  const { pointSettings, dispatchPointSettings} = useSettings();
 
   useEffect(() => {
     setup(dispatchData);
@@ -99,7 +99,7 @@ function Visualization(props) {
                     dispatchFilter={dispatchData}
                     sampleDateString={`${month} 1 ${year}`}
                     timePeriod={timePeriod}
-                    settings={(timePeriod === 'monthly') ? monthlySettings : yearlySettings}
+                    settings={pointSettings}
                   />
                 </div>
               </div>
@@ -125,10 +125,8 @@ function Visualization(props) {
                   <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
                 </div>
                 <Settings
-                  dispatchMonth={dispatchMonth}
-                  dispatchYear={dispatchYear}
-                  monthlySettings={monthlySettings}
-                  yearlySettings={yearlySettings}
+                  dispatchPointSettings={dispatchPointSettings}
+                  pointSettings={pointSettings}
                   timePeriod={timePeriod}
                 />
               </div>
