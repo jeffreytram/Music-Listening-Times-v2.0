@@ -2,48 +2,45 @@ import React from 'react';
 
 const categories = ['default', 'day', 'search', 'select', 'hidden'];
 
-const PointSettings = ({ settings, dispatchPointSettings, }) => {
-  return (
-    <div className="point-setting">
-      <h3>Settings</h3>
-      <div className="settings-container">
-        <div>
-          <h4>Point Opacity</h4>
-          <div className="settings-flexbox">
-            {categories.map((cat, i) => {
-              return (
-                <>
-                  <label htmlFor={`point-${cat}-opacity-setting`}>{cat}</label>
-                  <input type="range" step=".01" min="0" max="1" value={settings[cat]['opacity']} onChange={(event) => dispatchPointSettings({ type: cat, setting: 'opacity', value: event.target.value })} id={`point-${cat}-opacity-setting`} />
-                </>
-              );
-            })}
-          </div>
-        </div>
-        <div>
-          <h4>Point Radius</h4>
-          <div className="settings-flexbox">
-            {categories.map((cat, i) => {
-              return (
-                <>
-                  <label htmlFor={`point-${cat}-radius-setting`}>{cat}</label>
-                  <input type="range" step=".5" min="1" max="10" value={settings[cat]['radius']} onChange={(event) => dispatchPointSettings({ type: cat, setting: 'radius', value: event.target.value })} id={`point-${cat}-radius-setting`} />
-                </>
-              );
-            })}
-          </div>
+function Settings({ dispatchPointSettings, pointSettings }) {
+  const PointSetting = ({ title, step, min, max, settingName }) => {
+    return (
+      <div className="point-setting">
+        <h4>{title}</h4>
+        <div className="settings-flexbox">
+          {categories.map((cat, i) => {
+            return (
+              <>
+                <label htmlFor={`point-${cat}-${settingName}-setting`}>{cat}</label>
+                <input type="range" step={step} min={min} max={max} value={pointSettings[cat][settingName]} onChange={(event) => dispatchPointSettings({ type: cat, setting: settingName, value: event.target.value })} id={`point-${cat}-${settingName}-setting`} />
+              </>
+            );
+          })}
         </div>
       </div>
-      <button className="button reset-default" onClick={() => dispatchPointSettings({ mode: `reset-point-settings` })}>Reset Default</button>
-    </div>
-  )
-};
+    );
+  };
 
-function Settings({ dispatchPointSettings, pointSettings }) {
   return (
     <div className="point-settings-container">
-      <PointSettings timePeriod="monthly" settings={pointSettings}
-        dispatchPointSettings={dispatchPointSettings} />
+      <h3>Settings</h3>
+      <div className="settings-container">
+        <PointSetting
+          title='Point Opacity'
+          step={.01}
+          min={0}
+          max={1}
+          settingName='opacity'
+        />
+        <PointSetting
+          title='Point Radius'
+          step={.5}
+          min={1}
+          max={10}
+          settingName='radius'
+        />
+      </div>
+      <button className="button reset-default" onClick={() => dispatchPointSettings({ mode: `reset-point-settings` })}>Reset default settings</button>
     </div >
   );
 }

@@ -122,7 +122,7 @@ function Visualization(props) {
                     dataset={dataset}
                   />
                   <DayFilter dayFilter={dayFilter} dispatchFilter={dispatchData} dataset={dataset} />
-                  <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
+                  <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset filter</button>
                 </div>
                 <Settings
                   dispatchPointSettings={dispatchPointSettings}
