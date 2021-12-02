@@ -102,7 +102,7 @@
 
 #filter-input {
   display: inline-block;
-  width: clamp(100px, 50%, 300px);
+  width: clamp(100px, 60%, 260px);
   padding: 4px 8px;
   margin: 5px 5px 5px 0px;
   border: none;
@@ -449,12 +449,25 @@ input[type="radio"]+label {
     overflow-y: scroll;
   }
 
+  /* Time Settings */
   .time-period {
-    margin-bottom: .5em;
+    margin-bottom: .25em;
   }
 
   .time-settings {
-    margin-bottom: 1em;
+    margin-bottom: .5em;
+  }
+
+  #month-select, #year-select {
+    font-size: x-large;
+  }
+
+  .up-caret {
+    top: 2px;
+  }
+  
+  .down-caret {
+    bottom: 2px;
   }
 }
 
