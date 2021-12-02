@@ -70,15 +70,15 @@
   font-size: xx-large;
 }
 
-/* Top right options */
+/* Corner right options */
 
-#side-options-container {
+#corner-options-container {
   position: absolute;
   top: .5em;
-  right: .5em;
+  right: 1.5em;
 }
 
-.side-option {
+.corner-option {
   display: inline-block;
   margin: 0 0 0 .75em;
   padding: .5em .75em;
@@ -88,6 +88,7 @@
 #file-upload {
   display: none;
 }
+
 
 /* Filters */
 
@@ -262,7 +263,7 @@ input[type=checkbox] {
 .time-settings {
   text-align: center;
   margin-top: 1em;
-  margin-bottom: 6em;
+  margin-bottom: 5em;
 }
 
 .time-period {
@@ -355,14 +356,14 @@ input[type="radio"]+label {
 
 .point-setting {
   border-radius: calc(var(--border-radius) + 10px);
-  width: calc(100% - 4em);
+  box-sizing: border-box;
+  width: 100%;
   padding: .5em 2em;
 }
 
 .settings-container {
   display: flex;
   justify-content: space-around;
-  gap: 0 2em;
   width: 100%;
 }
 
@@ -388,4 +389,78 @@ input[type="radio"]+label {
 .disabled-arrow {
   pointer-events: none;
   color: var(--light);
+}
+
+@media (min-width: 1000px) {
+
+  .site-container {
+    height: 100%;
+  }
+
+  /* SIDE OPTIONS --------- */
+  .side-options {
+    width: 25%;
+    height: 100%;
+    float: left;
+    box-sizing: border-box;
+    padding: 0em 1.5em;
+    overflow-y: scroll;
+    border-right: 4px solid var(--light);
+    background-color: var(--main-bg);
+  }
+
+  /* Song Info */
+  .song-info-grid {
+    width: 100%;
+    margin: 0em 0;
+  }
+
+  /* Filters */
+  .info-grid {
+    text-align: left;
+    justify-items: left;
+  }
+
+  #search-filter, #day-filters {
+    margin: .5em 0;
+  }
+
+  /* Settings */
+  .point-settings-container {
+    text-align: left;
+    justify-content: left;
+  }
+
+  .point-setting {
+    padding: 0;
+  }
+
+  .settings-container {
+    gap: 0 1.5em;
+  }
+
+  /* MAIN CONTENT ----------- */
+  #content-container {
+    width: 75%;
+    height: 100%;
+    float: right;
+    box-sizing: border-box;
+    padding: 0em 0em;
+    overflow-y: scroll;
+  }
+
+  .time-period {
+    margin-bottom: .5em;
+  }
+
+  .time-settings {
+    margin-bottom: 1em;
+  }
+}
+
+@media (min-width: 1300px) {
+  /* MAIN CONTENT ----------- */
+  #content-container {
+    padding: 0em 6vw;
+  }
 }

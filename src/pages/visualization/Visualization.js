@@ -74,20 +74,6 @@ function Visualization(props) {
           :
           (
             <>
-              <div id="side-options-container">
-                <label htmlFor="file-upload" className="side-option button">
-                  <FontAwesomeIcon icon={faUpload} />
-                </label>
-                <input id="file-upload" type="file" accept=".csv" onChange={handleFileUpload}></input>
-                <div className="button side-option" onClick={() => setIsDarkTheme(!isDarkTheme)}>
-                  {
-                    (isDarkTheme) ?
-                      (<FontAwesomeIcon icon={faMoon} />)
-                      :
-                      (<FontAwesomeIcon icon={faSun} />)
-                  }
-                </div>
-              </div>
               <div id="content-container">
                 <div className="time-settings">
                   <div className="time-period">
@@ -116,6 +102,8 @@ function Visualization(props) {
                     settings={(timePeriod === 'monthly') ? monthlySettings : yearlySettings}
                   />
                 </div>
+              </div>
+              <div className="side-options">
                 <div className="info-grid">
                   {clickedPoint !== -1 && (
                     <SongInfo
@@ -136,15 +124,29 @@ function Visualization(props) {
                   <DayFilter dayFilter={dayFilter} dispatchFilter={dispatchData} dataset={dataset} />
                   <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset</button>
                 </div>
+                <Settings
+                  dispatchMonth={dispatchMonth}
+                  dispatchYear={dispatchYear}
+                  monthlySettings={monthlySettings}
+                  yearlySettings={yearlySettings}
+                  timePeriod={timePeriod}
+                />
               </div>
               <Datalist dataset={dataset} />
-              <Settings
-                dispatchMonth={dispatchMonth}
-                dispatchYear={dispatchYear}
-                monthlySettings={monthlySettings}
-                yearlySettings={yearlySettings}
-                timePeriod={timePeriod}
-              />
+              <div id="corner-options-container">
+                <label htmlFor="file-upload" className="corner-option button">
+                  <FontAwesomeIcon icon={faUpload} />
+                </label>
+                <input id="file-upload" type="file" accept=".csv" onChange={handleFileUpload}></input>
+                <div className="button corner-option" onClick={() => setIsDarkTheme(!isDarkTheme)}>
+                  {
+                    (isDarkTheme) ?
+                      (<FontAwesomeIcon icon={faMoon} />)
+                      :
+                      (<FontAwesomeIcon icon={faSun} />)
+                  }
+                </div>
+              </div>
             </>
           )
       }

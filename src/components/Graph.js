@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import { generateYState } from '../logic/chart';
 
 const width = 950;
-const height = 720;
+const height = 580;
 const padding = { left: 90, right: 0, top: 10, down: 60 };
 
 let svg = {};
