@@ -1,4 +1,7 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRedoAlt } from '@fortawesome/free-solid-svg-icons'
+
 
 const PointSetting = ({ title, settingName, dispatchPointSettings, pointSettings }) => {
   return (
@@ -16,7 +19,6 @@ const PointSetting = ({ title, settingName, dispatchPointSettings, pointSettings
 function Settings({ dispatchPointSettings, pointSettings }) {
   return (
     <div className="point-settings-container">
-      <h3>Settings</h3>
       <div className="settings-container">
         <PointSetting
           title='Point Opacity'
@@ -31,7 +33,7 @@ function Settings({ dispatchPointSettings, pointSettings }) {
           pointSettings={pointSettings}
         />
       </div>
-      <button className="button reset-default" onClick={() => dispatchPointSettings({ mode: `reset-point-settings` })}>Reset default settings</button>
+      <button className="button reset-default" onClick={() => dispatchPointSettings({ mode: `reset-point-settings` })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset default settings</button>
     </div >
   );
 }

@@ -14,6 +14,15 @@ import useSettings from '../../components/SettingsLogic';
 import { setup, uploadedDataSetup } from '../../logic/chart.js';
 import './visualization.css';
 
+const OptionCard = ({ name, children, className }) => {
+  return (
+    <div className={`option-card ${className}`}>
+      {(name) && <h3>{name}</h3>}
+      {children}
+    </div>
+  )
+}
+
 function Visualization(props) {
   const { data, dispatchData } = useData();
 
@@ -104,8 +113,8 @@ function Visualization(props) {
                 </div>
               </div>
               <div className="side-options">
-                <div className="info-grid">
-                  {clickedPoint !== -1 && (
+                {clickedPoint !== -1 && (
+                  <OptionCard className="song-info-card">
                     <SongInfo
                       clickedPoint={clickedPoint}
                       dispatchFilter={dispatchData}
@@ -114,7 +123,9 @@ function Visualization(props) {
                       entireDataset={entireDataset}
                       timePeriod={timePeriod}
                     />
-                  )}
+                  </OptionCard>
+                )}
+                <OptionCard name="Filters">
                   <SearchFilter
                     setDatalistSetting={setDatalistSetting}
                     dispatchFilter={dispatchData}
@@ -122,13 +133,15 @@ function Visualization(props) {
                     dataset={dataset}
                   />
                   <DayFilter dayFilter={dayFilter} dispatchFilter={dispatchData} dataset={dataset} />
-                  <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset filter</button>
-                </div>
-                <Settings
-                  dispatchPointSettings={dispatchPointSettings}
-                  pointSettings={pointSettings}
-                  timePeriod={timePeriod}
-                />
+                  <button id="reset" className="button" onClick={() => dispatchData({ type: 'reset' })}><FontAwesomeIcon icon={faRedoAlt} flip="horizontal" /> Reset filters</button>
+                </OptionCard>
+                <OptionCard name="Settings">
+                  <Settings
+                    dispatchPointSettings={dispatchPointSettings}
+                    pointSettings={pointSettings}
+                    timePeriod={timePeriod}
+                  />
+                </OptionCard>
               </div>
               <Datalist dataset={dataset} />
               <div id="corner-options-container">
