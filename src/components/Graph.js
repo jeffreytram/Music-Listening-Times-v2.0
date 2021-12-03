@@ -72,23 +72,14 @@ export default function Graph(props) {
       .append('g')
       .attr('class', 'point');
 
-    const radius = settings['default']['radius'];
-    const opacity = settings['default']['opacity'];
-
     pointEnter.merge(point)
       .attr('transform', d => {
         var tx = xScale(d.Time);
         var ty = yScale(d.Date);
         return 'translate(' + [tx, ty] + ')';
-      })
-      .select('circle')
-      .attr('r', radius)
-      .style('opacity', opacity);
-
+      });
 
     pointEnter.append('circle')
-      .attr('r', radius)
-      .style('opacity', opacity)
       .on("click", function (e, d) {
         dispatchFilter({ type: 'select', value: d });
       });
@@ -99,17 +90,19 @@ export default function Graph(props) {
     drawCanvasBars(data);
 
     zoom.on("zoom", (event) => zoomed(event));
-  }, [data]);
+  }, [data, timePeriod, dispatchFilter]);
 
   useEffect(() => {
     // Update Graph
     // Updates the current data in the graph (same time period, no time change. filter update)
     // filter updates, setting  updates
 
+    const radiusMultiplier = (timePeriod === 'yearly') ? .8 : 1;
+
     const opacity = settings[filterView]['opacity'];
-    const radius = settings[filterView]['radius'];
+    const radius = settings[filterView]['radius'] * radiusMultiplier;
     const hiddenOpacity = settings['hidden']['opacity'];
-    const hiddenRadius = settings['hidden']['radius'];
+    const hiddenRadius = settings['hidden']['radius'] * radiusMultiplier;
 
     //filtered selection
     var point = pointGroup.selectAll('.point')
@@ -129,7 +122,7 @@ export default function Graph(props) {
 
     // time period change is triggering a rerender
     // since all switching from monthly settings -> yearly settings
-  }, [filteredData, filterView, settings]);
+  }, [filteredData, filterView, timePeriod, settings]);
 
   useEffect(() => {
     // draw canvas bars

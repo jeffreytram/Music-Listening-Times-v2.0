@@ -24,7 +24,7 @@ function Visualization(props) {
 
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [datalistSetting, setDatalistSetting] = useState('artist');
-  const { pointSettings, dispatchPointSettings} = useSettings();
+  const { pointSettings, dispatchPointSettings } = useSettings();
 
   useEffect(() => {
     setup(dispatchData);

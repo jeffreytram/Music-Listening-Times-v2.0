@@ -402,7 +402,6 @@ input[type="radio"]+label {
     box-sizing: border-box;
     padding: 0em 1.5em;
     overflow-y: scroll;
-    border-right: 4px solid var(--light);
     background-color: var(--main-bg);
   }
 
