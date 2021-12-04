@@ -374,6 +374,7 @@ input[type="radio"]+label {
 
 .settings-flexbox>label {
   text-align: left;
+  white-space: nowrap;
 }
 
 .settings-flexbox>input {
@@ -394,6 +395,14 @@ input[type="radio"]+label {
 
   .site-container {
     height: 100%;
+  }
+
+  .button, #filter-select, #filter-input, .option-card {
+    font-size: smaller;
+  }
+
+  .song {
+    font-size: medium;
   }
 
   /* SIDE OPTIONS --------- */
