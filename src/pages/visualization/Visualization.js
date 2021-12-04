@@ -16,7 +16,7 @@ import './visualization.css';
 
 const OptionCard = ({ name, children, className }) => {
   return (
-    <div className={`option-card ${className}`}>
+    <div className={`option-card ${(className) ? className: ''}`}>
       {(name) && <h3>{name}</h3>}
       {children}
     </div>

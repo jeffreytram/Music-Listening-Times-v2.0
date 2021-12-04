@@ -97,7 +97,7 @@ export default function Graph(props) {
     // Updates the current data in the graph (same time period, no time change. filter update)
     // filter updates, setting  updates
 
-    const radiusMultiplier = (timePeriod === 'yearly') ? .8 : 1;
+    const radiusMultiplier = (timePeriod === 'yearly') ? .65 : 1;
 
     const opacity = settings[filterView]['opacity'];
     const radius = settings[filterView]['radius'] * radiusMultiplier;

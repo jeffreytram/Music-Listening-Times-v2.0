@@ -95,6 +95,7 @@
   padding: 1em 1em;
   box-sizing: border-box;
   border-radius: .5em;
+  background-color: var(--main-bg);
 }
 
 #filter-select {
@@ -220,14 +221,22 @@ input[type=checkbox] {
 }
 
 .tag {
+  height: min-content;
   display: inline-block;
   font-size: 10px;
   font-weight: 500;
   border-radius: 15px;
-  margin: 0px 2px 0px 0px;
+  margin: 0px 2px 1px 0px;
   padding: 1px 6px;
   background-color: var(--secondary-color);
   color: rgb(var(--accessible-color), var(--accessible-color), var(--accessible-color));
+}
+
+.tagList {
+  display: flex;
+  flex-flow: row wrap;
+  overflow: hidden;
+  align-content: flex-start;
 }
 
 /* Website layout */
@@ -237,11 +246,16 @@ input[type=checkbox] {
 }
 
 .side-options {
+  width: 100%;
   display: grid;
+  grid-template-columns: fit-content;
   gap: 1em 0em;
-  text-align: center;
-  justify-items: center;
+  justify-content: center;
   padding: .5em;
+}
+
+.side-options div {
+  width: 100%;
 }
 
 @keyframes content-fade-in {
@@ -324,7 +338,7 @@ input[type="radio"]+label {
   width: minmax(100%, 400px);
   display: grid;
   grid-template-columns: 115px 1fr;
-  grid-template-rows: 23px 23px 42px 18px 14px;
+  grid-template-rows: 23px 18px 45px 18px 14px;
   gap: 0px 12px;
   text-align: left;
 }
@@ -363,7 +377,6 @@ input[type="radio"]+label {
   display: flex;
   justify-content: space-around;
   width: 70%;
-  margin: .5em 0;
 }
 
 .settings-flexbox {
@@ -411,6 +424,7 @@ input[type="radio"]+label {
     float: left;
     box-sizing: border-box;
     text-align: left;
+    justify-content: flex-start;
   }
 
   /* Song Info */
@@ -426,7 +440,6 @@ input[type="radio"]+label {
   /* Filters */
   .option-card {
     width: 100%;
-    background-color: var(--main-bg);
   }
 
   #search-filter, #day-filters {
