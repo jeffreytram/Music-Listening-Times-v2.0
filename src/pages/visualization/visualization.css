@@ -75,13 +75,13 @@
 #corner-options-container {
   position: absolute;
   top: .5em;
-  right: 1.5em;
+  right: .5em;
 }
 
 .corner-option {
   display: inline-block;
-  margin: 0 0 0 .75em;
-  padding: .5em .75em;
+  margin: 0 0 0 .5em;
+  padding: .5em .7em;
   font-size: smaller;
 }
 
@@ -321,7 +321,7 @@ input[type="radio"]+label {
 }
 
 .song-info-grid {
-  width: 400px;
+  width: minmax(100%, 400px);
   display: grid;
   grid-template-columns: 115px 1fr;
   grid-template-rows: 23px 23px 42px 18px 14px;
@@ -465,6 +465,12 @@ input[type="radio"]+label {
     position: absolute;
     top: .5em;
     left: 1.5em;
+  }
+
+
+  /* Corner right options */
+  #corner-options-container {
+    right: 1.5em;
   }
 
   /* Time Settings */
