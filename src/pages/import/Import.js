@@ -1,9 +1,11 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import screenshot from '../../images/excel-screenshot.PNG';
 import './import.css';
 
 function Import(props) {
   return (
-    <div className="site-container">
+    <div className="instructions-container">
       <h1>Importing a CSV</h1>
       <h2>How to import your own LastFM data into the application</h2>
       <ol className="steps">
@@ -19,7 +21,8 @@ function Import(props) {
         </li>
         <li>Ensure you've entered the headers exactly as written to limit errors with the application</li>
         <li><strong>Save the CSV</strong></li>
-        <li><strong>Import the CSV</strong> into Music Listening Times</li>
+        <li><strong>Go to the application</strong> by viewing the example or by <a href="/visualize">clicking here</a></li>
+        <li><strong>Import the CSV</strong> into Music Listening Times by clicking the <FontAwesomeIcon icon={faUpload} /> upload icon in the top right corner</li>
       </ol>
     </div>
   )

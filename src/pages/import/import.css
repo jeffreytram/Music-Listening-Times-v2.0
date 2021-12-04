@@ -1,10 +1,16 @@
+.instructions-container {
+  padding: 2vw 4vw 4vw 4vw;
+  max-width: 600px;
+}
+
 .screenshot {
+  display: block;
   width: 100%;
   max-width: 500px;
   margin: 1em 0;
   border-radius: 2px;
 }
 
-.steps > li {
+.steps>li {
   margin: 4em 0;
 }
