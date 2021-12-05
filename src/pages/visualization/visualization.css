@@ -246,12 +246,12 @@ input[type=checkbox] {
 }
 
 .side-options {
-  width: 100%;
+  width: 90%;
   display: grid;
-  grid-template-columns: fit-content;
+  grid-template-columns: 100%;
   gap: 1em 0em;
-  justify-content: center;
   padding: .5em;
+  margin: auto;
 }
 
 .side-options div {
@@ -424,7 +424,6 @@ input[type="radio"]+label {
     float: left;
     box-sizing: border-box;
     text-align: left;
-    justify-content: flex-start;
   }
 
   /* Song Info */
