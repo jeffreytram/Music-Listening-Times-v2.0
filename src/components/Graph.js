@@ -21,7 +21,7 @@ let pointGroup = {};
 let zoom = {};
 
 export default function Graph(props) {
-  const { data, filteredData, sampleDateString, timePeriod, settings, dispatchFilter, filterView } = props;
+  const { data, filteredData, sampleDateString, timePeriod, settings, dispatchFilter, filterView, isDarkTheme } = props;
 
   useEffect(() => {
     initializeGraph();
@@ -127,7 +127,7 @@ export default function Graph(props) {
   useEffect(() => {
     // draw canvas bars
     drawCanvasBars(filteredData);
-  }, [filteredData])
+  }, [filteredData, isDarkTheme]);
 
   /**
    * Initializes the graph for the first time application load

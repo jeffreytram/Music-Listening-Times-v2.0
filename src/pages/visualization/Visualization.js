@@ -109,6 +109,7 @@ function Visualization(props) {
                     sampleDateString={`${month} 1 ${year}`}
                     timePeriod={timePeriod}
                     settings={pointSettings}
+                    isDarkTheme={isDarkTheme}
                   />
                 </div>
               </div>
