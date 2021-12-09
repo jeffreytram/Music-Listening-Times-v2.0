@@ -96,6 +96,8 @@
   box-sizing: border-box;
   border-radius: .5em;
   background-color: var(--main-bg);
+  -webkit-box-shadow: 3px 3px 10px 2px var(--shadow);
+  box-shadow: 3px 3px 10px 2px var(--shadow);
 }
 
 #filter-select {
@@ -241,7 +243,6 @@ input[type=checkbox] {
 
 /* Website layout */
 #content-container {
-  position: relative;
   animation: .5s ease-in-out content-fade-in;
 }
 
@@ -277,7 +278,6 @@ input[type=checkbox] {
 
 .time-settings {
   text-align: center;
-  margin-top: 1em;
   margin-bottom: 5em;
 }
 
@@ -344,8 +344,9 @@ input[type="radio"]+label {
 }
 
 #main {
-  margin: auto;
   text-align: center;
+  position: relative;
+  margin: .5em;
 }
 
 #main-graph, #test-canvas {

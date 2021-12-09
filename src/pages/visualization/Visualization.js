@@ -16,7 +16,7 @@ import './visualization.css';
 
 const OptionCard = ({ name, children, className }) => {
   return (
-    <div className={`option-card ${(className) ? className: ''}`}>
+    <div className={`option-card ${(className) ? className : ''}`}>
       {(name) && <h3>{name}</h3>}
       {children}
     </div>
@@ -84,23 +84,23 @@ function Visualization(props) {
           (
             <>
               <div id="content-container">
-                <div className="time-settings">
-                  <div className="time-period">
-                    <TimePeriodButton value="monthly" />
-                    <TimePeriodButton value="yearly" />
-                  </div>
-                  <DateNavigation
-                    month={month}
-                    year={year}
-                    timePeriod={timePeriod}
-                    timeRange={timeRange}
-                    yearList={yearList}
-                    dispatchData={dispatchData}
-                    datasetBuckets={datasetBuckets}
-                  />
-                  <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
-                </div>
                 <div id="main">
+                  <div className="time-settings">
+                    <div className="time-period">
+                      <TimePeriodButton value="monthly" />
+                      <TimePeriodButton value="yearly" />
+                    </div>
+                    <DateNavigation
+                      month={month}
+                      year={year}
+                      timePeriod={timePeriod}
+                      timeRange={timeRange}
+                      yearList={yearList}
+                      dispatchData={dispatchData}
+                      datasetBuckets={datasetBuckets}
+                    />
+                    <div id="entries">{(filteredDataset) ? filteredDataset.length : 0} entries</div>
+                  </div>
                   <Graph
                     data={dataset}
                     filteredData={filteredDataset}

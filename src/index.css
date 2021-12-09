@@ -1,7 +1,7 @@
 body {
   --main-text: #303030;
-  --main-bg: #f6f6f6;
-  --light: #e8e8e8;
+  --main-bg: #fcfcfc;
+  --light: #e5e5e5;
   --secondary-color: rgba(30, 30, 30, 1);
   --light-secondary: rgba(240, 240, 240, 1);
   --very-light-secondary: rgba(250, 250, 250, 1);
@@ -10,12 +10,11 @@ body {
   --secondary-g: 30;
   --secondary-b: 30;
   --accessible-color: calc( ( ( ( (var(--secondary-r) * 299) + (var(--secondary-g) * 587) + (var(--secondary-b) * 114)) / 1000) - 150) * -1000);
-  --shadow: rgba(50, 50, 50, 0.3);
+  --shadow: rgba(0, 0, 0, 0.12);
   --border-radius: 5px;
   --blue: rgb(77, 156, 208);
   --light-blue: rgb(204, 227, 242);
-  background: var(--very-light-secondary);
-  background: linear-gradient(170deg, var(--very-light-secondary) 10%, var(--light-secondary) 100%);
+  background: var(--main-bg);
   background-image: url('./images/blue-diamond-bg.svg');
   background-repeat: no-repeat;
   background-size: contain;
@@ -25,7 +24,7 @@ body {
 body.dark-theme {
   --main-text: #f7f7f7;
   --main-bg: #303030;
-  --light: #454545;
+  --light: #505050;
   --secondary-color: rgba(247, 247, 247, 1);
   --light-secondary: rgba(247, 247, 247, .8);
   --very-light-secondary: rgba(247, 247, 247, .7);
@@ -34,7 +33,7 @@ body.dark-theme {
   --secondary-g: 247;
   --secondary-b: 247;
   --accessible-color: calc( ( ( ( (var(--secondary-r) * 299) + (var(--secondary-g) * 587) + (var(--secondary-b) * 114)) / 1000) - 150) * -1000);
-  --shadow: rgba(0, 0, 0, .6);
+  --shadow: rgba(0, 0, 0, .4);
   --border-radius: 5px;
   --blue: rgb(77, 156, 208);
   --light-blue: rgb(204, 227, 242);
