@@ -3,23 +3,14 @@ import { getFunctions, httpsCallable } from '@firebase/functions';
 import { setContrastingColors } from '../logic/colors';
 
 export const SongInfoLogic = (clickedPoint, data, entireDataset, timePeriod) => {
-  let dataset = data;
-  if (data === undefined) dataset = [];
+  const point = entireDataset[clickedPoint];
 
-  let point = entireDataset[clickedPoint];
-  if (point === undefined) point = {};
+  const id = (timePeriod === 'monthly') ? 'monthID' : 'yearID';
 
-  let leftArrowVisibility;
-  let rightArrowVisibility;
+  const leftArrowVisibility = (point[id] < data.length - 1) ? '' : 'disabled-arrow';
+  const rightArrowVisibility = (point[id] > 0) ? '' : 'disabled-arrow';
 
-  if (timePeriod === 'monthly') {
-    leftArrowVisibility = (point.monthID < dataset.length - 1) ? '' : 'disabled-arrow';
-    rightArrowVisibility = (point.monthID > 0) ? '' : 'disabled-arrow';
-  } else if (timePeriod === 'yearly') {
-    leftArrowVisibility = (point.yearID < dataset.length - 1) ? '' : 'disabled-arrow';
-    rightArrowVisibility = (point.yearID > 0) ? '' : 'disabled-arrow';
-  }
-  return { dataset, point, leftArrowVisibility, rightArrowVisibility };
+  return { point, leftArrowVisibility, rightArrowVisibility };
 };
 
 export const SongInfoHandler = (dispatchFilter, clickedPoint, entireDataset, setDatalistSetting, data) => {
@@ -29,14 +20,14 @@ export const SongInfoHandler = (dispatchFilter, clickedPoint, entireDataset, set
     // check if valid change, if out of range dont do anything
     if (newID >= 0 && newID < entireDataset.length) {
       // need to change filtereddatasetmonth 
-      dispatchFilter( {type: 'select', value: entireDataset[newID]} );
+      dispatchFilter({ type: 'select', value: entireDataset[newID] });
     }
   }
 
   const handleInfoClick = (type, value) => {
     // set the datalist setting to artist
     setDatalistSetting(type);
-    dispatchFilter({type: 'search', value: value, dataset: data, datalistSetting: type });
+    dispatchFilter({ type: 'search', value: value, dataset: data, datalistSetting: type });
   }
 
   return { handlePointChange, handleInfoClick };
@@ -75,7 +66,6 @@ export const FetchArtistTags = (artist) => {
     const functions = getFunctions();
     const getArtistTags = httpsCallable(functions, 'getArtistTags');
     getArtistTags(artist).then(result => {
-      console.log(result);
       const tags = JSON.parse(result.data);
 
       let apiTags = tags.toptags.tag;
