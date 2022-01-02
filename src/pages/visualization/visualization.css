@@ -49,10 +49,6 @@
   fill: var(--main-text);
 }
 
-#selected {
-  fill: red;
-}
-
 .no-data-message {
   fill: gray;
   font-style: italic;
@@ -360,11 +356,17 @@ input[type="radio"]+label {
 
 /* Settings style */
 
-.point-settings-container {
+.settings-content {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.settings-input-container {
+  display: flex;
+  justify-content: space-around;
+  width: 70%;
 }
 
 .point-setting {
@@ -374,24 +376,18 @@ input[type="radio"]+label {
   padding: .5em 2em;
 }
 
-.settings-container {
-  display: flex;
-  justify-content: space-around;
-  width: 70%;
-}
-
-.settings-flexbox {
+.setting-flexbox {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.settings-flexbox>label {
+.setting-flexbox>label {
   text-align: left;
   white-space: nowrap;
 }
 
-.settings-flexbox>input {
+.setting-flexbox>input {
   width: 100%;
 }
 
@@ -411,7 +407,7 @@ input[type="radio"]+label {
     height: 100%;
   }
 
-  .button, #filter-select, #filter-input, .option-card {
+  .button, #filter-select, #filter-input, .option-card, #entries {
     font-size: smaller;
   }
 
@@ -447,20 +443,20 @@ input[type="radio"]+label {
   }
 
   /* Settings */
-  .point-settings-container {
+  .settings-content {
     text-align: left;
     align-items: flex-start;
+  }
+
+  .settings-input-container {
+    width: 100%;
   }
 
   .point-setting {
     padding: 0em 0em;
   }
 
-  .settings-container {
-    width: 100%;
-  }
-
-  .settings-flexbox>input {
+  .setting-flexbox>input {
     width: 90%;
   }
 
@@ -479,7 +475,6 @@ input[type="radio"]+label {
     top: .5em;
     left: 1.5em;
   }
-
 
   /* Corner right options */
   #corner-options-container {
