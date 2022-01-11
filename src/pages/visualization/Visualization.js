@@ -140,7 +140,6 @@ function Visualization(props) {
                   <Settings
                     dispatchPointSettings={dispatchPointSettings}
                     pointSettings={pointSettings}
-                    timePeriod={timePeriod}
                   />
                 </OptionCard>
               </div>
