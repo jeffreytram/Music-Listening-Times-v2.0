@@ -10,7 +10,7 @@ const initPointSettings = {
 };
 
 const useSettings = () => {
-  function reducer(state, { mode, type, setting, value }) {
+  function reducer(state, { mode, setting, value }) {
     switch (mode) {
       case 'reset-point-settings':
         return initPointSettings;
