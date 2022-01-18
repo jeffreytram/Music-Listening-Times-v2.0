@@ -10,31 +10,44 @@ const initPointSettings = {
   constant: { opacity: 1, radius: 1 },
 };
 
-test('useSettings', () => {
-  const { result } = renderHook(useSettings);
-
-  expect(result.current.pointSettings).toEqual(initPointSettings);
-
-  // changing opacity
+describe('useSettings', () => {
+  const { result, rerender } = renderHook(useSettings);
   const value = .5;
-  act(() => {
-    result.current.dispatchPointSettings({ setting: 'opacity', value: value });
-  });
-  for (const key of Object.keys(initPointSettings)) {
-    expect(result.current.pointSettings[key].opacity).toBe(initPointSettings[key].opacity * value);
-  }
 
-  // changing radius
-  act(() => {
-    result.current.dispatchPointSettings({ setting: 'radius', value: value });
+  it('initializes the point settings', () => {
+    expect(result.current.pointSettings).toEqual(initPointSettings);
   });
-  for (const key of Object.keys(initPointSettings)) {
-    expect(result.current.pointSettings[key].opacity).toBe(initPointSettings[key].opacity * value);
-  }
 
-  // reset default
-  act(() => {
-    result.current.dispatchPointSettings({ mode: 'reset-point-settings' });
+  it('changes opacity', () => {
+    rerender();
+    act(() => {
+      result.current.dispatchPointSettings({ setting: 'opacity', value: value });
+    });
+    for (const key of Object.keys(initPointSettings)) {
+      expect(result.current.pointSettings[key].opacity).toBe(initPointSettings[key].opacity * value);
+    }
   });
-  expect(result.current.pointSettings).toEqual(initPointSettings);
+
+  it('changes radius', () => {
+    rerender();
+    act(() => {
+      result.current.dispatchPointSettings({ setting: 'radius', value: value });
+    });
+    for (const key of Object.keys(initPointSettings)) {
+      expect(result.current.pointSettings[key].opacity).toBe(initPointSettings[key].opacity * value);
+    }
+  });
+
+  it('resets the settings to the default settings', () => {
+    rerender();
+    act(() => {
+      result.current.dispatchPointSettings({ setting: 'opacity', value: value });
+    });
+    expect(result.current.pointSettings.constant.opacity).toBe(.5);
+
+    act(() => {
+      result.current.dispatchPointSettings({ mode: 'reset-point-settings' });
+    });
+    expect(result.current.pointSettings).toEqual(initPointSettings);
+  });
 });
