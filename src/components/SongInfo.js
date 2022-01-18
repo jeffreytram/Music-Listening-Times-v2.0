@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft, faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons'
-import { SongInfoLogic, SongInfoHandler, FetchAlbumInfo, FetchArtistTags } from './SongInfoLogic';
+import { useSongInfo, SongInfoHandler, FetchAlbumInfo, FetchArtistTags } from './SongInfoLogic';
 
 export default function SongInfo({ clickedPoint, data, entireDataset, timePeriod, dispatchFilter, setDatalistSetting }) {
-  const { point, leftArrowVisibility, rightArrowVisibility } = SongInfoLogic(clickedPoint, data, entireDataset, timePeriod);
+  const { point, leftArrowVisibility, rightArrowVisibility } = useSongInfo(clickedPoint, data, entireDataset, timePeriod);
 
   const { handlePointChange, handleInfoClick } = SongInfoHandler(dispatchFilter, clickedPoint, entireDataset, setDatalistSetting, data);
 

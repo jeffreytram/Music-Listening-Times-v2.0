@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { getFunctions, httpsCallable } from '@firebase/functions';
 import { setContrastingColors } from '../logic/colors';
 
-export const SongInfoLogic = (clickedPoint, data, entireDataset, timePeriod) => {
+export const useSongInfo = (clickedPoint, data, entireDataset, timePeriod) => {
   const point = entireDataset[clickedPoint];
 
   const id = (timePeriod === 'monthly') ? 'monthID' : 'yearID';
